@@ -37,11 +37,11 @@ class RESTDatasource(Datasource):
 		self.keyname = keyname
 
 	def request(self, method, **kwargs):
-	'''
-	Wrapper method for the Requests library.
-	If apikey has been provided, expects the name of 
-	the API key parameter for the URI under "kwargs['keyname']"
-	'''
+		'''
+		Wrapper method for the Requests library.
+		If apikey has been provided, expects the name of 
+		the API key parameter for the URI under "kwargs['keyname']"
+		'''
 		if not self.apikey is None and not self.keyname is None:
 			kwargs[kwargs['keyname']] = self.apikey
 		r = requests.get(str(uri) + str(method), params=kwargs)
