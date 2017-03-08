@@ -1,6 +1,7 @@
 '''
 File: datasource/__init__.py
 Author: Spencer Norris
+Description: Implementation of Datasource base class.
 '''
 
 import requests
