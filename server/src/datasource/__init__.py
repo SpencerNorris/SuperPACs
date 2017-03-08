@@ -41,7 +41,7 @@ class RESTDatasource(Datasource):
 	If apikey has been provided, expects the name of 
 	the API key parameter for the URI under "kwargs['keyname']"
 	'''
-	if not self.apikey is None and not self.keyname is None:
-		kwargs[kwargs['keyname']] = self.apikey
-	r = requests.get(str(uri) + str(method), params=kwargs)
-	return json.loads(r.text)
+		if not self.apikey is None and not self.keyname is None:
+			kwargs[kwargs['keyname']] = self.apikey
+		r = requests.get(str(uri) + str(method), params=kwargs)
+		return json.loads(r.text)
