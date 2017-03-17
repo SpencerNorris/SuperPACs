@@ -2,13 +2,13 @@ version: '2'
 services:
   web:
     restart: always
-    build: .
-    expose:
-      - "8000"
+    build: ./server/web
+    ports:
+      - "8000:8000"
     links:
       - mysql:mysql
     volumes:
-      - ./web:/code
+      - ./server/web/code:/code
   
   nginx:
     restart: always
@@ -16,8 +16,8 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginx:/usr/share/nginx/html
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./server/nginx:/usr/share/nginx/html
+      - ./server/nginx.conf:/etc/nginx/nginx.conf
     volumes_from:
       - web
     links:
