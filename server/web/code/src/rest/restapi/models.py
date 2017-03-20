@@ -1,7 +1,9 @@
 from django.db import models
 
 # Create your models here.
-
+'''
+Representative class which represents Representatives.
+'''
 class Representative(models.Model):
     name = models.charField(max_length = 140)
     district = models.charField(max_length = 140)
@@ -17,14 +19,18 @@ class Representative(models.Model):
 
 ##Can we do this subclass things?
 #class Senator(models.Model):
-
+'''
+SuperPAC class which represents SuperPACs.
+'''
 class SuperPAC(models.Model):
     name = models.charField(max_length = 140)
 
     def __str__():
         return self.name
 
-
+'''
+Legislation class which represents Legislation.
+'''
 class Legislation(models.Model):
     name = models.charField(max_length = 140)
     hr = models.IntegerField()
@@ -33,6 +39,9 @@ class Legislation(models.Model):
     def __str__():
         return self.name
 
+'''
+Vote class which represents a Representative voting on Legislation.
+'''
 class Vote(models.Model):
     representative = models.ForeignKey(Representative, on_delete=models.CASCADE)
     legislation = models.ForeignKey(Legislation, on_delete=models.CASCADE)
