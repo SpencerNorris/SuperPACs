@@ -12,12 +12,9 @@ services:
   
   nginx:
     restart: always
-    image: nginx:latest
+    build: ./client
     ports:
       - "80:80"
-    volumes:
-      - ./server/nginx:/usr/share/nginx/html
-      - ./server/nginx.conf:/etc/nginx/nginx.conf
     volumes_from:
       - web
     links:
