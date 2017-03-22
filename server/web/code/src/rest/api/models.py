@@ -6,9 +6,12 @@ class Representative(models.Model):
     '''
     Representative class which represents Representatives.
     '''
+
     name = models.CharField(max_length = 140)
     district = models.CharField(max_length = 140)
     state = models.CharField(max_length = 140)
+    link = models.CharField(max_length = 500)
+
     PARTIES = (("D","Democrat"),
             ("R","Republican"),
             )
@@ -25,6 +28,8 @@ class SuperPAC(models.Model):
     SuperPAC class which represents SuperPACs.
     '''
     name = models.CharField(max_length = 140)
+    link = models.CharField(max_length = 500)
+
 
     def __str__():
         return self.name
@@ -36,6 +41,7 @@ class Legislation(models.Model):
     '''
     name = models.CharField(max_length = 140)
     hr = models.IntegerField()
+    link = models.CharField(max_length = 500)
     ##more details about the bill? Sponsors? co-sponsors?
 
     def __str__():
