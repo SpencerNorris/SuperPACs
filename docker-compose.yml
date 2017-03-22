@@ -2,13 +2,13 @@ version: '2'
 services:
   web:
     restart: always
-    build: ./server/web
+    build: ./server
     ports:
       - "8000:8000"
     links:
       - mysql:mysql
     volumes:
-      - ./server/web/code:/code
+      - ./server:/code
   
   nginx:
     restart: always

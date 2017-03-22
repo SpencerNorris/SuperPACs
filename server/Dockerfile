@@ -3,8 +3,9 @@ ENV PYTHONUNBUFFERED 1
 ADD run.sh /
 RUN mkdir /code
 WORKDIR /code
-ADD code /code/
+ADD . /code/
 RUN apt-get install libmysqlclient-dev
-RUN pip install -r src/requirements.txt
-RUN chmod +x /run.sh
-CMD ["/run.sh"]
+RUN pip install -r src/requirments.txt
+RUN chmod +x /code/run.sh
+#CMD ["/code/run.sh"]
+CMD ["man ssh"]
