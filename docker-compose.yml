@@ -1,0 +1,38 @@
+version: '2'
+services:
+  web:
+    restart: always
+    build: ./server/web
+    ports:
+      - "8000:8000"
+    links:
+      - mysql:mysql
+    volumes:
+      - ./server/web/code:/code
+  
+  nginx:
+    restart: always
+    build: ./client
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    links:
+      - web:web
+  
+  mysql:
+    restart: always
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    volumes:
+      - data_sql:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_ALLOW_EMPTY_PASSWORD
+
+volumes:
+  data_sql:
