@@ -8,8 +8,6 @@ RUN apt-get install -y nodejs
 RUN mkdir /opt/client
 COPY . /opt/client
 WORKDIR /opt/client
-RUN node --version
-RUN npm --version
 RUN npm install
 RUN npm run build
 RUN cp -r /opt/client/dist/* /usr/share/nginx/html
