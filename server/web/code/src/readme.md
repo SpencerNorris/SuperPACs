@@ -24,7 +24,9 @@ $ export DJANGO_SECRET_KEY="password"
 sets environment variable for the django secret key, is referenced in /src/rest/rest/settings.py
 now > SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', default_value) will be "password"
 
-### models.py ORM to sql schema
+### Migrations: models.py ORM to sql schema
+https://docs.djangoproject.com/en/1.10/topics/migrations/
+Migrations are Django’s way of propagating changes you make to your models (adding a field, deleting a model, etc.) into your database schema. They’re designed to be mostly automatic, but you’ll need to know when to make migrations, when to run them, and the common problems you might run into.
 
 What we want to do is get the /api/models.py ORM class representation into a mysql database schema so that we can add to it from the caching APIs.
 
