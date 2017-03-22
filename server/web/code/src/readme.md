@@ -10,9 +10,6 @@ http://www.revsys.com/blog/2014/nov/21/recommended-django-project-layout/
 
 (Make this better)
 
-/src/rest/
-$ django-admin.py startproject rest
-Created the main django environment
 
 /src/rest/
 $ python3 manage.py runserver
