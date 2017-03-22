@@ -28,7 +28,6 @@ https://www.youtube.com/playlist?list=PLQVvvaa0QuDeA05ZouE4OzDYLHY-XH-Nd
 In restapi/rest/rest/settings.py, there is an encryption key that must be securely stored, out of production.
 Stick it in an environment variable, and leave it out of the code.
 
-
 ## Virtual Environment for python 3.
 
 Included in the gitignore is the file /superpac
@@ -44,6 +43,29 @@ Now do $ python3 and python3 will start.
 
 ## Setting up Django.
 
+# Deployment Guide
+
+Use the following instructions to deploy this website on to a server that supports Docker Compose.
+
+## Prerequisites
+This project uses Docker compose for its deployment so you'll need
+* Docker 1.13+
+* Docker Compose 1.11+
+You will also need to set the following environment variables
+* MYSQL_DATABASE
+* MYSQL_USER
+* MYSQL_PASSWORD
+* MYSQL_ROOT_PASSWORD
+
+## Build Instructions
+* Clone this project on to the server
+* Enter the project directory
+* Run `docker-compose build`
+Docker Compose will now automatically build all the Docker containers
+
+## Deployment Instructions
+* Run `docker-compose up -d`
+Docker Compose will now start the Docker containers and the website should be running on localhost.
 
 # Software Design And Development Documentation.
 
@@ -68,4 +90,4 @@ https://docs.google.com/document/d/1J4wr-IQZrq70X1NWiGK2sZdRkyR7uL44O6pK88FKAZk/
 
 ## Elaboration document
 
-https://docs.google.com/document/d/1J4wr-IQZrq70X1NWiGK2sZdRkyR7uL44O6pK88FKAZk/edit?usp=sharing
+https://docs.google.com/document/d/1N2Na6WvKSEU1u6L_2dpugFqMjkHSLFVl76K2zl2guqk/edit?usp=sharing
