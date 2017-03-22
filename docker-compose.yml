@@ -38,7 +38,7 @@ services:
       - MYSQL_PASSWORD
       - MYSQL_ROOT_PASSWORD
     healthcheck:
-      test: mysqladmin ping --silent
+      test: mysqladmin ping -p$MYSQL_ROOT_PASSWORD
       interval: 20s
       timeout: 5s
       retries: 30
