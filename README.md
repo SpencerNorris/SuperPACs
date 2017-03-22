@@ -51,6 +51,7 @@ Use the following instructions to deploy this website on to a server that suppor
 This project uses Docker compose for its deployment so you'll need
 * Docker 1.13+
 * Docker Compose 1.11+
+
 You will also need to set the following environment variables
 * MYSQL_DATABASE
 * MYSQL_USER
@@ -61,10 +62,12 @@ You will also need to set the following environment variables
 * Clone this project on to the server
 * Enter the project directory
 * Run `docker-compose build`
+
 Docker Compose will now automatically build all the Docker containers
 
 ## Deployment Instructions
 * Run `docker-compose up -d`
+
 Docker Compose will now start the Docker containers and the website should be running on localhost.
 
 # Software Design And Development Documentation.
