@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 services:
   web:
     restart: always
@@ -14,7 +14,8 @@ services:
       - MYSQL_USER
       - MYSQL_PASSWORD
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
   
   nginx:
     restart: always
@@ -36,6 +37,11 @@ services:
       - MYSQL_USER
       - MYSQL_PASSWORD
       - MYSQL_ROOT_PASSWORD
+    healthcheck:
+      test: mysqladmin ping --silent
+      interval: 20s
+      timeout: 5s
+      retries: 30
 
 volumes:
   data_sql:
