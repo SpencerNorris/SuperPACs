@@ -6,9 +6,15 @@ services:
     ports:
       - "8000:8000"
     links:
-      - mysql:mysql
+      - mysql
     volumes:
       - ./server:/code
+    environment:
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+    depends_on:
+      - mysql
   
   nginx:
     restart: always
@@ -23,8 +29,6 @@ services:
   mysql:
     restart: always
     image: mysql:latest
-    ports:
-      - "3306:3306"
     volumes:
       - data_sql:/var/lib/mysql
     environment:
@@ -32,7 +36,6 @@ services:
       - MYSQL_USER
       - MYSQL_PASSWORD
       - MYSQL_ROOT_PASSWORD
-      - MYSQL_ALLOW_EMPTY_PASSWORD
 
 volumes:
   data_sql:
