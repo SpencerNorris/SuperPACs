@@ -52,6 +52,9 @@ This project uses Docker compose for its deployment so you'll need
 * Docker 1.13+
 * Docker Compose 1.11+
 
+Instructions for installing Docker and Docker Compose can be found here:
+https://docs.docker.com/compose/install/
+
 You will also need to set the following environment variables
 * MYSQL_DATABASE
 * MYSQL_USER
