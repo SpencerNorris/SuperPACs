@@ -28,11 +28,11 @@ services:
     volumes:
       - data_sql:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: "test"
-      MYSQL_USER: "test"
-      MYSQL_PASSWORD: "test"
-      MYSQL_ROOT_PASSWORD: "root"
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_ALLOW_EMPTY_PASSWORD
 
 volumes:
   data_sql:
