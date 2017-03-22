@@ -66,12 +66,12 @@ You will also need to set the following environment variables
 * Enter the project directory
 * Run `docker-compose build`
 
-Docker Compose will now automatically build all the Docker containers
+Docker Compose will now automatically build all the Docker containers, you may need to run as root for the build to work properly.
 
 ## Deployment Instructions
 * Run `docker-compose up -d`
 
-Docker Compose will now start the Docker containers and the website should be running on localhost.
+Docker Compose will now start the Docker containers and the website should be running on localhost. You may need to run as root, if you do remember to have the environment variables in the root environment.
 
 # Software Design And Development Documentation.
 
