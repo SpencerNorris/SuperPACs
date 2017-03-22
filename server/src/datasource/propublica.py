@@ -1,6 +1,6 @@
 '''
 File: datasource/propublica.py
-Author: Spencer Norris
+Author: Kevin Reitano
 Description: Implementation of clients for
 the Propublica Campaign Finance and Congress APIs.
 '''
