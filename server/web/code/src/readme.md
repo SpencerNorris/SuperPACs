@@ -34,13 +34,13 @@ Django forces you to do things the Django way, because its usually the right way
 
 If you want customization, you can do it all yourself, but it will devolve into spaghetti code fast.
 
-rest: Name of the django app, it contains sub apps, the main one being /rest/, and the rest api of the app is called /restapi/.
+rest: Name of the django app, it contains sub apps, the main one being /rest/, and the rest api of the app is called /api/.
 
 You are supposed to divide the parts of your web app into "individual web apps"
 
 ## Django File Explanation
 
-For each sub-app, (/rest/, /restapi/), it contains many required files:
+For each sub-app, (/rest/, /api/), it contains many required files:
 __init__.py: Tells python that this folder is a "package".
 settings.py: Configuration settings,,,
 urls.py: Binds url endpoints to views.
