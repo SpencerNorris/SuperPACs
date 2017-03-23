@@ -23,6 +23,8 @@ class CampaignFinanceAPI(RESTDatasource):
         self.uri = "https://api.propublica.org/congress/v1/"
         self.keyname = 'X-API-Key'
         #self.headers[self.keyname] = apikey
+
+
     def find_comittees(self, query=None):
         """
         Method for searching for committees using a query string
@@ -31,7 +33,9 @@ class CampaignFinanceAPI(RESTDatasource):
         """
         rheaders = {self.keyname: self.apikey}
         rparams = {'query': query}
-    def get_commitee(self, fecid=None, cycle=2016):
+
+
+    def get_commitee(self, fecid=None, cycle='2016'):
         """
         Method for searching for a specific committee by fec-id
         :param fecid: The committee's fec-id
@@ -47,7 +51,7 @@ class CampaignFinanceAPI(RESTDatasource):
 
 
 class CongressAPI(RESTDatasource):
-    def __init__(self, apikey=None, congressnum=115):
+    def __init__(self, apikey=None, congressnum='115'):
         """
         Constructor for the CongressAPI class
         :param apikey: The ProPublica API Key
@@ -59,9 +63,11 @@ class CongressAPI(RESTDatasource):
         super().__init__(apikey)
         self.uri = "https://api.propublica.org/congress/v1/"
         self.keyname = 'X-API-Key'
-        #self.headers[self.keyname] = self.apikey
+
         #congress number must be 102-115 for House and 80-115 for Senate, 115 is current as of March 2017
         self.congressnum = congressnum
+
+
     def set_congressnum(self, newnum):
         """
         Method to change the objects congress number,
@@ -69,11 +75,12 @@ class CongressAPI(RESTDatasource):
         :param newnum: The new congressnum for the object
         :return: true if successful, false otherwise
         """
-        if newnum > 115 or newnum < 80:
+        if newnum > '115' or newnum < '80':
             return False
         else:
             self.congressnum = newnum
             return True
+
     def list_members(self, chamber=None):
         """
         API Method for getting the list of all members in the House or Senate.
@@ -87,7 +94,6 @@ class CongressAPI(RESTDatasource):
         rheaders = {self.keyname: self.apikey}
         rparams = {}
         return super().request(requeststr, rparams, rheaders)
-
 
     def get_member(self, memberid=None):
         """

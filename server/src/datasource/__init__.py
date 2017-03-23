@@ -5,6 +5,7 @@ Description: Implementation of Datasource base class.
 """
 
 import requests
+import json
 
 
 class APIKeyException(Exception):
@@ -54,4 +55,4 @@ class RESTDatasource(Datasource):
         will be required in some form.
         """
         r = requests.get(str(requeststr), params=params, headers=headers)
-        return r.text
+        return json.loads(r.text)
