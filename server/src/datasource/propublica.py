@@ -1,6 +1,6 @@
 '''
 File: datasource/propublica.py
-Author: Kevin Reitano
+Author: Spencer Norris
 Description: Implementation of clients for
 the Propublica Campaign Finance and Congress APIs.
 '''
@@ -31,7 +31,19 @@ class CampaignFinanceAPI(RESTDatasource):
         """
         rheaders = {self.keyname: self.apikey}
         rparams = {'query': query}
-
+    def get_commitee(self, fecid=None, cycle=2016):
+        """
+        Method for searching for a specific committee by fec-id
+        :param fecid: The committee's fec-id
+        :param cycle: The cycle to get info for, default is most recent (2016)
+        :return: The result of the api call as json
+        """
+        if fecid is None:
+            raise URIParameterException('FEC ID required but not given')
+        params = {}
+        headers = {self.keyname: self.apikey}
+        requeststr = str(self.uri) + str(cycle) + "/committees/" + str(fecid)
+        return super().request(requeststr, params, headers)
 
 
 class CongressAPI(RESTDatasource):

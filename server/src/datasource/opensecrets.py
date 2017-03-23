@@ -37,4 +37,18 @@ class OpenSecretsAPI(RESTDatasource):
         rparams['output'] = 'json'
         requeststr = str(self.uri)
         return super().request(requeststr, rparams, rheaders)
-
+    def get_candcontrib(self, cid=None, cycle=2016):
+        """
+        Method to get the top contributors to a specific candidate for an election cycle
+        :param cid: The candidate id number, can be obtained from list_candidates
+        :param cycle: The cycle to get contributions for, default is most recent
+        :return: The response to the api call as json
+        """
+        if cid is None:
+            raise URIParameterException('CID parameter required but not given')
+        rheaders = {}
+        rparams = {"apikey": self.apikey}
+        rparams['output'] = 'json'
+        rparams['cycle'] = cycle
+        requeststr = str(self.uri)
+        return super().request(requeststr, rparams, rheaders)
