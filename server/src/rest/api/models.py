@@ -84,7 +84,8 @@ class Donation(models.Model):
     '''
     superpac = models.ForeignKey(SuperPAC, on_delete=models.CASCADE)##figure out what is best here.
     represenative = models.ForeignKey(Representative, on_delete=models.CASCADE)
-    amount = models.IntegerField()
+    positive = models.IntegerField()
+    negative = models.IntegerField()
 
     def __str__():
         return self.superpac.__str__()+","+self.representative.__str__()+","+self.amount
