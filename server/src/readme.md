@@ -16,10 +16,6 @@ $ python3 manage.py runserver
 Runs the django server onto localhost:8000
 
 /src/rest/rest/
-$ python3 manage.py startapp rest
-Creates the app rest
-
-/src/rest/rest/
 $ export DJANGO_SECRET_KEY="password"
 sets environment variable for the django secret key, is referenced in /src/rest/rest/settings.py
 now > SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', default_value) will be "password"
