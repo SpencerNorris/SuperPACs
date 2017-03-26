@@ -35,7 +35,7 @@ Note:  There is an encryption key in `restapi/rest/rest/settings.py` that must b
 
 ## Virtual Environment for Python 3.
 
-Included in the gitignore is the file `/superpac`. It is meant to be the virtual environment file, there so you can work with the python 3 code even with python 2.7 installed.
+Included in the gitignore is the file `/superpac`. It is meant to be the virtual environment file, there so you can work with the Python 3 code even with Python 2.7 installed.
 
 Run `SuperPACs/ $ virtualenv -p python3 superpac`. A new folder will be created: `/superpac`. Now run `$ python3` and Python 3 will start.
 
