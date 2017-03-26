@@ -2,3 +2,4 @@
 superpac/
 __pycache__/
 env/
+migrations/

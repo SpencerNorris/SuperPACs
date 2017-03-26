@@ -26,7 +26,6 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', default_value)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-
 ALLOWED_HOSTS = ['*']
 
 
@@ -78,10 +77,8 @@ WSGI_APPLICATION = 'rest.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-
         'NAME': os.getenv('MYSQL_DATABASE', 'test'),
         'HOST': 'mysql',
-
         'PORT': '3306',
         'USER': os.getenv('MYSQL_USER', 'root'),
         'PASSWORD': os.getenv('MYSQL_PASSWORD', 'root')
