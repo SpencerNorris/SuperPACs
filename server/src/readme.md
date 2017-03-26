@@ -38,6 +38,7 @@ What we want to do is get the /api/models.py ORM class representation into a mys
 4. Open mysql database from settings.py
 5. Notice that we now have a schema representing the models.py
 
+
 ## Django Comments
 
 Django forces you to do things the Django way, because its usually the right way to do things.
