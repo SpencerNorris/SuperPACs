@@ -6,13 +6,26 @@ class Representative(models.Model):
     '''
     Representative class which represents Representatives.
     '''
+
+
     name = models.CharField(max_length = 140)
     district = models.CharField(max_length = 140)
     state = models.CharField(max_length = 140)
+    sitelink = models.CharField(max_length = 500,default="https://www.wikipedia.org/")
+
+
     PARTIES = (("D","Democrat"),
             ("R","Republican"),
             )
     party = models.CharField(max_length=1, choices=PARTIES)
+
+
+    ##PROPUBLICA api id.
+    propublicaid = models.CharField(max_length = 9,default = "1")
+
+    ##FEC api id
+    fecid = models.CharField(max_length = 9,default = "1")
+
 
     def __str__():
         return self.name+" ("+party+")"
@@ -25,6 +38,14 @@ class SuperPAC(models.Model):
     SuperPAC class which represents SuperPACs.
     '''
     name = models.CharField(max_length = 140)
+    sitelink = models.CharField(max_length = 500,default="https://www.wikipedia.org/")
+
+    ##PROPUBLICA api id reference.
+    propublicaid = models.CharField(max_length = 9,default = "1")
+
+    ##FEC api id
+    fecid = models.CharField(max_length = 9,default = "1")
+
 
     def __str__():
         return self.name
@@ -35,8 +56,17 @@ class Legislation(models.Model):
     Legislation class which represents Legislation.
     '''
     name = models.CharField(max_length = 140)
+
+
+    sitelink = models.CharField(max_length = 500,default="https://www.wikipedia.org/")
     hr = models.IntegerField()
     ##more details about the bill? Sponsors? co-sponsors?
+
+    ##PROPUBLICA api id.
+    propublicaid = models.CharField(max_length = 9,default = "1")
+
+    ##FEC api id
+    fecid = models.CharField(max_length = 9,default = "1")
 
     def __str__():
         return self.name
@@ -61,6 +91,11 @@ class Donation(models.Model):
     superpac = models.ForeignKey(SuperPAC, on_delete=models.CASCADE)##figure out what is best here.
     represenative = models.ForeignKey(Representative, on_delete=models.CASCADE)
     amount = models.IntegerField()
+    support_options =   (("S","Support"),
+                        ("A","Against"),
+                        )
+    support = models.CharField(max_length=1, choices=support_options)
+
 
     def __str__():
         return self.superpac.__str__()+","+self.representative.__str__()+","+self.amount

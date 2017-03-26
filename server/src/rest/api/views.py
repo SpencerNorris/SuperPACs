@@ -4,7 +4,9 @@ from django.http import HttpResponse
 
 
 '''
-basic view that returns on basic http://localhost:8000/restapi/ call.
+
+basic view that returns on basic http://localhost:8000/api/ call.
+
 '''
 def index(request):
     return HttpResponse("<h2> This works!!!!!!!</h2>")

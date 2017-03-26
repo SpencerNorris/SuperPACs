@@ -16,13 +16,27 @@ $ python3 manage.py runserver
 Runs the django server onto localhost:8000
 
 /src/rest/rest/
-$ python3 manage.py startapp rest
-Creates the app rest
-
-/src/rest/rest/
 $ export DJANGO_SECRET_KEY="password"
 sets environment variable for the django secret key, is referenced in /src/rest/rest/settings.py
 now > SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', default_value) will be "password"
+
+### Migrations: models.py ORM to sql schema
+https://docs.djangoproject.com/en/1.10/topics/migrations/
+Migrations are Django’s way of propagating changes you make to your models (adding a field, deleting a model, etc.) into your database schema. They’re designed to be mostly automatic, but you’ll need to know when to make migrations, when to run them, and the common problems you might run into.
+
+What we want to do is get the /api/models.py ORM class representation into a mysql database schema so that we can add to it from the caching APIs.
+
+From
+
+$ cd server/src/rest
+
+1. Create your ORM model: in our case, api/models.py
+2. Make a migration,
+  - $ python3 manage.py makemigrations
+3. Send that migration to the mysql server you specified in rest/settings.py
+  - $ python3 manage.py migrate
+4. Open mysql database from settings.py
+5. Notice that we now have a schema representing the models.py
 
 
 ## Django Comments
