@@ -2,4 +2,5 @@
 superpac/
 __pycache__/
 env/
-migrations/
+server/src/rest/api/migrations/*
+!server/src/rest/api/migrations/__init__.py

@@ -73,12 +73,13 @@ WSGI_APPLICATION = 'rest.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
+print(os.getenv('MYSQL_DATABASE', 'test'),os.getenv('MYSQL_USER', 'root'),os.getenv('MYSQL_PASSWORD', 'root'))
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('MYSQL_DATABASE', 'test'),
-        'HOST': 'mysql',
+        'NAME': os.getenv('MYSQL_DATABASE', 'superpac2'),
+        'HOST': 'localhost',#revert back to mysql
         'PORT': '3306',
         'USER': os.getenv('MYSQL_USER', 'root'),
         'PASSWORD': os.getenv('MYSQL_PASSWORD', 'root')

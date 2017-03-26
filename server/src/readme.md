@@ -26,6 +26,10 @@ Migrations are Django’s way of propagating changes you make to your models (ad
 
 What we want to do is get the /api/models.py ORM class representation into a mysql database schema so that we can add to it from the caching APIs.
 
+From
+
+$ cd server/src/rest
+
 1. Create your ORM model: in our case, api/models.py
 2. Make a migration,
   - $ python3 manage.py makemigrations
