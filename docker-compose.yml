@@ -1,14 +1,21 @@
-version: '2'
+version: '2.1'
 services:
   web:
     restart: always
-    build: ./server/web
+    build: ./server
     ports:
       - "8000:8000"
     links:
-      - mysql:mysql
+      - mysql
     volumes:
-      - ./server/web/code:/code
+      - ./server:/code
+    environment:
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+    depends_on:
+      mysql:
+        condition: service_healthy
   
   nginx:
     restart: always
@@ -23,8 +30,6 @@ services:
   mysql:
     restart: always
     image: mysql:latest
-    ports:
-      - "3306:3306"
     volumes:
       - data_sql:/var/lib/mysql
     environment:
@@ -32,7 +37,11 @@ services:
       - MYSQL_USER
       - MYSQL_PASSWORD
       - MYSQL_ROOT_PASSWORD
-      - MYSQL_ALLOW_EMPTY_PASSWORD
+    healthcheck:
+      test: mysqladmin ping -p$MYSQL_ROOT_PASSWORD
+      interval: 20s
+      timeout: 5s
+      retries: 30
 
 volumes:
   data_sql:
