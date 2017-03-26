@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'rest.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('MYSQL_DATABASE', 'superpac3'),
+        'NAME': os.getenv('MYSQL_DATABASE', 'superpac'),
         'HOST': 'mysql',
         'PORT': '3306',
         'USER': os.getenv('MYSQL_USER', 'root'),
