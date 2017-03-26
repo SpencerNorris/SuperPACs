@@ -4,7 +4,6 @@ from datasource import RESTDatasource
 from datasource import APIKeyException
 from datasource import URIParameterException
 
-APIKEY = "0N9uRPFJjbk3xcm2QHaoQNvtB85FTGxF9kjlrijW"
 class FECAPI(RESTDatasource):
     def __init__(self, apikey=None):
         """
