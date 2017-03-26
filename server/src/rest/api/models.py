@@ -7,21 +7,25 @@ class Representative(models.Model):
     Representative class which represents Representatives.
     '''
 
+
     name = models.CharField(max_length = 140)
     district = models.CharField(max_length = 140)
     state = models.CharField(max_length = 140)
     sitelink = models.CharField(max_length = 500,default="https://www.wikipedia.org/")
+
 
     PARTIES = (("D","Democrat"),
             ("R","Republican"),
             )
     party = models.CharField(max_length=1, choices=PARTIES)
 
+
     ##PROPUBLICA api id.
     propublicaid = models.CharField(max_length = 9,default = "1")
 
     ##FEC api id
     fecid = models.CharField(max_length = 9,default = "1")
+
 
     def __str__():
         return self.name+" ("+party+")"
@@ -42,6 +46,7 @@ class SuperPAC(models.Model):
     ##FEC api id
     fecid = models.CharField(max_length = 9,default = "1")
 
+
     def __str__():
         return self.name
 
@@ -51,6 +56,7 @@ class Legislation(models.Model):
     Legislation class which represents Legislation.
     '''
     name = models.CharField(max_length = 140)
+
 
     sitelink = models.CharField(max_length = 500,default="https://www.wikipedia.org/")
     hr = models.IntegerField()
