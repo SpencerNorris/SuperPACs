@@ -13,6 +13,7 @@ services:
       - MYSQL_DATABASE
       - MYSQL_USER
       - MYSQL_PASSWORD
+      - DJANGO_SECRET_KEY
     depends_on:
       mysql:
         condition: service_healthy

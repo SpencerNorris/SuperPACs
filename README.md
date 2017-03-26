@@ -60,6 +60,7 @@ You will also need to set the following environment variables
 * MYSQL_USER
 * MYSQL_PASSWORD
 * MYSQL_ROOT_PASSWORD
+* DJANGO_SECRET_KEY
 
 ## Build Instructions
 * Clone this project on to the server
