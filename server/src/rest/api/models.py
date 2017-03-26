@@ -90,8 +90,12 @@ class Donation(models.Model):
     '''
     superpac = models.ForeignKey(SuperPAC, on_delete=models.CASCADE)##figure out what is best here.
     represenative = models.ForeignKey(Representative, on_delete=models.CASCADE)
-    positive = models.IntegerField()
-    negative = models.IntegerField()
+    amount = models.IntegerField()
+    support_options =   (("S","Support"),
+                        ("A","Against"),
+                        )
+    support = models.CharField(max_length=1, choices=support_options)
+
 
     def __str__():
         return self.superpac.__str__()+","+self.representative.__str__()+","+self.amount
