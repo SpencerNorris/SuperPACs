@@ -71,16 +71,16 @@ We have chosen style guides for [Github](https://sethrobertson.github.io/GitBest
 
 ## Deployment Diagram
 
-![Deployment Diagram](https://lh4.googleusercontent.com/Rc-BI434lkhq59SBmjxQgtHMp8-AdFfe_UH_84F6yACxUgEL4pquDi17hqTc89HMwN5XppKRaZA14zI=w1600-h770-rw)
+[Deployment Diagram on Google Drive](https://drive.google.com/file/d/0B4fJ04kc6tHRQmFMUGpDQ1BFN0E/view?usp=sharing)
 
 ## Domain Model
 
-![Domain Model](https://lh5.googleusercontent.com/GG82Cm7vj0BM6_TSgyuD1P9OZqFGY2LCw17x5tky4mCqa1alWWcAZpBka1DO43id-_qTVjmCAC5Ds6g=w1600-h770-rw)
+[Domain Model on Google Drive](https://drive.google.com/file/d/0ByU5I4EWAyp5cjdSdFpBZ2xEa3c/view?usp=sharing)
 
-## Inception document
+## Inception Document
 
-https://docs.google.com/document/d/1J4wr-IQZrq70X1NWiGK2sZdRkyR7uL44O6pK88FKAZk/edit?usp=sharing
+[Inception document on Google Drive](https://docs.google.com/document/d/1J4wr-IQZrq70X1NWiGK2sZdRkyR7uL44O6pK88FKAZk/edit?usp=sharing)
 
-## Elaboration document
+## Elaboration Document
 
-https://docs.google.com/document/d/1N2Na6WvKSEU1u6L_2dpugFqMjkHSLFVl76K2zl2guqk/edit?usp=sharing
+[Elaboration document on Google Drive](https://docs.google.com/document/d/1N2Na6WvKSEU1u6L_2dpugFqMjkHSLFVl76K2zl2guqk/edit?usp=sharing)
