@@ -68,7 +68,7 @@ module.exports = function makeWebpackConfig() {
     config.devtool = 'source-map';
   }
   else {
-    config.devtool = 'eval-source-map';
+    config.devtool = 'source-map';
   }
 
   /**
@@ -214,8 +214,11 @@ module.exports = function makeWebpackConfig() {
    */
   config.devServer = {
     contentBase: './src/public',
-    stats: 'minimal'
+    stats: 'minimal',
+	proxy: {
+	  "/api": process.env.API_SERVER || "http://localhost:8000"
+	}
   };
-
+  
   return config;
 }();
