@@ -1,8 +1,7 @@
-import urllib.request
-import json
 from datasource import RESTDatasource
 from datasource import APIKeyException
 from datasource import URIParameterException
+
 
 class FECAPI(RESTDatasource):
     def __init__(self, apikey=None):
@@ -35,10 +34,9 @@ class FECAPI(RESTDatasource):
         headers = {}
         return self.get_allpages(requeststr, params, headers)
 
-    def get_committees(self, page):
+    def get_committees(self):
         """
 
-        :param page:
         :return:
         """
         requeststr = str(self.uri) + 'committees/'

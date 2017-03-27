@@ -20,7 +20,7 @@ class CampaignFinanceAPI(RESTDatasource):
         if (apikey is None):
             raise APIKeyException('API key not provided')
         super().__init__(apikey)
-        self.uri = "https://api.propublica.org/congress/v1/"
+        self.uri = "https://api.propublica.org/campaign-finance/v1/"
         self.keyname = 'X-API-Key'
         #self.headers[self.keyname] = apikey
 
@@ -46,9 +46,23 @@ class CampaignFinanceAPI(RESTDatasource):
             raise URIParameterException('FEC ID required but not given')
         params = {}
         headers = {self.keyname: self.apikey}
-        requeststr = str(self.uri) + str(cycle) + "/committees/" + str(fecid)
+        requeststr = str(self.uri) + str(cycle) + "/committees/" + str(fecid) + ".json"
         return super().request(requeststr, params, headers)
 
+
+    def get_indep_expends(self, fecid=None, cycle='2016'):
+        """
+
+        :param fecid:
+        :param cycle:
+        :return:
+        """
+        if fecid is None:
+            raise URIParameterException('FEC ID required but not given')
+        params = {}
+        headers = {self.keyname: self.apikey}
+        requeststr = str(self.uri) + str(cycle) + "/committees/" + str(fecid) + "/independent_expenditures.json"
+        return super().request(requeststr, params, headers)
 
 class CongressAPI(RESTDatasource):
     def __init__(self, apikey=None, congressnum='115'):
@@ -80,6 +94,7 @@ class CongressAPI(RESTDatasource):
         else:
             self.congressnum = newnum
             return True
+
 
     def list_members(self, chamber=None):
         """
