@@ -52,10 +52,10 @@ class CampaignFinanceAPI(RESTDatasource):
 
     def get_indep_expends(self, fecid=None, cycle='2016'):
         """
-
-        :param fecid:
-        :param cycle:
-        :return:
+        Gets the independant expenditures for a specific committee for a specific cycle
+        :param fecid: The committee's fec id (required)
+        :param cycle: The cycle as a string, '2016' is the default
+        :return: The results of the api call as json
         """
         if fecid is None:
             raise URIParameterException('FEC ID required but not given')
