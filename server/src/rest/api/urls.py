@@ -6,5 +6,5 @@ basic self-referencing controller.
 '''
 urlpatterns = [
     url(r'^$', views.index),
-	url(r'^demo$', views.demo)
+    url(r'^demo$', views.demo)
 ]
