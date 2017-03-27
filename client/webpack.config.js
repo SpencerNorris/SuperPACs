@@ -219,6 +219,6 @@ module.exports = function makeWebpackConfig() {
 	  "/api": process.env.API_SERVER || "http://localhost:8000"
 	}
   };
-  
+
   return config;
 }();
