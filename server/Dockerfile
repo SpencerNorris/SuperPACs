@@ -5,4 +5,6 @@ WORKDIR /code
 ADD . /code/
 RUN apt-get install libmysqlclient-dev
 RUN pip install -r src/requirments.txt
-CMD ["python", "/code/src/rest/manage.py", "runserver", "0.0.0.0:8000"]
+WORKDIR /code/src/rest/
+RUN chmod ugo+x run.sh
+CMD ["sh", "run.sh"]
