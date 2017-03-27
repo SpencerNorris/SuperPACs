@@ -1,6 +1,6 @@
 """
 File: datasource/__init__.py
-Author: Spencer Norris
+Author: Spencer Norris and Kevin Reitano
 Description: Implementation of Datasource base class.
 """
 
