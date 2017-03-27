@@ -89,7 +89,7 @@ const MODULE_NAME = 'app';
 
 angular.module(MODULE_NAME, [])
   .directive('app', app)
-  .controller('AppCtrl', ($http) => {
+  .controller('AppCtrl', /*@ngInject*/ ($http) => {
       $http.get('/api/demo').then((response) => {
           drawGraph(response.data);
       });
