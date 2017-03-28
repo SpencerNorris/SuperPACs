@@ -44,8 +44,7 @@ class RESTDatasource(Datasource):
             raise APIKeyException('API key not provided but')
         super().__init__()
         self.apikey = apikey
-        #self.params = dict()
-        #self.headers = dict()
+        
 
     def request(self, requeststr, params, headers):
         """
