@@ -26,7 +26,7 @@ class FECAPI(RESTDatasource):
         Function to get independant expenditures of a particular committee for a particular cycle
         :param committee_id: The FEC id of a particular committee (required)
         :param cycle: (string) The cycle that you are intereested in the independant expenditures for, default is "2016"
-        :return: All pages from the response from the api as JSOn
+        :return: All pages from the response from the api as JSON
         """
         if committee_id is None:
             raise URIParameterException('Committee ID parameter required but not given')
@@ -43,7 +43,7 @@ class FECAPI(RESTDatasource):
     def get_committees(self):
         """
         Function to get all SuperPACs from the FEC
-        :return: The api response containing all SuperPACs as json data
+        :return: The api response containing all SuperPACs as JSON data
         """
         requeststr = str(self.uri) + 'committees/'
         params = {
