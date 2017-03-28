@@ -22,17 +22,19 @@ class CampaignFinanceAPI(RESTDatasource):
         super().__init__(apikey)
         self.uri = "https://api.propublica.org/campaign-finance/v1/"
         self.keyname = 'X-API-Key'
-        #self.headers[self.keyname] = apikey
 
 
-    def find_comittees(self, query=None):
+    def find_comittees(self, query=None, cycle='2016'):
         """
         Method for searching for committees using a query string
         :param query: The search query for the api call, note that "*" does not act as a wildcard
+        :param cycle: The cycle to get info for, default is most recent (2016)
         :return: The response of the search for committees api call as json
         """
         rheaders = {self.keyname: self.apikey}
         rparams = {'query': query}
+        requeststr = str(self.uri) + str(cycle) + "/committees/search"
+        return super().request(requeststr, params, headers)
 
 
     def get_commitee(self, fecid=None, cycle='2016'):
