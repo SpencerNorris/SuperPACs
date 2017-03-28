@@ -20,7 +20,9 @@
   },
   "homepage": "https://github.com/Foxandxss/angular-webpack-workflow",
   "dependencies": {
-    "angular": "^1.5.0"
+    "angular": "^1.5.0",
+    "d3": "^4.7.4",
+    "d3-webpack-loader": "^0.1.1"
   },
   "devDependencies": {
     "angular-mocks": "^1.5.0",
@@ -42,6 +44,7 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-spec-reporter": "0.0.26",
     "karma-webpack": "2.0.1",
+    "ng-annotate-loader": "^0.2.0",
     "node-libs-browser": "2.0.0",
     "null-loader": "^0.1.1",
     "phantomjs-prebuilt": "^2.1.4",

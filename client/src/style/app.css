@@ -20,3 +20,11 @@ footer {
   text-align: center;
   font-size: 0.8em;
 }
+
+#graph {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  background-color: black;
+}

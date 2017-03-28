@@ -68,7 +68,7 @@ module.exports = function makeWebpackConfig() {
     config.devtool = 'source-map';
   }
   else {
-    config.devtool = 'eval-source-map';
+    config.devtool = 'source-map';
   }
 
   /**
@@ -86,7 +86,10 @@ module.exports = function makeWebpackConfig() {
       // Transpile .js files using babel-loader
       // Compiles ES6 and ES7 into ES5 code
       test: /\.js$/,
-      loader: 'babel-loader',
+      use: [
+        {loader: 'ng-annotate-loader'},
+        {loader: 'babel-loader'}
+      ],
       exclude: /node_modules/
     }, {
       // CSS LOADER
@@ -176,8 +179,9 @@ module.exports = function makeWebpackConfig() {
     // Render index.html
     config.plugins.push(
       new HtmlWebpackPlugin({
-        template: './src/public/index.html',
-        inject: 'body'
+        template: './src/public/app/index.html',
+        inject: 'body',
+		filename: 'app/index.html'
       }),
 
       // Reference: https://github.com/webpack/extract-text-webpack-plugin
@@ -213,7 +217,10 @@ module.exports = function makeWebpackConfig() {
    */
   config.devServer = {
     contentBase: './src/public',
-    stats: 'minimal'
+    stats: 'minimal',
+      proxy: {
+        "/api": process.env.API_SERVER || "http://localhost:8000"
+      }
   };
 
   return config;
