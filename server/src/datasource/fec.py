@@ -1,3 +1,9 @@
+"""
+-File: datasource/fec.py
+-Author: Kevin Reitano
+-Description: This File implements the FEC API Wrapper Class
+"""
+
 from datasource import RESTDatasource
 from datasource import APIKeyException
 from datasource import URIParameterException
