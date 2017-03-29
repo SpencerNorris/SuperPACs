@@ -6,29 +6,40 @@ class Representative(models.Model):
     '''
     Representative class which represents Representatives.
     '''
+    ##PROPUBLICA api id.
+    propublicaid = models.CharField(max_length = 9,unique=True)
 
+    first_name = models.CharField(max_length = 140)
+    middle_name = models.CharField(max_length = 140,default="")
+    last_name = models.CharField(max_length = 140)
 
-    name = models.CharField(max_length = 140)
-    district = models.CharField(max_length = 140)
+    district = models.CharField(max_length = 140,default="0")
     state = models.CharField(max_length = 140)
     sitelink = models.CharField(max_length = 500,default="https://www.wikipedia.org/")
+    #office = models.BooleanField(default=True)
 
 
-    PARTIES = (("D","Democrat"),
-            ("R","Republican"),
-            )
+    PARTIES =   (("D","Democrat"),
+                ("R","Republican"),
+                )
     party = models.CharField(max_length=1, choices=PARTIES)
 
+    CHAMBERS =   (("H","House"),
+                ("S","Senate"),
+                )
+    chamber = models.CharField(max_length=1, choices=CHAMBERS)
 
-    ##PROPUBLICA api id.
-    propublicaid = models.CharField(max_length = 9,default = "1")
 
     ##FEC api id
-    fecid = models.CharField(max_length = 9,default = "1")
+    fecid = models.CharField(max_length = 9,default = "2")
 
 
     def __str__():
         return self.name+" ("+party+")"
+
+    ##getters
+
+
 
 ##Can we do this subclass things?
 #class Senator(models.Model):
@@ -51,9 +62,9 @@ class SuperPAC(models.Model):
         return self.name
 
 
-class Legislation(models.Model):
+class Bill(models.Model):
     '''
-    Legislation class which represents Legislation.
+    Bill class which represents Bill. Is either passed or not passed.
     '''
     name = models.CharField(max_length = 140)
 
@@ -74,14 +85,14 @@ class Legislation(models.Model):
 
 class Vote(models.Model):
     '''
-    Vote class which represents a Representative voting on Legislation.
+    Vote class which represents a Representative voting on a Bill.
     '''
     representative = models.ForeignKey(Representative, on_delete=models.CASCADE)
-    legislation = models.ForeignKey(Legislation, on_delete=models.CASCADE)
+    bill = models.ForeignKey(Bill, on_delete=models.CASCADE)
     decision = models.IntegerField()
 
     def __str__():
-        return self.representative.__str__()+","+self.legislation.__str__()+","+self.decision
+        return self.representative.__str__()+","+self.bill.__str__()+","+self.decision
 
 
 class Donation(models.Model):

@@ -74,6 +74,7 @@ Docker Compose will now automatically build all the Docker containers, you may n
 
 Docker Compose will now start the Docker containers and the website should be running on localhost. You may need to run as root, if you do remember to have the environment variables in the root environment.
 
+
 # Software Design And Development Documentation.
 
 ## Style Guide
