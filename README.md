@@ -18,26 +18,20 @@ Installation instructions [here](https://docs.docker.com/engine/installation/).
 
 ### Database (MySQL)
 This project uses MySQL 5.6+. 
-Installation instructions [here](https://dev.mysql.com/doc/refman/5.6/en/installing.html).
 
 ### Client (Angular)
 This project uses Angular 1.6+. 
-Download Angular [here](https://angularjs.org/).
 
 ### Server (Django)
 This project uses Django 1.10.6 with Python 3.6. 
-Download Python 3.6 [here](https://www.python.org/downloads/) or use a virtual environment (details below).
-Installation instructions for Django [here](https://docs.djangoproject.com/en/1.10/topics/install/).
 
-For more help with Django, check out this [useful video tutorial](https://www.youtube.com/playlist?list=PLQVvvaa0QuDeA05ZouE4OzDYLHY-XH-Nd).
+For help with Django, check out this [useful video tutorial](https://www.youtube.com/playlist?list=PLQVvvaa0QuDeA05ZouE4OzDYLHY-XH-Nd).
 
 Note:  There is an encryption key in `restapi/rest/rest/settings.py` that must be securely stored, out of production. Stick it in an environment variable, and leave it out of the code.
 
 ## Virtual Environment for Python 3.
 
 Included in the gitignore is the file `/superpac`. It is meant to be the virtual environment file, there so you can work with the Python 3 code even with Python 2.7 installed.
-
-Run `SuperPACs/ $ virtualenv -p python3 superpac`. A new folder will be created: `/superpac`. Now run `$ python3` and Python 3 will start.
 
 # Deployment Guide
 
