@@ -17,17 +17,17 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-  
+
   nginx:
     restart: always
     build: ./client
     ports:
-      - "80:80"
+      - "81:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
     links:
       - web:web
-  
+
   mysql:
     restart: always
     image: mysql:latest
