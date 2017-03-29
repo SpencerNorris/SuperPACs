@@ -41,7 +41,7 @@ class RESTDatasource(Datasource):
 
         #Throw API key errors
         if (apikey is None):
-            raise APIKeyException('API key not provided but')
+            raise APIKeyException('API key not provided')
         super().__init__()
         self.apikey = apikey
         
