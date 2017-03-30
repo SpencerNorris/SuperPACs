@@ -31,7 +31,7 @@ class Representative(models.Model):
 
 
     ##FEC api id
-    fecid = models.CharField(max_length = 9,default = "2")
+    fecid = models.CharField(max_length = 9,default = "222222222")
 
 
     def __str__():
@@ -52,10 +52,10 @@ class SuperPAC(models.Model):
     sitelink = models.CharField(max_length = 500,default="https://www.wikipedia.org/")
 
     ##PROPUBLICA api id reference.
-    propublicaid = models.CharField(max_length = 9,default = "1")
+    propublicaid = models.CharField(max_length = 9)
 
     ##FEC api id
-    fecid = models.CharField(max_length = 9,default = "1")
+    fecid = models.CharField(max_length = 9,default = "111111111")
 
 
     def __str__():
@@ -77,7 +77,7 @@ class Bill(models.Model):
     propublicaid = models.CharField(max_length = 9,default = "1")
 
     ##FEC api id
-    fecid = models.CharField(max_length = 9,default = "1")
+    fecid = models.CharField(max_length = 9,default = "ccccccccc")
 
     def __str__():
         return self.name
@@ -105,8 +105,8 @@ class Donation(models.Model):
     support_options =   (("S","Support"),
                         ("A","Against"),
                         )
-    support = models.CharField(max_length=1, choices=support_options)
-
+    support = models.CharField(max_length=1, choices=support_options,default="S")
+    #uniqueid = models.CharField(max_length = 40,default = "1")
 
     def __str__():
         return self.superpac.__str__()+","+self.representative.__str__()+","+self.amount
