@@ -69,7 +69,7 @@ class SuperPAC(models.Model):
 
 class Bill(models.Model):
     '''
-    Bill class which represents Bill. Is either passed or not passed.
+    Bill class which represents Bill. It is either passed or not passed.
     '''
     name = models.CharField(max_length = 140)
 
