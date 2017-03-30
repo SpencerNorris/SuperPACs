@@ -34,11 +34,13 @@ class Representative(models.Model):
     fecid = models.CharField(max_length = 9,default = "222222222")
 
 
-    def __str__():
+    def __str__(self):
         return self.name+" ("+party+")"
 
-    ##getters
 
+    ##getters
+    def __json__(self):
+        return {"id":self.id,"name":str(self.first_name+" "+self.last_name),"party":self.party}
 
 
 ##Can we do this subclass things?
@@ -58,8 +60,11 @@ class SuperPAC(models.Model):
     fecid = models.CharField(max_length = 9,default = "111111111")
 
 
-    def __str__():
+    def __str__(self):
         return self.name
+
+    def __json__(self):
+        return {"id":self.id,"name":self.name}
 
 
 class Bill(models.Model):
@@ -79,7 +84,7 @@ class Bill(models.Model):
     ##FEC api id
     fecid = models.CharField(max_length = 9,default = "ccccccccc")
 
-    def __str__():
+    def __str__(self):
         return self.name
 
 
@@ -91,7 +96,7 @@ class Vote(models.Model):
     bill = models.ForeignKey(Bill, on_delete=models.CASCADE)
     decision = models.IntegerField()
 
-    def __str__():
+    def __str__(self):
         return self.representative.__str__()+","+self.bill.__str__()+","+self.decision
 
 
@@ -100,13 +105,16 @@ class Donation(models.Model):
     Donation class that acts as a donation edge from SuperPACs to Representatives.
     '''
     superpac = models.ForeignKey(SuperPAC, on_delete=models.CASCADE)##figure out what is best here.
-    represenative = models.ForeignKey(Representative, on_delete=models.CASCADE)
+    representative = models.ForeignKey(Representative, on_delete=models.CASCADE)
     amount = models.IntegerField()
     support_options =   (("S","Support"),
-                        ("A","Against"),
+                        ("O","Oppose"),
                         )
     support = models.CharField(max_length=1, choices=support_options,default="S")
-    #uniqueid = models.CharField(max_length = 40,default = "1")
+    uid = models.CharField(max_length = 40,default=None)
 
-    def __str__():
+    def __str__(self):
         return self.superpac.__str__()+","+self.representative.__str__()+","+self.amount
+
+    def __json__(self):
+        return {"from":self.superpac.id,"to":self.representative.id,"amount":self.amount,"support":self.support}

@@ -2,7 +2,7 @@
 import os
 import MySQLdb
 import django
-
+from django.core.exceptions import MultipleObjectsReturned
 os.sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
@@ -83,17 +83,43 @@ def uploadDonations():
         rep = Representative.objects.get(propublicaid=donation["propublica_candidate_id"])
         sup = SuperPAC.objects.get(fecid=donation["committee_id"])
 
-        donation_dict["represenative"] = rep
-        donation_dict["superpac"] = sup
+        donation_dict["representative_id"] = rep.id
+        donation_dict["superpac_id"] = sup.id
         donation_dict["amount"] = donation["amount"]
-
+        donation_dict["uid"] = donation["unique_id"]
+        donation_dict["support"] = donation["support_or_oppose"]
         Donation.objects.create(**donation_dict)
+        print("get donation")
+
+        #d = Donation.objects.get(**donation_dict)
+        #figure out how to update donation if it already exists.
+        '''failed_update = True
+        try:
+            d = Donation.objects.get(**donation_dict)
+            d.uid = donation["unique_id"]
+            d.support = donation["support_or_oppose"]
+            d.save()
+            failed_update = False
+            print("old donation save: ",d.amount," ",d.support)
+        except MultipleObjectsReturned:
+            failed_update = True
+            print("new donation: ",d.amount," ",d.support)
+        #what if nothing is found!??
+        '''
+        '''if(d):
+            print("new donation save: ",d.amount," ",d.support)
+            print(" --> ",donation["support_or_oppose"])
+            d.support = donation["support_or_oppose"]
+            d.save()
+        else:'''
+
+
 
 
 def uploadToDatabase():
-    representative_json = uploadRepresentatives()
+    #representative_json = uploadRepresentatives()
     print("Finished seeding Representatives.")
-    superpac_json = uploadSuperPACs()
+    #superpac_json = uploadSuperPACs()
     print("Finished seeding SuperPACs.")
     ##what to do if database already got created.
 

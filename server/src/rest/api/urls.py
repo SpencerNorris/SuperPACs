@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^$', views.index),
     url(r'^demo$', views.demo),
     url(r'^restdemo$', views.restdemo),
+    url(r'^datademo$', views.datademo),
 ]
