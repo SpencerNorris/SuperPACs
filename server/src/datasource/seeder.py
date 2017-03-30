@@ -64,7 +64,7 @@ def uploadRepresentatives():
     return True
 
 def uploadSuperPACs():
-    fec_obj = fec.FECAPI(FEC_APIKEY)
+    fec_obj = FECAPI(FEC_APIKEY)
     superpacs_list = fec_obj.get_committees()
 
     #print(superpacs_list[0])
@@ -117,9 +117,9 @@ def uploadDonations():
 
 
 def uploadToDatabase():
-    #representative_json = uploadRepresentatives()
+    representative_json = uploadRepresentatives()
     print("Finished seeding Representatives.")
-    #superpac_json = uploadSuperPACs()
+    superpac_json = uploadSuperPACs()
     print("Finished seeding SuperPACs.")
     ##what to do if database already got created.
 

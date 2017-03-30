@@ -8,7 +8,7 @@ print(os.sys.path)
 from fec import *
 from propublica import *
 import pickle
-from simplejson import JSONDecodeError
+from json import JSONDecodeError
 
 
 FEC_APIKEY = os.getenv('FEC_API_KEY', '')
