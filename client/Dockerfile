@@ -3,7 +3,7 @@ FROM nginx:latest
 ADD https://deb.nodesource.com/setup_7.x /opt/node_ppa.sh
 RUN chmod u+x /opt/node_ppa.sh
 RUN /opt/node_ppa.sh
-RUN apt-get install -y nodejs
+RUN apt-get install -y nodejs bzip2
 
 RUN mkdir /opt/client
 COPY . /opt/client
