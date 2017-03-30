@@ -10,7 +10,7 @@ Use the following instructions to develop code for client side use
 ## Dependencies
 What you'll need the begin development:
 * `node`and `npm`
-* Ensure you're running Node (v4.1.x+) and NPM (2.14.x+)
+* Ensure you're running Node (v7.7.3+) and NPM (4.1.2+)
 
 ## Installing
 * On your local copy of this project, enter this directory (`client/`)
@@ -25,6 +25,8 @@ The webpack dev server is now serving content at `http://localhost:8080`.
 
 The webpack dev server proxies requests that are sent to `api/`.
 To set the server that it points to set the environment variable `API_SERVER`, the default value used is `http://localhost:8000`.
+We recommend running the Docker container for this, with the `API_SERVER` enviroment variable pointing to the Django server in Docker.
+
 
 This is the point at which you can begin developing. 
 Any changed made will update in real time and automatically refresh the browser window.

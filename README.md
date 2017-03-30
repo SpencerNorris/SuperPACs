@@ -10,39 +10,6 @@ In today’s age of SuperPACs massive funding of politicians it is important for
 
 The focus of our website is to create visualizations of how SuperPAC contributions to members of congress affect their voting on different pieces of legislation. A particular visualization, or set of visualizations, is presented when the user searches either for a specific member of Congress or for a specific SuperPAC. If the user searches for a SuperPAC, visualizations will focus on how that SuperPACs contributions to congressmen affect legislation. Conversely, if the user searches for a particular representative, the visuals will focus on what SuperPACs are contributing and how that is reflected in the representative’s voting on legislation. As the goal of the site is to inform, other relevant information, such as more information about a particular SuperPAC or politician, will be either given directly, or linked to, whenever possible.
 
-# Setup Guide
-
-## Docker
-
-### database (MySQL)
-
-### client (angular)
-
-### server (django)
-SuperPACs/
-$ pip3 install django
-
-Useful tutorial for understanding django.
-https://www.youtube.com/playlist?list=PLQVvvaa0QuDeA05ZouE4OzDYLHY-XH-Nd
-
-In restapi/rest/rest/settings.py, there is an encryption key that must be securely stored, out of production.
-Stick it in an environment variable, and leave it out of the code.
-
-## Virtual Environment for python 3.
-
-Included in the gitignore is the file /superpac
-it is meant to be the virtual environment file, there so you can work with the python 3 code even with python 2.7 installed.
-
-SuperPACs/ $ virtualenv -p python3 superpac
-
-A new folder will be created /superpac.
-
-Now do $ python3 and python3 will start.
-
-** may need to install python3 already? **
-
-## Setting up Django.
-
 # Deployment Guide
 
 Use the following instructions to deploy this website on to a server that supports Docker Compose.
@@ -73,6 +40,18 @@ Docker Compose will now automatically build all the Docker containers, you may n
 * Run `docker-compose up -d`
 
 Docker Compose will now start the Docker containers and the website should be running on localhost. You may need to run as root, if you do remember to have the environment variables in the root environment.
+
+> Note, if you are running mysql locally you may need to stop it before deploying Docker
+
+# Development Instructions
+
+## Backend Development
+
+To develop for Django, simply deploy Docker and edit files within the `server/` folder. Changes will be reflected automatically in the Docker contianer.
+
+## Frontend Development
+
+Instructions for frontend development are within the `client/` folder.
 
 # Software Design And Development Documentation.
 
