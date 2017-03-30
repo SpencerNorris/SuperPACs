@@ -10,7 +10,7 @@ Use the following instructions to develop code for client side use
 ## Dependencies
 What you'll need the begin development:
 * `node`and `npm`
-* Ensure you're running Node (v4.1.x+) and NPM (2.14.x+)
+* Ensure you're running Node (v7.7.3+) and NPM (4.1.2+)
 
 ## Installing
 * On your local copy of this project, enter this directory (`client/`)
