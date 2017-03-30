@@ -148,7 +148,7 @@ const MODULE_NAME = 'app';
 
 angular.module(MODULE_NAME, [])
   .directive('app', app)
-  .controller('AppCtrl', ($http) => {
+  .controller('AppCtrl', /*@ngInject*/ ($http) => {
       $http.get('/api/datademo').then((response) => {
           alert("data");
           alert(response.data);
