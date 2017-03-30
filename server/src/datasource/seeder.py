@@ -18,30 +18,8 @@ from parse_indepexpends import *
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'rest.settings'
 
-
-
 ProPublica_APIKEY = os.getenv('PP_API_KEY', '')
 FEC_APIKEY = os.getenv('FEC_API_KEY', '')
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('MYSQL_DATABASE', 'superpac'),
-        'HOST': 'mysql',
-        'PORT': '3306',
-        'USER': os.getenv('MYSQL_USER', 'root'),
-        'PASSWORD': os.getenv('MYSQL_PASSWORD', 'root')
-    }
-}
-
-def connect(database):
-    '''
-    Connecting to the database and returning a cursor.
-    '''
-    db = MySQLdb.connect(host=database['HOST'],user=database["USER"],passwd=database["PASSWORD"],db=database["NAME"])
-    cur = db.cursor()
-    return cur
-
 
 def uploadRepresentatives():
     ##get all the representatives in json
@@ -83,41 +61,47 @@ def uploadRepresentatives():
 
         Representative.objects.create(**senator_dict)
 
-
     return True
 
 def uploadSuperPACs():
     fec_obj = fec.FECAPI(FEC_APIKEY)
     superpacs_list = fec_obj.get_committees()
 
-    print(superpacs_list[0])
+    #print(superpacs_list[0])
+    for superpac in superpacs_list:
+        superpac_dict = {}
+        superpac_dict["name"]=superpac["name"]
+        superpac_dict["fecid"]=superpac["committee_id"]
+        SuperPAC.objects.create(**superpac_dict)
 
 def uploadDonations():
+    donation_list = donations()
 
+    for donation in donation_list:
+        donation_dict = {}
 
-    return True
+        rep = Representative.objects.get(propublicaid=donation["propublica_candidate_id"])
+        sup = SuperPAC.objects.get(fecid=donation["committee_id"])
 
+        donation_dict["represenative"] = rep
+        donation_dict["superpac"] = sup
+        donation_dict["amount"] = donation["amount"]
 
-#def uploadBills():
-#    pass
+        Donation.objects.create(**donation_dict)
 
 
 def uploadToDatabase():
-
-
-    #cursor = connect(DATABASES['default'])
-
-    #representative_json = uploadRepresentatives()
+    representative_json = uploadRepresentatives()
+    print("Finished seeding Representatives.")
     superpac_json = uploadSuperPACs()
+    print("Finished seeding SuperPACs.")
+    ##what to do if database already got created.
+
     donation_json = uploadDonations()
-
-
-    #congressAPI.
-    #uploadBills(cursor)
+    print("Finished seeding Donations.")
 
 if __name__ == "__main__":
     django.setup()
-    #import rest.rest.settings
     from api.models import *
-    print(1)
+
     uploadToDatabase()
