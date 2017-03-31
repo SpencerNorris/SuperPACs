@@ -83,7 +83,7 @@ function drawGraph(data) {
                         } else if(d.party=="D"){
                             return d.color = "#1976D2";
                         } else {
-                            return d.color = "#795548";
+                            return d.color = "#BCAAA4";
                         }
                     });
     /* Draw text for all the nodes */
