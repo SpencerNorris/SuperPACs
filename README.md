@@ -28,6 +28,11 @@ You will also need to set the following environment variables
 * MYSQL_PASSWORD
 * MYSQL_ROOT_PASSWORD
 * DJANGO_SECRET_KEY
+* PP_API_KEY
+* FEC_API_KEY
+
+> PP_API_KEY refers to the ProPublic API Key which can be procured from https://www.propublica.org/datastore/api/campaign-finance-api,
+> FEC_API_KEY refers to the Federal Election Commission API Key which can be procured from https://api.data.gov/signup/
 
 ## Build Instructions
 * Clone this project on to the server
