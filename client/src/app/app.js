@@ -2,7 +2,6 @@ import angular from 'angular';
 import d3 from './d3-modules';
 import '../style/app.css';
 
-
 let app = () => {
   return {
     template: require('./app.html'),
@@ -18,15 +17,14 @@ function drawGraph(data) {
 
     var nodes = [];
     var links = [];
-    var representatives = [];
 
     //nodes
     Object.keys(data.committees).forEach(function(rep) {
-        nodes.push({id:"c_"+data.committees[rep].id, name: data.committees[rep].name, _x: 300, _y: 400});
+        nodes.push({id:"c_"+data.committees[rep].id, name: data.committees[rep].name, x: 300, _x: 300, y: 400, _y: 400});
     });
 
     Object.keys(data.representatives).forEach(function(rep) {
-        nodes.push({id:"r_"+data.representatives[rep].id, name: data.representatives[rep].name,party:data.representatives[rep].party, _x: 600, _y: 400});
+        nodes.push({id:"r_"+data.representatives[rep].id, name: data.representatives[rep].name,party:data.representatives[rep].party, x:600, _x: 600, y: 400, _y: 400});
     });
 
     //uncomment when bills are added
@@ -36,25 +34,24 @@ function drawGraph(data) {
 
     //links
     Object.keys(data.donations).forEach(function(rep) {
-        if(data.donations[rep].from in data.committees && data.donations[rep].to in data.representatives){
-            links.push({source:"c_"+data.donations[rep].from, target: "r_"+data.donations[rep].to,thickness:data.donations[rep].amount,support:data.donations[rep].support});
+        if(data.donations[rep].source in data.committees && data.donations[rep].destination in data.representatives){
+            links.push({source:"c_"+data.donations[rep].source, target: "r_"+data.donations[rep].destination,thickness:data.donations[rep].amount,support:data.donations[rep].support});
         }
     });
 
     //uncomment when votes are added
     /*Object.keys(data.votes).forEach(function(rep) {
-        links.push({source:"r_"+data.votes[rep].from, target: "b_"+data.votes[rep].to});
+        links.push({source:"r_"+data.votes[rep].source, target: "b_"+data.votes[rep].destination});
     });*/
     
     var y = d3.scaleLinear().domain([0,d3.max(data.donations,function(d){return d.amount;})]).range([2, 20]);
-    /* Draw the node labels first */
 
     /* Establish the dynamic force behavor of the nodes */
     var force = d3.forceSimulation(nodes)
-                    .force("charge", d3.forceManyBody().strength(function() {return -500;}))
-                    .force('link', d3.forceLink(links).distance(0).strength(0.005).id(function(d) {return d.id;}))
-                    .force('X', d3.forceX().x(function(d) { return d._x }).strength(function() {return 8;}))
-                    .force('Y', d3.forceY().y(function(d) { return d._y }).strength(function() {return .05;}))
+                    //.force("charge", d3.forceManyBody().strength(function() {return -5;}))
+                    .force('link', d3.forceLink(links).distance(0).strength(0).id(function(d) {return d.id;}))
+                    .force('X', d3.forceX().x(function(d) { return d._x }).strength(function() {return 1;}))
+                    //.force('Y', d3.forceY().y(function(d) { return d._y }).strength(function() {return .05;}))
                     .force("collide", d3.forceCollide().radius(function(d) { return 20 + 5; }).iterations(2));
     /* Draw the edges/links between the nodes */
     var edges = vis.selectAll("line")
@@ -79,11 +76,11 @@ function drawGraph(data) {
                     .style("stroke", "black")
                     .style("fill",function(d){
                         if(d.party == "R"){
-                            return d.color = "#E64A19";
+                            return d.color = "#E64A19"; //red
                         } else if(d.party=="D"){
-                            return d.color = "#1976D2";
+                            return d.color = "#1976D2"; //blue
                         } else {
-                            return d.color = "#BCAAA4";
+                            return d.color = "#BCAAA4"; //brown
                         }
                     });
     /* Draw text for all the nodes */
@@ -112,7 +109,7 @@ function drawGraph(data) {
                 .attr("y2", function(d) { return d.target.y; });
         circles.attr("cx", function(d) { return d.x; })
                 .attr("cy", function(d) { return d.y; })
-        texts.attr("transform", function(d) { return "translate(" + (d.party ? d.x : d.x-d.bbox.width) + "," + (d.y+(d.bbox.height/2)) + ")"; });
+        texts.attr("transform", function(d) { return "translate(" + (d.party ? d.x : d.x-d.bbox.width) + "," + (d.y+(d.bbox.height/4)) + ")"; });
         textBGs.attr("transform", function(d) { return "translate(" + (d.party ? d.x-5 : d.x-d.bbox.width-5) + "," + (d.y-(d.bbox.height*.5)-5) + ")"; });
     }); // End tick func
 }
@@ -123,7 +120,7 @@ const MODULE_NAME = 'app';
 angular.module(MODULE_NAME, [])
   .directive('app', app)
   .controller('AppCtrl', /*@ngInject*/ ($http) => {
-      $http.get('/api/datademo').then((response) => {
+      $http.get('/api/donationsDemo').then((response) => {
           drawGraph(response.data);
       });
   });
