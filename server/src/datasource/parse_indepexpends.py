@@ -8,7 +8,7 @@ print(os.sys.path)
 from fec import *
 from propublica import *
 import pickle
-from simplejson import JSONDecodeError
+from json import JSONDecodeError
 
 
 FEC_APIKEY = os.getenv('FEC_API_KEY', '')
@@ -39,7 +39,6 @@ def donations_helper():
             try:
                 indepExpend = PPCampFinObj.get_indep_expends(str(committee['committee_id']))
                 if(count%100==0):
-                    #print(expend['candidate_name']+" "+count)
                     print("committee ",count," ",str(committee['committee_id']))
 
                 for expend in indepExpend["results"]:
@@ -47,7 +46,6 @@ def donations_helper():
                         #expend fo a particular expenditure
                         expend['committee_id'] = str(committee['committee_id'])
                         expend['propublica_candidate_id'] = str(legislator_index[expend['candidate_name']]['id'])
-                        #print(expend)
                         donations.append(expend)
                     except KeyError:
                         pass
@@ -65,13 +63,11 @@ def donations():
     except EOFError:
 
         donations = donations_helper()
-        #a = {"data":donations,"open":True}
 
         with open('donationdata.pickle', 'wb') as handle:
             pickle.dump(donations, handle, protocol=pickle.HIGHEST_PROTOCOL)
         print("donations",donations)
         return donations
-        #pickle.dump(a,open("donationdata.pickle","wb"))
 
 
 if __name__ == "__main__":

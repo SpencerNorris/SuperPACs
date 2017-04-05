@@ -33,8 +33,6 @@ module.exports = function makeWebpackConfig() {
     app: './src/app/app.js'
   };
 
-
-
   /**
    * Output
    * Reference: http://webpack.github.io/docs/configuration.html#output
