@@ -44,7 +44,7 @@ Docker Compose will now automatically build all the Docker containers, you may n
 ## Deployment Instructions
 * Run `docker-compose up -d`
 
-Docker Compose will now start the Docker containers and the website should be running on localhost. You may need to run as root, if you do remember to have the environment variables in the root environment.
+Docker Compose will now start the Docker containers and the website should be running on localhost. You may need to run as root, if you do remember to have the environment variables in the root environment. Note that on Windows, the website may instead be running on virtualbox, but you can still access the site through Kinematic which is available as part of the Docker Toolbox download.
 
 > Note, if you are running mysql locally you may need to stop it before deploying Docker
 
