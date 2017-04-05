@@ -96,7 +96,7 @@ function drawGraph(data) {
                     .data(nodes)
                     .enter()
                     .insert("rect", "text")
-                    .attr("fill", function(d){return d.color;})//d3.rgb(d.color).darken(1);})
+                    .attr("fill", function(d){return d.color;})
                     .attr("width", function(d){return d.bbox.width+10})
                     .attr("height", function(d){return d.bbox.height+10});
     /* Run the Force effect */
