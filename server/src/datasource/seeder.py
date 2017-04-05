@@ -27,6 +27,7 @@ def uploadRepresentatives():
     congressmen_list = con_obj.list_members(chamber = "house")
     senators_list = con_obj.list_members(chamber = "senate")
 
+    #print(congressmen_list['results'][0]['members'][0])
     for congressman in congressmen_list['results'][0]['members']:
         congress_dict = {} #personal details
         congress_dict["propublicaid"] = congressman['id']
@@ -58,6 +59,7 @@ def uploadSuperPACs():
     fec_obj = FECAPI(FEC_APIKEY)
     superpacs_list = fec_obj.get_committees()
 
+    #print(superpacs_list[0])
     for superpac in superpacs_list:
         superpac_dict = {}
         superpac_dict["name"]=superpac["name"]
@@ -66,7 +68,7 @@ def uploadSuperPACs():
 
 def uploadDonations():
     donation_list = donations()
-
+    print(donation_list[0])
     for donation in donation_list:
         donation_dict = {}
 
@@ -79,21 +81,23 @@ def uploadDonations():
         donation_dict["uid"] = donation["unique_id"]
         donation_dict["support"] = donation["support_or_oppose"]
         Donation.objects.create(**donation_dict)
-        print("get donation")
+        #print("get donation")
 
 def uploadToDatabase():
 
     Representative.objects.all().delete()
     print("Deleting all representatives.")
-    print("Using the PP key "+ProPublica_APIKEY)
+
     representative_json = uploadRepresentatives()
     print("Finished seeding Representatives.")
 
+
     SuperPAC.objects.all().delete()
+    print("Deleting all SuperPACs.")
 
     superpac_json = uploadSuperPACs()
     print("Finished seeding SuperPACs.")
-    ##what to do if database already got created.
+
 
     donation_json = uploadDonations()
     print("Finished seeding Donations.")
