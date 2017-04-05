@@ -48,10 +48,8 @@ function drawGraph(data) {
 
     /* Establish the dynamic force behavor of the nodes */
     var force = d3.forceSimulation(nodes)
-                    //.force("charge", d3.forceManyBody().strength(function() {return -5;}))
                     .force('link', d3.forceLink(links).distance(0).strength(0).id(function(d) {return d.id;}))
                     .force('X', d3.forceX().x(function(d) { return d._x }).strength(function() {return 1;}))
-                    //.force('Y', d3.forceY().y(function(d) { return d._y }).strength(function() {return .05;}))
                     .force("collide", d3.forceCollide().radius(function(d) { return 20 + 5; }).iterations(2));
     /* Draw the edges/links between the nodes */
     var edges = vis.selectAll("line")
