@@ -15,10 +15,9 @@ FEC_APIKEY = os.getenv('FEC_API_KEY', '')
 ProPublica_APIKEY = os.getenv('PP_API_KEY', '')
 
 def donations_helper():
-    print(FEC_APIKEY)
+
     FecApiObj = FECAPI(FEC_APIKEY)
     committees = FecApiObj.get_committees()
-    print(len(committees))
     PPCampFinObj = CampaignFinanceAPI(ProPublica_APIKEY)
     PPCongressApi = CongressAPI(ProPublica_APIKEY)
     legislator_index = dict()
@@ -32,14 +31,12 @@ def donations_helper():
         legislator_index[name] = legislator
 
     donations = []
-    print("committees:",len(committees))
+    print("committees number:",len(committees))
     count = 0
     for committee in committees:
         if(2016 in committee['cycles']):
             try:
                 indepExpend = PPCampFinObj.get_indep_expends(str(committee['committee_id']))
-                if(count%100==0):
-                    print("committee ",count," ",str(committee['committee_id']))
 
                 for expend in indepExpend["results"]:
                     try:
@@ -56,17 +53,18 @@ def donations_helper():
 def donations():
 
     try:
+        print("donation data pickled already. Grabbing data from donationdata.picke")
         with open('donationdata.pickle', 'rb') as handle:
             donations = pickle.load(handle)
-        print("donations",donations)
+        #print("donations",donations)
         return donations
     except EOFError:
-
+        print("donation data not pickled, grabbing directly from FEC and ProPublica APIs")
         donations = donations_helper()
 
         with open('donationdata.pickle', 'wb') as handle:
             pickle.dump(donations, handle, protocol=pickle.HIGHEST_PROTOCOL)
-        print("donations",donations)
+
         return donations
 
 
