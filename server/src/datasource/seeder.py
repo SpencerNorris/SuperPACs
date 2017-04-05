@@ -28,11 +28,11 @@ def uploadRepresentatives():
     senators_list = con_obj.list_members(chamber = "senate")
 
     for congressman in congressmen_list['results'][0]['members']:
-        congress_dict = {}
+        congress_dict = {} #personal details
         congress_dict["propublicaid"] = congressman['id']
         congress_dict["first_name"] = congressman['first_name']
-
         congress_dict["last_name"] = congressman['last_name']
+        #office details
         congress_dict["district"] = congressman['district']
         congress_dict["state"] = congressman['state']
         congress_dict["party"] = congressman['party']
@@ -41,14 +41,13 @@ def uploadRepresentatives():
         Representative.objects.create(**congress_dict)
 
     for senator in senators_list['results'][0]['members']:
-        senator_dict = {}
+        senator_dict = {}#personal details
         senator_dict["propublicaid"] = senator['id']
         senator_dict["first_name"] = senator['first_name']
-
         senator_dict["last_name"] = senator['last_name']
+        #office details
         senator_dict["state"] = senator['state']
         senator_dict["party"] = senator['party']
-        ##somehow in_office is fucky
         senator_dict["chamber"] = "S"
 
         Representative.objects.create(**senator_dict)
