@@ -14,6 +14,8 @@ services:
       - MYSQL_USER
       - MYSQL_PASSWORD
       - DJANGO_SECRET_KEY
+      - PP_API_KEY
+      - FEC_API_KEY
     depends_on:
       mysql:
         condition: service_healthy
