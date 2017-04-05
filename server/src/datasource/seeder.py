@@ -11,7 +11,7 @@ srcpath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 restpath = srcpath+"/rest"
 
 os.sys.path.append(restpath)
-print(restpath)
+
 from fec import *
 from propublica import *
 from parse_indepexpends import *
@@ -84,6 +84,8 @@ def uploadDonations():
 def uploadToDatabase():
 
     Representative.objects.all().delete()
+    print("Deleting all representatives.")
+    print("Using the PP key "+ProPublica_APIKEY)
     representative_json = uploadRepresentatives()
     print("Finished seeding Representatives.")
 

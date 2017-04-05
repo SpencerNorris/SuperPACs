@@ -31,7 +31,7 @@ class Representative(models.Model):
 
 
     ##FEC api id
-    fecid = models.CharField(max_length = 9,default = "222222222")
+    fecid = models.CharField(max_length = 9,default = None)
 
 
     def __str__(self):
@@ -57,7 +57,7 @@ class SuperPAC(models.Model):
     propublicaid = models.CharField(max_length = 9)
 
     ##FEC api id
-    fecid = models.CharField(max_length = 9,default = "111111111")
+    fecid = models.CharField(max_length = 9,default = None)
 
 
     def __str__(self):
@@ -79,10 +79,10 @@ class Bill(models.Model):
     ##more details about the bill? Sponsors? co-sponsors?
 
     ##PROPUBLICA api id.
-    propublicaid = models.CharField(max_length = 9,default = "1")
+    propublicaid = models.CharField(max_length = 9,default = None)
 
     ##FEC api id
-    fecid = models.CharField(max_length = 9,default = "ccccccccc")
+    fecid = models.CharField(max_length = 9,default = None)
 
     def __str__(self):
         return self.name
