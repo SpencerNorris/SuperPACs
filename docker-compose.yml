@@ -14,10 +14,12 @@ services:
       - MYSQL_USER
       - MYSQL_PASSWORD
       - DJANGO_SECRET_KEY
+      - PP_API_KEY
+      - FEC_API_KEY
     depends_on:
       mysql:
         condition: service_healthy
-  
+
   nginx:
     restart: always
     build: ./client
@@ -27,7 +29,7 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
     links:
       - web:web
-  
+
   mysql:
     restart: always
     image: mysql:latest

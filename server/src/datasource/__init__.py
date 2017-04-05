@@ -1,47 +1,57 @@
-'''
+"""
 File: datasource/__init__.py
-Author: Spencer Norris
-'''
+Author: Spencer Norris and Kevin Reitano
+Description: Implementation of Datasource base class.
+"""
 
 import requests
+import json
 
 
 class APIKeyException(Exception):
-	'''
-	Class for defining Datasource instantiation errors
-	where the user has provided an API key or the name of the 
-	API key parameter but not both.
-	'''
-	def __init__(self, value):
-		self.value = value
-	def __str__(self):
-		return repr(self.value)
+    """
+    Class for defining Datasource instantiation errors
+    where the user has provided an API key or the name of the
+    API key parameter but not both.
+    """
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
+
+
+class URIParameterException(Exception):
+    """
+    Class for defining Datasource method call errors
+    where the user has failed to provide a required parameter
+    for a given api method
+    """
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
 
 
 class Datasource:
-	pass
+    pass
+
 
 class RESTDatasource(Datasource):
-	def __init__(self, uri, apikey=None, keyname=None):
+    def __init__(self, apikey=None):
 
-		#Throw API key errors
-		if (apikey is None and not keyname is None):
-			raise APIKeyException('API key parameter name provided but not the API key')
-		elif (apikey is not None and keyname is None):
-			raise APIKeyException('API key provided but not API key parameter name')
+        #Throw API key errors
+        if (apikey is None):
+            raise APIKeyException('API key not provided')
+        super().__init__()
+        self.apikey = apikey
+        
 
-		super().__init__()
-		self.uri = uri
-		self.apikey = apikey
-		self.keyname = keyname
-
-	def request(self, method, **kwargs):
-	'''
-	Wrapper method for the Requests library.
-	If apikey has been provided, expects the name of 
-	the API key parameter for the URI under "kwargs['keyname']"
-	'''
-		if not self.apikey is None and not self.keyname is None:
-			kwargs[kwargs['keyname']] = self.apikey
-		r = requests.get(str(uri) + str(method), params=kwargs)
-		return json.loads(r.text)
+    def request(self, requeststr, params, headers):
+        """
+        Wrapper method for the Requests library.
+        Requires the uri of the request as well as parameters
+        and headers, which vary by method although an api key
+        will be required in some form.
+        """
+        r = requests.get(str(requeststr), params=params, headers=headers)
+        return json.loads(r.text)

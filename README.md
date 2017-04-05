@@ -28,6 +28,11 @@ You will also need to set the following environment variables
 * MYSQL_PASSWORD
 * MYSQL_ROOT_PASSWORD
 * DJANGO_SECRET_KEY
+* PP_API_KEY
+* FEC_API_KEY
+
+> PP_API_KEY refers to the ProPublic API Key which can be procured from https://www.propublica.org/datastore/api/campaign-finance-api,
+> FEC_API_KEY refers to the Federal Election Commission API Key which can be procured from https://api.data.gov/signup/
 
 ## Build Instructions
 * Clone this project on to the server
@@ -39,7 +44,7 @@ Docker Compose will now automatically build all the Docker containers, you may n
 ## Deployment Instructions
 * Run `docker-compose up -d`
 
-Docker Compose will now start the Docker containers and the website should be running on localhost. You may need to run as root, if you do remember to have the environment variables in the root environment.
+Docker Compose will now start the Docker containers and the website should be running on localhost. You may need to run as root, if you do remember to have the environment variables in the root environment. Note that on Windows, the website may instead be running on virtualbox, but you can still access the site through Kinematic which is available as part of the Docker Toolbox download.
 
 > Note, if you are running mysql locally you may need to stop it before deploying Docker
 
