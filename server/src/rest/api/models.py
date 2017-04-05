@@ -6,17 +6,15 @@ class Representative(models.Model):
     '''
     Representative class which represents Representatives.
     '''
-    ##PROPUBLICA api id.
-    propublicaid = models.CharField(max_length = 9,unique=True)
+
 
     first_name = models.CharField(max_length = 140)
     middle_name = models.CharField(max_length = 140,default="")
     last_name = models.CharField(max_length = 140)
 
-    district = models.CharField(max_length = 140,default="0")
+    district = models.CharField(max_length = 140,default="")
     state = models.CharField(max_length = 140)
-    sitelink = models.CharField(max_length = 500,default="https://www.wikipedia.org/")
-    #office = models.BooleanField(default=True)
+    sitelink = models.CharField(max_length = 500,default="")
 
 
     PARTIES =   (("D","Democrat"),
@@ -29,9 +27,11 @@ class Representative(models.Model):
                 )
     chamber = models.CharField(max_length=1, choices=CHAMBERS)
 
+    ##PROPUBLICA api id.
+    propublicaid = models.CharField(max_length = 9,unique=True)
 
     ##FEC api id
-    fecid = models.CharField(max_length = 9,default = None)
+    fecid = models.CharField(max_length = 9,default = "")
 
 
     def __str__(self):
@@ -43,21 +43,19 @@ class Representative(models.Model):
         return {"id":self.id,"name":str(self.first_name+" "+self.last_name),"party":self.party}
 
 
-##Can we do this subclass things?
-#class Senator(models.Model):
 
 class SuperPAC(models.Model):
     '''
     SuperPAC class which represents SuperPACs.
     '''
     name = models.CharField(max_length = 140)
-    sitelink = models.CharField(max_length = 500,default="https://www.wikipedia.org/")
+    sitelink = models.CharField(max_length = 500,default="")
 
     ##PROPUBLICA api id reference.
-    propublicaid = models.CharField(max_length = 9)
+    propublicaid = models.CharField(max_length = 9,default="")
 
     ##FEC api id
-    fecid = models.CharField(max_length = 9,default = None)
+    fecid = models.CharField(max_length = 9,unique = True)
 
 
     def __str__(self):
@@ -74,7 +72,7 @@ class Bill(models.Model):
     name = models.CharField(max_length = 140)
 
 
-    sitelink = models.CharField(max_length = 500,default="https://www.wikipedia.org/")
+    sitelink = models.CharField(max_length = 500,default="")
     hr = models.IntegerField()
     ##more details about the bill? Sponsors? co-sponsors?
 
@@ -110,7 +108,7 @@ class Donation(models.Model):
     support_options =   (("S","Support"),
                         ("O","Oppose"),
                         )
-    support = models.CharField(max_length=1, choices=support_options,default="S")
+    support = models.CharField(max_length=1, choices=support_options)
     uid = models.CharField(max_length = 40,default=None)
 
     def __str__(self):
