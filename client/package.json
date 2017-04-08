@@ -20,7 +20,11 @@
   },
   "homepage": "https://github.com/Foxandxss/angular-webpack-workflow",
   "dependencies": {
-    "angular": "^1.5.0",
+    "angular": "1.5.x",
+    "angular-animate": "1.5.x",
+    "angular-aria": "1.5.x",
+    "angular-material": "^1.1.3",
+    "angular-ui-notification": "^0.3.6",
     "d3": "^4.7.4",
     "d3-webpack-loader": "^0.1.1"
   },

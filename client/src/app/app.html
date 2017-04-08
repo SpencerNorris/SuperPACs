@@ -1,6 +1,30 @@
 
 <main>
+    <div id="sidebar">
+        <div class="form-group">
+            <md-autocomplete
+                    md-selected-item="searchItem"
+                    md-search-text="searchText"
+                    md-items="item in searchQuery(searchText)"
+                    md-item-text="item.name"
+                    md-min-length="3"
+                    md-dropdown-items="100"
+                    placeholder="Search">
+                <md-item-template>
+                    <span>{{item.name}}</span><br>
+                    <span class="autocompleteSubtext">{{item.type}}</span>
+                </md-item-template>
+                <md-not-found>
+                    No matches found.
+                </md-not-found>
+            </md-autocomplete>
+        </div>
+        <hr>
+
+        <h2>Active Filters</h2>
+        <span class="muted" ng-hide="filters.length">No filters</span>
+        <div ng-repeat="filter in filters"></div>
+
+    </div>
     <div id="graph"></div>
 </main>
-<footer>
-</footer>

@@ -1,7 +1,7 @@
 /* styles in src/style directory are applied to the whole page */
 body {
-  background: #0147A7;
   color: #fff;
+  margin: 0;
 }
 
 a {
@@ -9,11 +9,13 @@ a {
 }
 
 main {
-  padding: 1em;
   font-family: Arial, Helvetica, sans-serif;
   text-align: center;
-  margin-top: 50px;
   display: block;
+  display: flex;
+  height: 100vh;
+  background-color: black;
+  align-items: stretch;
 }
 
 footer {
@@ -22,9 +24,31 @@ footer {
 }
 
 #graph {
-  align-items: center;
+  flex-grow: 1;
   display: flex;
+  overflow: auto;
+  align-items: center;
   justify-content: center;
-  height: 100%;
-  background-color: black;
+}
+
+#sidebar {
+  min-width: 300px;
+  background-color: #0d47a1;
+  overflow: auto;
+  padding: 40px 10px;
+}
+
+.muted {
+  color: #aaa;
+}
+
+.autocompleteSubtext {
+  font-size: 10px;
+  color: #aaa;
+}
+
+.md-autocomplete-suggestions li {
+    padding: 10px 15px;
+    height: inherit;
+    line-height: inherit;
 }
