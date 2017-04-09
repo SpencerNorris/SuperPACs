@@ -3,22 +3,37 @@ import d3 from './d3-modules';
 
 class Graph {
     constructor(element) {
-        this.vis = d3.select(element).append("svg");
-        var w = 1200, h = 900;
-        this.vis.attr("width", w).attr("height", h).transition().style("background-color", "white");
+        this.width = 1200;
+        this.height = 900;
+        this.svg = d3.select(element).append("svg");
+        this.svg.attr("width", this.width).attr("height", this.height).style("background-color", "white");
+        this.vis = this.svg.append("g");
+
+        this.zoom = d3.zoom()
+            .scaleExtent([.01, 5])
+            .on("zoom", () => {
+                this.vis.attr("transform", d3.getEvent().transform);
+            });
+
+        this.svg.call(this.zoom).call(this.zoom.transform, d3.zoomIdentity.translate(0, this.height * .3));
     }
 
     draw(data) {
+        //clear the svg
+        this.vis.selectAll("*").remove();
+
         var nodes = [];
         var links = [];
 
         //nodes
+        let init_y = 0;
         Object.keys(data.committees).forEach(function(rep) {
-            nodes.push({id:"c_"+data.committees[rep].id, name: data.committees[rep].name, x: 300, _x: 300, y: 400, _y: 400});
+            nodes.push({id:"c_"+data.committees[rep].id, name: data.committees[rep].name, x: 300, _x: 300, y: init_y+=60, _y: 400});
         });
 
+        init_y = 0;
         Object.keys(data.representatives).forEach(function(rep) {
-            nodes.push({id:"r_"+data.representatives[rep].id, name: data.representatives[rep].name,party:data.representatives[rep].party, x:600, _x: 600, y: 400, _y: 400});
+            nodes.push({id:"r_"+data.representatives[rep].id, name: data.representatives[rep].name,party:data.representatives[rep].party, x:600, _x: 600, y: init_y+=60, _y: 400});
         });
 
         //uncomment when bills are added
@@ -42,9 +57,9 @@ class Graph {
 
         /* Establish the dynamic force behavor of the nodes */
         var force = d3.forceSimulation(nodes)
-                        .force('link', d3.forceLink(links).distance(0).strength(0).id(function(d) {return d.id;}))
-                        .force('X', d3.forceX().x(function(d) { return d._x }).strength(function() {return 1;}))
-                        .force("collide", d3.forceCollide().radius(function(d) { return 20 + 5; }).iterations(2));
+                        .force('link', d3.forceLink(links).distance(0).strength(0.1).id(function(d) {return d.id;}))
+                        .force('X', d3.forceX().x(function(d) { return d._x }).strength(function() {return 2;}))
+                        .force("collide", d3.forceCollide().radius(function(d) { return 20 + 10; }).iterations(2));
         /* Draw the edges/links between the nodes */
         var edges = this.vis.selectAll("line")
                         .data(links)
@@ -83,7 +98,7 @@ class Graph {
                         .attr("fill", "black")
                         .attr("font-family", "sans-serif")
                         .attr("font-size", "10px")
-                        .text(function(d) { return d.name; })
+                        .html(function(d) { return d.name; })
                         .each(function(d) { d.bbox = this.getBBox(); });
         /* Draw text background for all the nodes */
         var textBGs = this.vis.selectAll("rect")
@@ -104,6 +119,28 @@ class Graph {
             texts.attr("transform", function(d) { return "translate(" + (d.party ? d.x : d.x-d.bbox.width) + "," + (d.y+(d.bbox.height/4)) + ")"; });
             textBGs.attr("transform", function(d) { return "translate(" + (d.party ? d.x-5 : d.x-d.bbox.width-5) + "," + (d.y-(d.bbox.height*.5)-5) + ")"; });
         }); // End tick func
+
+        setTimeout(() => {this.zoomTo(this.vis)}, 100);
+    }
+
+    zoomTo(element) {
+        var bounds = element.node().getBBox();
+        var parent = element.node().parentElement;
+        var fullWidth = parent.clientWidth || parent.parentNode.clientWidth,
+            fullHeight = parent.clientHeight || parent.parentNode.clientHeight;
+        var width = bounds.width,
+            height = bounds.height;
+        var midX = bounds.x + width / 2,
+            midY = bounds.y + height / 2;
+        if (width == 0 || height == 0) return; // nothing to fit
+        var scale = Math.max(.05, Math.min(5, 0.85 / Math.max(width / fullWidth, height / fullHeight)));
+        var translate = [fullWidth / 2 - scale * midX, fullHeight / 2 - scale * midY];
+
+        if(bounds.width == 0 || bounds.height == 0) {
+            return;
+        }
+
+        this.svg.transition().duration(750).call(this.zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
     }
 }
 export default Graph;

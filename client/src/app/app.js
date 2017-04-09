@@ -2,8 +2,9 @@ import angular from 'angular';
 import ngMaterial from 'angular-material';
 
 import Graph from './utils/graph';
-import filter from './utils/filter';
+import Filter from './utils/filter';
 
+import 'font-awesome/css/font-awesome.css';
 import 'angular-material/angular-material.css';
 import '../style/app.css';
 
@@ -32,12 +33,16 @@ angular.module(MODULE_NAME, [ngMaterial])
                 // Map the response object to the data object.
                 let data = [];
 
+                for(const f of Filter.general.filter((f) => {return f.name.toLowerCase().indexOf(query.toLowerCase()) != -1})) {
+                    data.push({name: f.name, type: Filter.type.GENERAL, predicate: f.predicate});
+                }
+
                 for(const rep of response.data['representatives']) {
-                    data.push({name: rep.name, type: "Representative"});
+                    data.push({name: rep.name, type: Filter.type.REPRESENTATIVE});
                 }
 
                 for(const committee of response.data['committees']) {
-                    data.push({name: committee.name, type: "Committee"});
+                    data.push({name: committee.name, type: Filter.type.COMMITTEE});
                 }
 
                 //todo add bills
@@ -48,18 +53,38 @@ angular.module(MODULE_NAME, [ngMaterial])
 
       $scope.$watch('searchItem', () => {
           if($scope.searchItem instanceof Object) {
-              console.log($scope.searchItem);
+              let item = $scope.searchItem;
+              $scope.filters.unshift({
+                  name: item.name,
+                  predicate: (obj, type) => {
+                      if(item.type == Filter.type.GENERAL) {
+                          return item.predicate(obj, type);
+                      } else if(item.type == type) {
+                          return obj.name == item.name ?
+                            Filter.actions.ADD : Filter.actions.PASS;
+                      }
+                      return Filter.actions.PASS;
+                  }
+              });
+
               $scope.searchItem = null;
               $scope.searchText = "";
+
+              $scope.refreshGraph();
           }
       });
 
+      $scope.removeFilter = (filter) => {
+          $scope.filters.splice($scope.filters.indexOf(filter), 1);
+          $scope.refreshGraph();
+      }
+
       $scope.refreshGraph = () => {
-          let filteredData = filter($scope.filters, $scope.data);
+          let filteredData = Filter.filter($scope.filters, $scope.data);
           $scope.graph.draw(filteredData);
       };
 
-      $http.get('/api/donationsDemo').then((response) => {
+      $http.get('/api/donations').then((response) => {
           $scope.data = response.data;
           $scope.refreshGraph();
       });

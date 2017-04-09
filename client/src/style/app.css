@@ -26,7 +26,7 @@ footer {
 #graph {
   flex-grow: 1;
   display: flex;
-  overflow: auto;
+  overflow: hidden;
   align-items: center;
   justify-content: center;
 }
@@ -51,4 +51,23 @@ footer {
     padding: 10px 15px;
     height: inherit;
     line-height: inherit;
+}
+
+.filter {
+    padding: 5px;
+    position: relative;
+}
+
+.filter .name {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 280px;
+    overflow: hidden;
+    display: block;
+}
+
+.filter .delete {
+    position: absolute;
+    right: 0;
+    top: 5px;
 }

@@ -23,7 +23,10 @@
 
         <h2>Active Filters</h2>
         <span class="muted" ng-hide="filters.length">No filters</span>
-        <div ng-repeat="filter in filters"></div>
+        <div ng-repeat="filter in filters" ng-attr-title="{{filter.name}}" class="filter">
+            <span class="name">{{filter.name}}</span>
+            <a href="" class="delete" ng-click="removeFilter(filter)"><i class="fa fa-trash" aria-hidden="true"></i></a>
+        </div>
 
     </div>
     <div id="graph"></div>
