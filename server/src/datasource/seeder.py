@@ -2,6 +2,7 @@
 import os
 import MySQLdb
 import django
+from api.models import *
 from django.core.exceptions import MultipleObjectsReturned
 os.sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -66,8 +67,8 @@ def uploadSuperPACs():
         superpac_dict["fecid"]=superpac["committee_id"]
         SuperPAC.objects.create(**superpac_dict)
 
-def uploadDonations():
-    donation_list = donations()
+def uploadDonations(filename='donationdata.pickle'):
+    donation_list = donations(filename)
     print(donation_list[0])
     for donation in donation_list:
         donation_dict = {}
@@ -83,8 +84,11 @@ def uploadDonations():
         Donation.objects.create(**donation_dict)
         #print("get donation")
 
-def uploadToDatabase():
+def uploadToDatabase(picklefilename):
+    Donation.objects.all().delete()
+    print("Deleting all donations")
 
+    
     Representative.objects.all().delete()
     print("Deleting all representatives.")
 
@@ -99,11 +103,11 @@ def uploadToDatabase():
     print("Finished seeding SuperPACs.")
 
 
-    donation_json = uploadDonations()
+    donation_json = uploadDonations(picklefilename)
     print("Finished seeding Donations.")
 
 if __name__ == "__main__":
     django.setup()
     from api.models import *
 
-    uploadToDatabase()
+    uploadToDatabase('donationdata.pickle')

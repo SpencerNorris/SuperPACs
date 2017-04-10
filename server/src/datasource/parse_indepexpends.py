@@ -50,11 +50,11 @@ def donations_helper():
                 pass
             count += 1
     return donations
-def donations():
+def donations(filename='donationdata.pickle'):
 
     try:
         print("donation data pickled already. Grabbing data from donationdata.picke")
-        with open('donationdata.pickle', 'rb') as handle:
+        with open(filename, 'rb') as handle:
             donations = pickle.load(handle)
         #print("donations",donations)
         return donations
@@ -62,7 +62,7 @@ def donations():
         print("donation data not pickled, grabbing directly from FEC and ProPublica APIs")
         donations = donations_helper()
 
-        with open('donationdata.pickle', 'wb') as handle:
+        with open(filename, 'wb') as handle:
             pickle.dump(donations, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
         return donations
@@ -70,4 +70,4 @@ def donations():
 
 if __name__ == "__main__":
 
-    donations()
+    donations('donationdata.pickle')
