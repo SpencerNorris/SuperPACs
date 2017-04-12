@@ -34,35 +34,54 @@ class AbstractSeeder:
     ##pickled, cached data
     donation_data_file="donationdata.pickle"
 
+    ##function skeletons.
+    '''
+    Gets all the representatives straight from the API into a JSON form
+    that the uploadRepresentatives() function can ingest
+    '''
+    @staticmethod
     def getRepresentatives():
         pass
+    '''
+    Accepts a representative JSON list and puts it into the django ORM.
+    '''
     def uploadRepresentatives(representatives_list):
         pass
 
+    '''
+    Gets all the SuperPACs straight from the API into a JSON form
+    that the uploadSuperPACs() function can ingest
+    '''
+    @staticmethod
     def getSuperPACs():
         pass
+    '''
+    Accepts a superpac JSON list and puts it into the django ORM.
+    '''
     def uploadSuperPACs(superpacs_list):
         pass
 
+    '''
+    Gets all the donations straightfrom the API into a JSON form
+    that the uploadDonations() function can ingest
+    '''
+    @staticmethod
     def getDonations():
         pass
+    '''
+    Accepts a donations JSON list and puts it into the django ORM.
+    '''
     def uploadDonations(donations_list):
         pass
 
-class Seeder(AbstractSeeder):
-    ##api keys
-    ProPublica_APIKEY = ""
-    FEC_API_KEY = ""
+    '''
+    calls all functions here, to get all json, and upload it to the ORM.
+    '''
+    def seedAll():
+        pass
 
-    ##Django environment
-    os.environ['DJANGO_SETTINGS_MODULE'] = 'rest.settings'
-
-    ##Find out way to pass in the testing or production database to seed.
-    ##Unfortunately, it is currently based on the environment where this seeder object is called.
-
-    ##pickled, cached data
-    donation_data_file="donationdata.pickle"
-
+class APISeeder(AbstractSeeder):
+    @staticmethod
     def getRepresentatives():
         ##get all the representatives in json
         con_obj = CongressAPI(apikey=ProPublica_APIKEY,congressnum=115)
@@ -100,6 +119,7 @@ class Seeder(AbstractSeeder):
 
             Representative.objects.create(**senator_dict)
 
+    @staticmethod
     def getSuperPACs():
         fec_obj = FECAPI(FEC_APIKEY)
         superpacs_list = fec_obj.get_committees()
@@ -112,15 +132,8 @@ class Seeder(AbstractSeeder):
             superpac_dict["fecid"]=superpac["committee_id"]
             SuperPAC.objects.create(**superpac_dict)
 
+    @staticmethod
     def getDonations():
-
-        return donation_list
-
-    def getCachedDonations():
-        donation_list = donations(filename)
-        return donation_list
-
-    def getAPIDonations():
         donation_list = donations(filename)
         return donation_list
 
@@ -138,28 +151,57 @@ class Seeder(AbstractSeeder):
             donation_dict["support"] = donation["support_or_oppose"]
             Donation.objects.create(**donation_dict)
 
+    def seedAll():
+        reps_list = getRepresentatives()
+        uploadRepresentatives(reps_list)
 
+        superpacs_list = getSuperPACs()
+        uploadSuperPACs(superpacs_list)
+
+        donations_list = getDonations()
+        uploadDonations(donations_list)
+
+
+
+class PickleSeeder:
+    ##pickled, cached data
+    donation_data_file="donationdata.pickle"
+
+    def seedAll():
+        reps_list = APISeeder.getRepresentatives()
+        uploadRepresentatives(reps_list)
+
+        superpacs_list = APISeeder.getSuperPACs()
+        uploadSuperPACs(superpacs_list)
+
+        donations_list = APISeeder.getDonations()
+        uploadDonations(donations_list)
+
+def uploadToDatabase():
+    apiseeder = APIseeder()
+    apiseeder.seedAll()
+    
+'''
 def uploadToDatabase(picklefilename):
     Donation.objects.all().delete()
     print("Deleting all donations")
 
-
     Representative.objects.all().delete()
     print("Deleting all representatives.")
-
-    representative_json = uploadRepresentatives()
-    print("Finished seeding Representatives.")
-
 
     SuperPAC.objects.all().delete()
     print("Deleting all SuperPACs.")
 
+
+    representative_json = uploadRepresentatives()
+    print("Finished seeding Representatives.")
+
     superpac_json = uploadSuperPACs()
     print("Finished seeding SuperPACs.")
 
-
     donation_json = uploadDonations(picklefilename)
     print("Finished seeding Donations.")
+'''
 
 if __name__ == "__main__":
     django.setup()
