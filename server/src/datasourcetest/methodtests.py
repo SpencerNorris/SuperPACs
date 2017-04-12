@@ -20,7 +20,7 @@ def testfec_get_committees(apikey=None):
     fecobj = fec.FECAPI(apikey)
     try:
         res = fecobj.get_committees()
-        if('contains' not in res[0]):
+        if('cycles' not in res[0]):
             print('For FEC Api, the method "get_committees" result does not include cycles')
             return False
         if('committee_id' not in res[0]):
