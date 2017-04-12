@@ -70,9 +70,33 @@ function filter(filters, data) {
 }
 
 //some general filters
-let general = [{name: "Democrats", predicate: (obj, type) => {return obj.party === "D" ? actions.ADD : actions.PASS}},
-    {name: "Republicans", predicate: (obj, type) => {return obj.party === "R" ? actions.ADD : actions.PASS}},
-    {name: "Independents", predicate: (obj, type) => {return obj.party === "I" ? actions.ADD : actions.PASS}}];
+let general = [
+    {name: "Democrats", predicateFactory: (additive) => {
+        return (obj, type) => {
+            return obj.party === "D" ? (additive ? actions.ADD : actions.DELETE) : actions.PASS
+        }}},
+    {name: "Republicans", predicateFactory: (additive) => {
+        return (obj, type) => {
+            return obj.party === "R" ? (additive ? actions.ADD : actions.DELETE) : actions.PASS
+        }}},
+    {name: "Independents", predicateFactory: (additive) => {
+        return (obj, type) => {
+            return obj.party === "I" ? (additive ? actions.ADD : actions.DELETE) : actions.PASS
+        }}}
+];
+
+//filter for specific nodes, filters by name and type
+let nodeFilterFactory = (item) => {
+    return (additive) => {
+        return (obj, type) => {
+            if(item.type == type) {
+                return obj.name == item.name ?
+                    (additive ? actions.ADD : actions.DELETE) : actions.PASS;
+            }
+            return actions.PASS;
+        };
+    };
+};
 
 //export
-export default {filter, actions, type, general};
+export default {filter, actions, type, general, nodeFilterFactory};
