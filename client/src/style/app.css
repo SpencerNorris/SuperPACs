@@ -1,7 +1,8 @@
 /* styles in src/style directory are applied to the whole page */
 body {
-  background: #0147A7;
   color: #fff;
+  margin: 0;
+  overflow: hidden;
 }
 
 a {
@@ -9,11 +10,13 @@ a {
 }
 
 main {
-  padding: 1em;
   font-family: Arial, Helvetica, sans-serif;
   text-align: center;
-  margin-top: 50px;
   display: block;
+  display: flex;
+  height: 100vh;
+  background-color: black;
+  align-items: stretch;
 }
 
 footer {
@@ -22,9 +25,84 @@ footer {
 }
 
 #graph {
-  align-items: center;
+  flex-grow: 1;
   display: flex;
+  overflow: hidden;
+  align-items: center;
   justify-content: center;
-  height: 100%;
-  background-color: black;
+}
+
+#sidebar {
+  min-width: 300px;
+  background-color: #0d47a1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 40px 10px;
+}
+
+.muted {
+  color: #aaa;
+}
+
+.autocompleteSubtext {
+  font-size: 10px;
+  color: #aaa;
+}
+
+.md-autocomplete-suggestions li {
+    padding: 10px 15px;
+    height: inherit;
+    line-height: inherit;
+}
+
+.filters {
+    margin: -10px;
+    padding: 0;
+    list-style: none;
+}
+
+.filter {
+    padding: 10px;
+    position: relative;
+}
+
+.filter .name {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 255px;
+    overflow: hidden;
+    display: block;
+    margin-left: 20px;
+}
+
+.filter.ghost {
+    background-color: rgba(0,0,0,.5);
+}
+
+.filter .delete {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.filter .flip {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
+.filter .plus {
+    color: lightgreen;
+}
+
+.filter .plus:hover {
+    color: red;
+}
+
+.filter .minus {
+    color: red;
+}
+
+.filter .minus:hover {
+    color: lightgreen;
 }

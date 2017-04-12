@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^demo$', views.demo),
     url(r'^donations$', views.donations),
     url(r'^donationsDemo$', views.donationsDemo),
+    url(r'^search$', views.search)
 ]
