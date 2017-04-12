@@ -21,18 +21,17 @@ ProPublica_APIKEY = os.getenv('PP_API_KEY', '')
 FEC_APIKEY = os.getenv('FEC_API_KEY', '')
 ##abstract base class for
 class AbstractSeeder:
-    ##api keys
-    ProPublica_APIKEY = ""
-    FEC_API_KEY = ""
 
-    ##Django environment
-    os.environ['DJANGO_SETTINGS_MODULE'] = 'rest.settings'
+    def __init__(self):
+        ##Django environment
+        os.environ['DJANGO_SETTINGS_MODULE'] = 'rest.settings'
+        ##api keys
+        self.ProPublica_APIKEY = ""
+        self.FEC_API_KEY = ""
 
-    ##Find out way to pass in the testing or production database to seed.
-    ##Unfortunately, it is currently based on the environment where this seeder object is called.
+        ##Find out way to pass in the testing or production database to seed.
+        ##Unfortunately, it is currently based on the environment where this seeder object is called.
 
-    ##pickled, cached data
-    donation_data_file="donationdata.pickle"
 
     ##function skeletons.
     '''
@@ -45,7 +44,7 @@ class AbstractSeeder:
     '''
     Accepts a representative JSON list and puts it into the django ORM.
     '''
-    def uploadRepresentatives(representatives_list):
+    def uploadRepresentatives(self,representatives_list):
         pass
 
     '''
@@ -58,7 +57,7 @@ class AbstractSeeder:
     '''
     Accepts a superpac JSON list and puts it into the django ORM.
     '''
-    def uploadSuperPACs(superpacs_list):
+    def uploadSuperPACs(self,superpacs_list):
         pass
 
     '''
@@ -71,7 +70,7 @@ class AbstractSeeder:
     '''
     Accepts a donations JSON list and puts it into the django ORM.
     '''
-    def uploadDonations(donations_list):
+    def uploadDonations(self,donations_list):
         pass
 
     '''
@@ -79,21 +78,11 @@ class AbstractSeeder:
     '''
     def seedAll():
         pass
+class UploaderSeeder(AbstractSeeder):
+    def __init__(self):
+        AbstractSeeder.__init__(self)
 
-class APISeeder(AbstractSeeder):
-    @staticmethod
-    def getRepresentatives():
-        ##get all the representatives in json
-        con_obj = CongressAPI(apikey=ProPublica_APIKEY,congressnum=115)
-        house_list = con_obj.list_members(chamber = "house")
-        senators_list = con_obj.list_members(chamber = "senate")
-
-        congress_list = {}
-        congress_list["house"] = house_list
-        congress_list["senate"] = senate_list
-        return congress_list
-
-    def uploadRepresentatives(congress_list):
+    def uploadRepresentatives(self,congress_list):
         for congressman in congress_list["house"]['results'][0]['members']:
             congress_dict = {} #personal details
             congress_dict["propublicaid"] = congressman['id']
@@ -119,25 +108,14 @@ class APISeeder(AbstractSeeder):
 
             Representative.objects.create(**senator_dict)
 
-    @staticmethod
-    def getSuperPACs():
-        fec_obj = FECAPI(FEC_APIKEY)
-        superpacs_list = fec_obj.get_committees()
-        return superpacs_list
-
-    def uploadSuperPACs(superpac_list):
+    def uploadSuperPACs(self,superpac_list):
         for superpac in superpacs_list:
             superpac_dict = {}
             superpac_dict["name"]=superpac["name"]
             superpac_dict["fecid"]=superpac["committee_id"]
             SuperPAC.objects.create(**superpac_dict)
 
-    @staticmethod
-    def getDonations():
-        donation_list = donations(filename)
-        return donation_list
-
-    def uploadDonations(donation_list):
+    def uploadDonations(self,donation_list):
         for donation in donation_list:
             donation_dict = {}
 
@@ -151,7 +129,36 @@ class APISeeder(AbstractSeeder):
             donation_dict["support"] = donation["support_or_oppose"]
             Donation.objects.create(**donation_dict)
 
-    def seedAll():
+class APISeeder(UploaderSeeder):
+    def __init__(self):
+        UploaderSeeder.__init__(self)
+
+    @staticmethod
+    def getRepresentatives():
+        ##get all the representatives in json
+        con_obj = CongressAPI(apikey=ProPublica_APIKEY,congressnum=115)
+        house_list = con_obj.list_members(chamber = "house")
+        senators_list = con_obj.list_members(chamber = "senate")
+
+        congress_list = {}
+        congress_list["house"] = house_list
+        congress_list["senate"] = senate_list
+        return congress_list
+
+    @staticmethod
+    def getSuperPACs():
+        fec_obj = FECAPI(FEC_APIKEY)
+        superpacs_list = fec_obj.get_committees()
+        return superpacs_list
+
+    @staticmethod
+    def getDonations():
+        donation_list = donations_helper()
+        return donation_list
+
+
+
+    def seedAll(self):
         reps_list = getRepresentatives()
         uploadRepresentatives(reps_list)
 
@@ -163,24 +170,70 @@ class APISeeder(AbstractSeeder):
 
 
 
-class PickleSeeder:
-    ##pickled, cached data
-    donation_data_file="donationdata.pickle"
+class PickleSeeder(UploaderSeeder):
 
-    def seedAll():
+    def __init__(self):
+        UploaderSeeder.__init__(self)
+        ##pickled, cached data
+        self.donations_pickle_filename="donationdata.pickle"
+        self.superpacs_pickle_filename="superpacdata.pickle"
+        self.representative_pickle_filename="representativedata.pickle"
+
+    def getRepresentatives(self):
+        try:
+            print("superpac data pickled already. Grabbing data from representativedata.picke")
+            return APISeeder.getRepresentatives()
+        except EOFError:
+            print("representative data not pickled, grabbing directly from FEC and ProPublica APIs")
+            donations = donations_helper()
+
+            with open(self.representative_pickle_filename, 'wb') as handle:
+                pickle.dump(donations, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+            return donations
+
+    def getSuperPACs(self):
+        try:
+            print("superpac data pickled already. Grabbing data from superpacdata.picke")
+            return APISeeder.getSuperPACs()
+        except EOFError:
+            print("superpac data not pickled, grabbing directly from FEC and ProPublica APIs")
+            donations = donations_helper()
+
+            with open(self.superpacs_pickle_filename, 'wb') as handle:
+                pickle.dump(donations, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+            return donations
+
+    def getDonations(self):
+        try:
+            print("donation data pickled already. Grabbing data from donationdata.picke")
+            return APISeeder.getDonations()
+        except EOFError:
+            print("donation data not pickled, grabbing directly from FEC and ProPublica APIs")
+            donations = donations_helper()
+
+            with open(self.donations_pickle_filename, 'wb') as handle:
+                pickle.dump(donations, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+            return donations
+
+    def seedAll(self):
+        #Check if we have a pickle ready?
+
         reps_list = APISeeder.getRepresentatives()
-        uploadRepresentatives(reps_list)
+        self.uploadRepresentatives(reps_list)
 
         superpacs_list = APISeeder.getSuperPACs()
-        uploadSuperPACs(superpacs_list)
+        self.uploadSuperPACs(superpacs_list)
 
         donations_list = APISeeder.getDonations()
-        uploadDonations(donations_list)
+        self.uploadDonations(donations_list)
 
 def uploadToDatabase():
-    apiseeder = APIseeder()
+    apiseeder = APISeeder()
     apiseeder.seedAll()
-    
+
 '''
 def uploadToDatabase(picklefilename):
     Donation.objects.all().delete()
@@ -207,4 +260,4 @@ if __name__ == "__main__":
     django.setup()
     from api.models import *
 
-    uploadToDatabase('donationdata.pickle')
+    uploadToDatabase()

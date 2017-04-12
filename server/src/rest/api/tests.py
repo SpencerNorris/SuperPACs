@@ -17,7 +17,7 @@ from api.models import Representative
 
 class CacheToORMTest(TestCase):
     def setUp(self):
-        uploadToDatabase('/code/src/datasource/donationdata.pickle')
+        uploadToDatabase()
 
         print("number of representatives:",len(Representative.objects.all()))
         self.ted_cruz = Representative.objects.get(first_name="Ted",last_name="Cruz")
@@ -36,7 +36,7 @@ class CacheToORMTest(TestCase):
 #import django views to sanity check the front-end visualization contract.
 class ViewsToFrontendTest(TestCase):
     def setUp(self):
-        uploadToDatabase('/code/src/datasource/donationdata.pickle')
+        uploadToDatabase()
         print("Put everything in test database.")
 
     def tearDown(self):
