@@ -12,12 +12,13 @@ from api.models import Representative
 # Create your tests here.
 
 
+#this file is for
 
 
-
-class CongressTest(TestCase):
+class CacheToORMTest(TestCase):
     def setUp(self):
         uploadToDatabase('/code/src/datasource/donationdata.pickle')
+
         print("number of representatives:",len(Representative.objects.all()))
         self.ted_cruz = Representative.objects.get(first_name="Ted",last_name="Cruz")
         self.elizabeth_warren = Representative.objects.get(first_name="Elizabeth",last_name="Warren")
@@ -29,4 +30,17 @@ class CongressTest(TestCase):
     def test_partyperson(self):
         self.assertEqual(self.ted_cruz.party, 'R')
         self.assertEqual(self.elizabeth_warren.party, 'D')
+        pass
+
+
+#import django views to sanity check the front-end visualization contract.
+class ViewsToFrontendTest(TestCase):
+    def setUp(self):
+        uploadToDatabase('/code/src/datasource/donationdata.pickle')
+        print("Put everything in test database.")
+
+    def tearDown(self):
+        pass
+
+    def test_partyperson(self):
         pass
