@@ -6,9 +6,7 @@ from api.models import *
 from django.core.exceptions import MultipleObjectsReturned
 os.sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-
 srcpath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 restpath = srcpath+"/rest"
 
 os.sys.path.append(restpath)
@@ -17,10 +15,19 @@ from fec import *
 from propublica import *
 from parse_indepexpends import *
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'rest.settings'
+
 
 ProPublica_APIKEY = os.getenv('PP_API_KEY', '')
 FEC_APIKEY = os.getenv('FEC_API_KEY', '')
+
+class Seeder:
+    ##api keys
+    ProPublica_APIKEY = ""
+    FEC_API_KEY = ""
+
+    ##Django environment
+    os.environ['DJANGO_SETTINGS_MODULE'] = 'rest.settings'
+
 
 def uploadRepresentatives():
     ##get all the representatives in json
@@ -88,7 +95,7 @@ def uploadToDatabase(picklefilename):
     Donation.objects.all().delete()
     print("Deleting all donations")
 
-    
+
     Representative.objects.all().delete()
     print("Deleting all representatives.")
 
