@@ -320,32 +320,10 @@ def uploadToDatabase():
     print("Deleting all SuperPACs.")
 
 
-
     seeder = PickleSeeder()
     print("Using API seeder to get data.1")
     seeder.seedAll(reset=False)
 
-'''
-def uploadToDatabase(picklefilename):
-    Donation.objects.all().delete()
-    print("Deleting all donations")
-
-    Representative.objects.all().delete()
-    print("Deleting all representatives.")
-
-    SuperPAC.objects.all().delete()
-    print("Deleting all SuperPACs.")
-
-
-    representative_json = uploadRepresentatives()
-    print("Finished seeding Representatives.")
-
-    superpac_json = uploadSuperPACs()
-    print("Finished seeding SuperPACs.")
-
-    donation_json = uploadDonations(picklefilename)
-    print("Finished seeding Donations.")
-'''
 
 if __name__ == "__main__":
     django.setup()
