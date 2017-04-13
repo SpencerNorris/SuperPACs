@@ -32,6 +32,7 @@ class AbstractSeeder:
         ##Find out way to pass in the testing or production database to seed.
         ##Unfortunately, it is currently based on the environment where this seeder object is called.
 
+    ##Should I add a place here to delete parts of the database?
 
     ##function skeletons.
     '''
@@ -109,7 +110,7 @@ class UploaderSeeder(AbstractSeeder):
             Representative.objects.create(**senator_dict)
 
     def uploadSuperPACs(self,superpac_list):
-        for superpac in superpacs_list:
+        for superpac in superpac_list:
             superpac_dict = {}
             superpac_dict["name"]=superpac["name"]
             superpac_dict["fecid"]=superpac["committee_id"]
@@ -138,7 +139,7 @@ class APISeeder(UploaderSeeder):
         ##get all the representatives in json
         con_obj = CongressAPI(apikey=ProPublica_APIKEY,congressnum=115)
         house_list = con_obj.list_members(chamber = "house")
-        senators_list = con_obj.list_members(chamber = "senate")
+        senate_list = con_obj.list_members(chamber = "senate")
 
         congress_list = {}
         congress_list["house"] = house_list
@@ -159,14 +160,22 @@ class APISeeder(UploaderSeeder):
 
 
     def seedAll(self):
-        reps_list = getRepresentatives()
-        uploadRepresentatives(reps_list)
+        print("APISeeder seeding starting.")
 
-        superpacs_list = getSuperPACs()
-        uploadSuperPACs(superpacs_list)
+        print("getting representatives")
+        representatives_list = self.getRepresentatives()
+        self.uploadRepresentatives(representatives_list)
+        print("finished uploading representatives")
 
-        donations_list = getDonations()
-        uploadDonations(donations_list)
+        print("getting superpacs")
+        superpacs_list = self.getSuperPACs()
+        self.uploadSuperPACs(superpacs_list)
+        print("finished uploading superpacs")
+
+        print("getting donations")
+        donations_list = self.getDonations()
+        self.uploadDonations(donations_list)
+        print("finished uploading donations")
 
 
 
@@ -175,64 +184,139 @@ class PickleSeeder(UploaderSeeder):
     def __init__(self):
         UploaderSeeder.__init__(self)
         ##pickled, cached data
-        self.donations_pickle_filename="donationdata.pickle"
+
+
+        self.representatives_pickle_filename="representativedata.pickle"
         self.superpacs_pickle_filename="superpacdata.pickle"
-        self.representative_pickle_filename="representativedata.pickle"
+        self.donations_pickle_filename="donationdata.pickle"
+
+        ##Where to put the file for refreshing the pickled data?
+
+    ##call APISeeder method for getting data, and then pickle it in the class file for it.
+    def pickleRepresentatives(self):
+        print("Pickling Representatives from APISeeder.")
+        representatives_list = APISeeder.getRepresentatives()
+        with open(self.representatives_pickle_filename, 'wb') as handle:
+            pickle.dump(representatives_list, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        return representatives_list
 
     def getRepresentatives(self):
+        #Check for time-sensitive reasons to not use cache? Or perhaps use a subclass..
         try:
-            print("superpac data pickled already. Grabbing data from representativedata.picke")
-            return APISeeder.getRepresentatives()
+            try:
+                ##pull data from the pickle.
+                with open(self.representatives_pickle_filename, 'rb') as handle:
+                    representatives_list = pickle.load(handle)
+                print("superpac data pickled already. Grabbing data from "+self.representatives_pickle_filename)
+            except FileNotFoundError:
+                print("No "+self.representatives_pickle_filename+" file. Creating file from APISeeder data.")
+                ##seed the pickle if the file doesn't exist
+                representatives_list = self.pickleRepresentatives()
+
+            return representatives_list
         except EOFError:
             print("representative data not pickled, grabbing directly from FEC and ProPublica APIs")
-            donations = donations_helper()
+            representatives_list = self.pickleRepresentatives()
+            ##seed the pickle if the file exists but has weird data.
 
-            with open(self.representative_pickle_filename, 'wb') as handle:
-                pickle.dump(donations, handle, protocol=pickle.HIGHEST_PROTOCOL)
+            return representatives_list
 
-            return donations
+    ##call APISeeder method for getting data, and then pickle it in the class file for it.
+    def pickleSuperPACs(self):
+        print("Pickling SuperPACs from APISeeder.")
+        superpacs_list = APISeeder.getSuperPACs()
+        with open(self.superpacs_pickle_filename, 'wb') as handle:
+            pickle.dump(superpacs_list, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        return superpacs_list
 
     def getSuperPACs(self):
         try:
-            print("superpac data pickled already. Grabbing data from superpacdata.picke")
-            return APISeeder.getSuperPACs()
+            try:
+                ##pull data from the pickle.
+                with open(self.superpacs_pickle_filename, 'rb') as handle:
+                    superpacs_list = pickle.load(handle)
+                print("superpac data pickled already. Grabbing data from "+self.superpacs_pickle_filename)
+            except FileNotFoundError:
+                print("No "+self.superpacs_pickle_filename+" file. Creating file from APISeeder data.")
+                ##seed the pickle if the file doesn't exist
+                superpacs_list = self.pickleSuperPACs()
+
+            return superpacs_list
         except EOFError:
             print("superpac data not pickled, grabbing directly from FEC and ProPublica APIs")
-            donations = donations_helper()
+            superpacs_list = self.pickleSuperPACs()
+            ##seed the pickle if the file exists but has weird data.
 
-            with open(self.superpacs_pickle_filename, 'wb') as handle:
-                pickle.dump(donations, handle, protocol=pickle.HIGHEST_PROTOCOL)
+            return superpacs_list
 
-            return donations
+    ##call APISeeder method for getting data, and then pickle it in the class file for it.
+    def pickleDonations(self):
+        print("Pickling Donations from APISeeder.")
+        donations_list = APISeeder.getDonations()
+        with open(self.donations_pickle_filename, 'wb') as handle:
+            pickle.dump(donations_list, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        return donations_list
 
     def getDonations(self):
         try:
-            print("donation data pickled already. Grabbing data from donationdata.picke")
-            return APISeeder.getDonations()
+            try:
+                ##pull data from the pickle.
+                with open(self.donations_pickle_filename, 'rb') as handle:
+                    donations_list = pickle.load(handle)
+                print("donation data pickled already. Grabbing data from donationdata.picke")
+            except FileNotFoundError:
+                print("No "+self.donations_pickle_filename+" file. Creating file from APISeeder data.")
+                ##seed the pickle if the file doesn't exist
+                donations_list = self.pickleDonations()
+            return donations_list
+
         except EOFError:
             print("donation data not pickled, grabbing directly from FEC and ProPublica APIs")
-            donations = donations_helper()
+            ##seed the pickle if the file exists but has weird data.
 
-            with open(self.donations_pickle_filename, 'wb') as handle:
-                pickle.dump(donations, handle, protocol=pickle.HIGHEST_PROTOCOL)
+            donations_list = self.pickleDonations()
+            return donations_list
 
-            return donations
+    def seedAll(self,reset=False):
+        ##Check if the previous pickle has been updated in the past 24 hours?
+        ##Or should I delegate this to a subclass.
+        ##anyways, the optional reset keyword will re-call the api seeder operations, to delete the pickles and replace them
 
-    def seedAll(self):
-        #Check if we have a pickle ready?
+        if not reset:
+            representatives_list = self.getRepresentatives()
+            self.uploadRepresentatives(representatives_list)
 
-        reps_list = APISeeder.getRepresentatives()
-        self.uploadRepresentatives(reps_list)
+            superpacs_list = self.getSuperPACs()
+            print("len of superpacs:",len(superpacs_list))
+            self.uploadSuperPACs(superpacs_list)
 
-        superpacs_list = APISeeder.getSuperPACs()
-        self.uploadSuperPACs(superpacs_list)
+            donations_list = self.getDonations()
+            self.uploadDonations(donations_list)
+        else:
+            representatives_list = self.pickleRepresentatives()
+            self.uploadRepresentatives(representatives_list)
 
-        donations_list = APISeeder.getDonations()
-        self.uploadDonations(donations_list)
+            superpacs_list = self.pickleSuperPACs()
+            self.uploadSuperPACs(superpacs_list)
+
+            donations_list = self.pickleDonations()
+            self.uploadDonations(donations_list)
+
+
 
 def uploadToDatabase():
-    apiseeder = APISeeder()
-    apiseeder.seedAll()
+    Donation.objects.all().delete()
+    print("Deleting all donations")
+    Representative.objects.all().delete()
+    print("Deleting all representatives.")
+    SuperPAC.objects.all().delete()
+    print("Deleting all SuperPACs.")
+
+
+
+    apiseeder = PickleSeeder()
+    print("Using API seeder to get data.1")
+    apiseeder.seedAll(reset=False)
 
 '''
 def uploadToDatabase(picklefilename):
@@ -259,5 +343,5 @@ def uploadToDatabase(picklefilename):
 if __name__ == "__main__":
     django.setup()
     from api.models import *
-
+    print("starting main function:")
     uploadToDatabase()
