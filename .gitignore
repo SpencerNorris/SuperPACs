@@ -5,3 +5,4 @@ env/
 server/src/rest/api/migrations/*
 !server/src/rest/api/migrations/__init__.py
 environment.sh
+*.pickle
