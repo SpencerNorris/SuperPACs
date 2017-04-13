@@ -38,21 +38,25 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable'])
       };
       //setup the graph
       $scope.graph = new Graph("#graph", (d, e) => {
-          //context menu handler
+          //context menu handler, this function shows our context menu for nodes
+          //set menu position
           $scope.ctxMenu.top = e.y;
           $scope.ctxMenu.left = e.x;
-          console.log(d);
-          if(d.id.startsWith("r_")) {
+
+          if(d.id.startsWith("r_")) { //menu for representatives
               $scope.ctxMenu.items = [
                 {name: "Add Donating SuperPACs", action: () => {
+                    //a menu item that adds all the superpacs that donated to this representative
                     let names = [];
                     let id = d.id.substring(2);
+                    //loop over all the donations getting matches
                     Object.keys($scope.data.donations || {}).forEach((key) => {
                         if($scope.data.donations[key].destination == id) {
                             names.push($scope.data.committees[$scope.data.donations[key].source].name);
                         }
                     });
 
+                    //create a multi node filter
                     let predicateFactory = Filter.multiNodeFilterFactory(names, Filter.type.COMMITTEE);
 
                     //add the filter to our list of filters, initially in additive mode
@@ -68,17 +72,20 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable'])
                     $scope.refreshGraph();
                 }}
               ];
-          } else if(d.id.startsWith("c_")) {
+          } else if(d.id.startsWith("c_")) {//menu for committees
               $scope.ctxMenu.items = [
                 {name: "Add Politicians Donated To", action: () => {
+                    //a menu item that adds all the representatives that superpac donated to
                     let names = [];
                     let id = d.id.substring(2);
+                    //loop over all the donations getting matches
                     Object.keys($scope.data.donations || {}).forEach((key) => {
                         if($scope.data.donations[key].source == id) {
                             names.push($scope.data.representatives[$scope.data.donations[key].destination].name);
                         }
                     });
 
+                    //create a multi node filter
                     let predicateFactory = Filter.multiNodeFilterFactory(names, Filter.type.REPRESENTATIVE);
 
                     //add the filter to our list of filters, initially in additive mode
@@ -95,6 +102,8 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable'])
                 }}
               ];
           }
+
+          //show the menu
           $scope.ctxMenu.show = true;
           $scope.$apply();
       });
@@ -110,7 +119,7 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable'])
           }
       };
       $(document).mousedown(hideCtxMenu);
-      //$(window).blur(hideCtxMenu);
+      $(window).blur(hideCtxMenu);
       $(document).keyup((e) => {
           if (e.keyCode == 27) { // escape key maps to keycode `27`
               hideCtxMenu();
