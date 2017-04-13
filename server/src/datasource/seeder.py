@@ -1,9 +1,9 @@
-
 import os
 import MySQLdb
 import django
 from api.models import *
 from django.core.exceptions import MultipleObjectsReturned
+from time import sleep
 os.sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 srcpath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -185,10 +185,9 @@ class PickleSeeder(UploaderSeeder):
         UploaderSeeder.__init__(self)
         ##pickled, cached data
 
-
-        self.representatives_pickle_filename="representativedata.pickle"
-        self.superpacs_pickle_filename="superpacdata.pickle"
-        self.donations_pickle_filename="donationdata.pickle"
+        self.representatives_pickle_filename="../datasource/pickles/representativedata.pickle"
+        self.superpacs_pickle_filename="../datasource/pickles/superpacdata.pickle"
+        self.donations_pickle_filename="../datasource/pickles/donationdata.pickle"
 
         ##Where to put the file for refreshing the pickled data?
 
@@ -263,7 +262,7 @@ class PickleSeeder(UploaderSeeder):
                 ##pull data from the pickle.
                 with open(self.donations_pickle_filename, 'rb') as handle:
                     donations_list = pickle.load(handle)
-                print("donation data pickled already. Grabbing data from donationdata.picke")
+                print("donation data pickled already. Grabbing data from "+self.donations_pickle_filename)
             except FileNotFoundError:
                 print("No "+self.donations_pickle_filename+" file. Creating file from APISeeder data.")
                 ##seed the pickle if the file doesn't exist
@@ -287,7 +286,6 @@ class PickleSeeder(UploaderSeeder):
             self.uploadRepresentatives(representatives_list)
 
             superpacs_list = self.getSuperPACs()
-            print("len of superpacs:",len(superpacs_list))
             self.uploadSuperPACs(superpacs_list)
 
             donations_list = self.getDonations()
@@ -314,9 +312,9 @@ def uploadToDatabase():
 
 
 
-    apiseeder = PickleSeeder()
+    seeder = PickleSeeder()
     print("Using API seeder to get data.1")
-    apiseeder.seedAll(reset=False)
+    seeder.seedAll(reset=False)
 
 '''
 def uploadToDatabase(picklefilename):

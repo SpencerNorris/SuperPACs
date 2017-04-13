@@ -15,7 +15,7 @@ FEC_APIKEY = os.getenv('FEC_API_KEY', '')
 ProPublica_APIKEY = os.getenv('PP_API_KEY', '')
 
 def donations_helper():
-
+    print("donations_helper")
     FecApiObj = FECAPI(FEC_APIKEY)
     committees = FecApiObj.get_committees()
     PPCampFinObj = CampaignFinanceAPI(ProPublica_APIKEY)
@@ -29,15 +29,17 @@ def donations_helper():
     for legislator in legislators:
         name = str(legislator['first_name']) + " " + str(legislator['last_name'])
         legislator_index[name] = legislator
-
+    print("starting to iterate through superpacs")
     donations = []
-    print("committees number:",len(committees))
+    #print("committees number:",len(committees))
     count = 0
     for committee in committees:
         if(2016 in committee['cycles']):
             try:
                 indepExpend = PPCampFinObj.get_indep_expends(str(committee['committee_id']))
 
+                #print("superpac n"+str(count))
+                
                 for expend in indepExpend["results"]:
                     try:
                         #expend fo a particular expenditure
@@ -69,5 +71,5 @@ def donations(filename='donationdata.pickle'):
 
 
 if __name__ == "__main__":
-
+    ##replace with something else.
     donations('donationdata.pickle')
