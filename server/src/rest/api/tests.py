@@ -22,6 +22,7 @@ from api.views import *
 
 #What about API to pickle? or is that way too deep.
 class CacheToORMTest(TestCase):
+    ##creates a test_superpac database so we can fool around with testing.
     def setUp(self):
         self.api_seeder = APISeeder()
 
@@ -38,7 +39,7 @@ class CacheToORMTest(TestCase):
         self.elizabeth_warren = Representative.objects.get(first_name="Elizabeth",last_name="Warren")
         print("(end)CacheToORMTest(setUp):--------")
 
-
+    ##clears the test_superpac database that was created in setUp()
     def tearDown(self):
         pass
 
@@ -54,7 +55,6 @@ class CacheToORMTest(TestCase):
 #import django views to sanity check the front-end visualization contract.
 class ViewsToFrontendTest(TestCase):
     def setUp(self):
-
         self.api_seeder = APISeeder()
 
         print("(start)ViewsToFrontendTest(setUp):--------")

@@ -19,7 +19,16 @@ from parse_indepexpends import *
 
 ProPublica_APIKEY = os.getenv('PP_API_KEY', '')
 FEC_APIKEY = os.getenv('FEC_API_KEY', '')
-##abstract base class for
+##abstract base class for the seeder class.
+##has getter functions, which get the data from any source for the data contract that the ORM accepts
+    ####getter functions can have different implementation
+    #### in APISeeder(UploaderSeeder(AbstractSeeder)), the data comes straight from the API. the function is static too.
+    #### in PickleSeeder(UploaderSeeder(AbstractSeeder)), the data comes from a cached "pickle" data
+    ##### However, if the pickle files do not exist, or the data is wrong, or if you just want to get a new batch of data
+    ##### PickleSeeder's getter functions will call APISeeder's getter functions, and will then set it into a new pickle.
+##has uploader functions, which sends the data to the ORM.
+##those are implemented in UploaderSeeder(AbstractSeeder), and don't really change much.
+
 class AbstractSeeder:
 
     def __init__(self):
@@ -301,7 +310,7 @@ class PickleSeeder(UploaderSeeder):
             self.uploadDonations(donations_list)
 
 
-
+#this is only necessary when seeding the database when deploying the application, not in tests.
 def uploadToDatabase():
     Donation.objects.all().delete()
     print("Deleting all donations")
