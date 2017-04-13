@@ -40,8 +40,8 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable'])
       $scope.graph = new Graph("#graph", (d, e) => {
           //context menu handler, this function shows our context menu for nodes
           //set menu position
-          $scope.ctxMenu.top = e.y;
-          $scope.ctxMenu.left = e.x;
+          $scope.ctxMenu.top = e.clientY;
+          $scope.ctxMenu.left = e.clientX;
 
           if(d.id.startsWith("r_")) { //menu for representatives
               $scope.ctxMenu.items = [
