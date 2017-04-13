@@ -47,33 +47,33 @@ class Graph {
         //add our nodes
         //add the committee nodes
         let init_y = 0;
-        Object.keys(data.committees || {}).forEach((rep) => {
-            nodes.push({id:"c_"+data.committees[rep].id, name: data.committees[rep].name, x: 300, fx: 300, y: init_y+=60});
+        Object.keys(data.committees || {}).forEach((key) => {
+            nodes.push({id:"c_"+data.committees[key].id, name: data.committees[key].name, x: 300, fx: 300, y: init_y+=60});
         });
 
         //add the representative nodes
         init_y = 0;
-        Object.keys(data.representatives || {}).forEach((rep) => {
-            nodes.push({id:"r_"+data.representatives[rep].id, name: data.representatives[rep].name,party:data.representatives[rep].party, x:600, fx: 600, y: init_y+=60});
+        Object.keys(data.representatives || {}).forEach((key) => {
+            nodes.push({id:"r_"+data.representatives[key].id, name: data.representatives[key].name,party:data.representatives[key].party, x:600, fx: 600, y: init_y+=60});
         });
 
         //add the bill nodes
         init_y = 0;
-        Object.keys(data.bills || {}).forEach((rep) => {
-            nodes.push({id:"b_"+data.bills[rep].id, name: data.bills[rep].name, x: 900, fx: 900, y: init_y+=60});
+        Object.keys(data.bills || {}).forEach((key) => {
+            nodes.push({id:"b_"+data.bills[key].id, name: data.bills[key].name, x: 900, fx: 900, y: init_y+=60});
         });
 
         //add our links
         //add the donation links between committees and representatives
-        Object.keys(data.donations || {}).forEach((rep) => {
-            if(data.donations[rep].source in data.committees && data.donations[rep].destination in data.representatives){
-                links.push({source:"c_"+data.donations[rep].source, target: "r_"+data.donations[rep].destination,thickness:data.donations[rep].amount,support:data.donations[rep].support});
+        Object.keys(data.donations || {}).forEach((key) => {
+            if(data.donations[key].source in data.committees && data.donations[key].destination in data.representatives){
+                links.push({source:"c_"+data.donations[key].source, target: "r_"+data.donations[key].destination,thickness:data.donations[key].amount,support:data.donations[key].support});
             }
         });
 
         //add the vote links between representatives and bills
-        Object.keys(data.votes || {}).forEach((rep) => {
-            links.push({source:"r_"+data.votes[rep].source, target: "b_"+data.votes[rep].destination});
+        Object.keys(data.votes || {}).forEach((key) => {
+            links.push({source:"r_"+data.votes[key].source, target: "b_"+data.votes[key].destination});
         });
 
         //a scaling function that limits how think or thin edges can be in our graph
@@ -83,7 +83,7 @@ class Graph {
         let contextMenu = (d) => {
             let event = d3.getEvent();
             event.preventDefault();
-            console.log(event);
+            this.nodeMenu(d, event);
         };
 
         //Create a force directed graph and define forces in it
@@ -159,7 +159,7 @@ class Graph {
         }); // End tick func
 
         //zoom and pan our graph such that all elements are visible
-        setTimeout(() => {this.zoomTo(this.vis)}, 100);
+        setTimeout(() => {this.zoomTo(this.vis)}, 500);
     }
 
     /**
