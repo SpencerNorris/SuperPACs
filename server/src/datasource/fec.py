@@ -21,24 +21,6 @@ class FECAPI(RESTDatasource):
         super().__init__(apikey)
         self.uri = "https://api.open.fec.gov/v1/"
 
-    def get_indepexpend(self, committee_id=None, cycle="2016"):
-        """
-        Function to get independant expenditures of a particular committee for a particular cycle
-        :param committee_id: The FEC id of a particular committee (required)
-        :param cycle: (string) The cycle that you are intereested in the independant expenditures for, default is "2016"
-        :return: All pages from the response from the api as JSON
-        """
-        if committee_id is None:
-            raise URIParameterException('Committee ID parameter required but not given')
-        requeststr = str(self.uri) + 'committee/' + str(committee_id) + '/schedules/schedule_e/by_candidate/'
-        params = {
-            'api_key': self.apikey,
-            'sort_hide_null': 'true',
-            'per_page': '30',
-            'cycle': str(cycle),
-        }
-        headers = {}
-        return self.get_allpages(requeststr, params, headers)
 
     def get_committees(self):
         """
