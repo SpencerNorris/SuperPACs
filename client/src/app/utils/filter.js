@@ -85,7 +85,7 @@ let general = [
         }}}
 ];
 
-//filter for specific nodes, filters by name and type
+//filter for a specific node, filters by name and type
 let nodeFilterFactory = (item) => {
     return (additive) => {
         return (obj, type) => {
@@ -98,5 +98,21 @@ let nodeFilterFactory = (item) => {
     };
 };
 
+//filters for multiple nodes, filters by name and type
+let multiNodeFilterFactory = (names, o_type) => {
+    return (additive) => {
+        return (obj, type) => {
+            if(o_type == type) {
+                for(let name of names) {
+                    if(obj.name == name) {
+                        return additive ? actions.ADD : actions.DELETE;
+                    }
+                }
+            }
+            return actions.PASS;
+        };
+    };
+};
+
 //export
-export default {filter, actions, type, general, nodeFilterFactory};
+export default {filter, actions, type, general, nodeFilterFactory, multiNodeFilterFactory};
