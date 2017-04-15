@@ -69,12 +69,32 @@ class Bill(models.Model):
     '''
     Bill class which represents Bill. It is either passed or not passed.
     '''
-    name = models.CharField(max_length = 140)
+    bill_id = models.charField(max_length=12)
+    display_title = models.CharField(max_length = 140)
+    official_title = models.CharField(max_length = 140)
+    source = models.CharField(max_length = 500,default="")
+    congress = models.IntegerField()
+    subjects = models.ManyToManyField(BillSubject)
+
+    CHAMBERS = (
+                ("H","House"),
+                ("S","Senate"),
+            )
+    chamber = models.CharField(max_length=1, choices=CHAMBERS)
 
 
-    sitelink = models.CharField(max_length = 500,default="")
-    hr = models.IntegerField()
-    ##more details about the bill? Sponsors? co-sponsors?
+    BILL_TYPES = (
+                  ("hr", "House Bill"),
+                  ("s", "Senate Bill"),
+                  ("hres", "House Resolution"),
+                  ("sres", "Senate Resolution"),
+                  ("hconres", "House Concurrent Resolution"),
+                  ("sconres", "Senate Concurrent Resolution"),
+                  ("hjres", "House Joint Resolution"),
+                  ("sjres", "Senate Joint Resolution"),
+                )
+    bill_type = models.CharField(max_length=7, choices=BILL_TYPES)
+
 
     ##PROPUBLICA api id.
     propublicaid = models.CharField(max_length = 9,default = None)
@@ -83,8 +103,13 @@ class Bill(models.Model):
     fecid = models.CharField(max_length = 9,default = None)
 
     def __str__(self):
-        return self.name
+        return self.display_title
 
+
+class BillSubject(models.Model):
+    subject = models.CharField(max_length="100")
+    def __str__(self):
+        return subject
 
 class Vote(models.Model):
     '''
