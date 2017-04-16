@@ -33,7 +33,6 @@ class CacheToORMTest(TestCase):
         print("Finished using PickleSeeder.")
 
 
-        #print("Number of representatives:",len(Representative.objects.all()))
         print("Getting ORM values to compare with API json.")
         self.ted_cruz = Representative.objects.get(first_name="Ted",last_name="Cruz")
         self.elizabeth_warren = Representative.objects.get(first_name="Elizabeth",last_name="Warren")
@@ -44,7 +43,7 @@ class CacheToORMTest(TestCase):
         pass
 
     def test_partyperson(self):
-        ##compare the data you can get from the Seeder to data in the original JSON
+        ##TODO:compare the data you can get from the Seeder to data in the original JSON
         ##essentially, create content based comparisons like this:
         ##self.api_seeder.getRepresentatives()["Ted_cruz"]["party"] == self.ted_cruz.party
         self.assertEqual(self.ted_cruz.party, 'R')
@@ -72,7 +71,7 @@ class ViewsToFrontendTest(TestCase):
         pass
 
     def test_partyperson(self):
-        ##compare the data you can get from the ORM to data in the view
+        ##TODO: compare the data you can get from the ORM to data in the view
         ##essentially, create content based comparisons like this:
         ##self.ted_cruz.party == views.donations()["ted_cruz"].party
 
