@@ -1,5 +1,13 @@
 import angular from 'angular';
-import d3 from './d3-modules';
+import ngMaterial from 'angular-material';
+import ngSortable from 'angular-legacy-sortablejs-maintained';
+import $ from 'jquery';
+
+import Graph from './utils/graph';
+import Filter from './utils/filter';
+
+import 'font-awesome/css/font-awesome.css';
+import 'angular-material/angular-material.css';
 import '../style/app.css';
 
 let app = () => {
@@ -10,116 +18,194 @@ let app = () => {
   }
 };
 
-function drawGraph(data) {
-    var vis = d3.select("#graph").append("svg");
-    var w = 1200, h = 900;
-    vis.attr("width", w).attr("height", h).transition().style("background-color", "white");
+const MODULE_NAME = 'app';
+angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable'])
+  .directive('app', app)
+  .controller('AppCtrl', /*@ngInject*/ ($scope, $http) => {
+      //init some inital data
+      $scope.filters = [];
+      $scope.searchItem = null;
+      $scope.data = {};
+      $scope.ctxMenu = {top: 0, left: 0, show: false, items: []};
+      //configuration for the sortable filter list
+      $scope.sortableConf = {
+          animation: 150,
+          ghostClass: "ghost",
+          onUpdate: (evt) => {
+              //refresh our graph when the list get rearranged
+              $scope.refreshGraph();
+          }
+      };
+      //setup the graph
+      $scope.graph = new Graph("#graph", (d, e) => {
+          //context menu handler, this function shows our context menu for nodes
+          //set menu position
+          $scope.ctxMenu.top = e.clientY;
+          $scope.ctxMenu.left = e.clientX;
 
-    var nodes = [];
-    var links = [];
-
-    //nodes
-    Object.keys(data.committees).forEach(function(rep) {
-        nodes.push({id:"c_"+data.committees[rep].id, name: data.committees[rep].name, x: 300, _x: 300, y: 400, _y: 400});
-    });
-
-    Object.keys(data.representatives).forEach(function(rep) {
-        nodes.push({id:"r_"+data.representatives[rep].id, name: data.representatives[rep].name,party:data.representatives[rep].party, x:600, _x: 600, y: 400, _y: 400});
-    });
-
-    //uncomment when bills are added
-    /*Object.keys(data.bills).forEach(function(rep) {
-        nodes.push({id:"b_"+data.bills[rep].id, name: data.bills[rep].name, _x: 700, _y: 200});
-    });*/
-
-    //links
-    Object.keys(data.donations).forEach(function(rep) {
-        if(data.donations[rep].source in data.committees && data.donations[rep].destination in data.representatives){
-            links.push({source:"c_"+data.donations[rep].source, target: "r_"+data.donations[rep].destination,thickness:data.donations[rep].amount,support:data.donations[rep].support});
-        }
-    });
-
-    //uncomment when votes are added
-    /*Object.keys(data.votes).forEach(function(rep) {
-        links.push({source:"r_"+data.votes[rep].source, target: "b_"+data.votes[rep].destination});
-    });*/
-    
-    var y = d3.scaleLinear().domain([0,d3.max(data.donations,function(d){return d.amount;})]).range([2, 20]);
-
-    /* Establish the dynamic force behavor of the nodes */
-    var force = d3.forceSimulation(nodes)
-                    .force('link', d3.forceLink(links).distance(0).strength(0).id(function(d) {return d.id;}))
-                    .force('X', d3.forceX().x(function(d) { return d._x }).strength(function() {return 1;}))
-                    .force("collide", d3.forceCollide().radius(function(d) { return 20 + 5; }).iterations(2));
-    /* Draw the edges/links between the nodes */
-    var edges = vis.selectAll("line")
-                    .data(links)
-                    .enter()
-                    .append("line")
-                    .style("stroke-width", function(d) { return y(d.thickness); })
-                    .style("stroke",function(d){
-                        if(d.support == "S"){
-                            return "Green";
-                        }else if(d.support=="O"){
-                            return "Purple";
-                        }
-                    })
-                    .attr("marker-end", "url(#end)");
-    /* Draw the nodes themselves */
-    var circles = vis.selectAll("circle")
-                    .data(nodes)
-                    .enter()
-                    .append("circle")
-                    .attr("r", 20)
-                    .style("stroke", "black")
-                    .style("fill",function(d){
-                        if(d.party == "R"){
-                            return d.color = "#E64A19"; //red
-                        } else if(d.party=="D"){
-                            return d.color = "#1976D2"; //blue
-                        } else {
-                            return d.color = "#BCAAA4"; //brown
+          if(d.id.startsWith("r_")) { //menu for representatives
+              $scope.ctxMenu.items = [
+                {name: "Add Donating SuperPACs", action: () => {
+                    //a menu item that adds all the superpacs that donated to this representative
+                    let names = [];
+                    let id = d.id.substring(2);
+                    //loop over all the donations getting matches
+                    Object.keys($scope.data.donations || {}).forEach((key) => {
+                        if($scope.data.donations[key].destination == id) {
+                            names.push($scope.data.committees[$scope.data.donations[key].source].name);
                         }
                     });
-    /* Draw text for all the nodes */
-    var texts = vis.selectAll("text")
-                    .data(nodes)
-                    .enter()
-                    .append("text")
-                    .attr("fill", "black")
-                    .attr("font-family", "sans-serif")
-                    .attr("font-size", "10px")
-                    .text(function(d) { return d.name; })
-                    .each(function(d) { d.bbox = this.getBBox(); });
-    /* Draw text background for all the nodes */
-    var textBGs = vis.selectAll("rect")
-                    .data(nodes)
-                    .enter()
-                    .insert("rect", "text")
-                    .attr("fill", function(d){return d.color;})
-                    .attr("width", function(d){return d.bbox.width+10})
-                    .attr("height", function(d){return d.bbox.height+10});
-    /* Run the Force effect */
-    force.on("tick", function() {
-        edges.attr("x1", function(d) { return d.source.x; })
-                .attr("y1", function(d) { return d.source.y; })
-                .attr("x2", function(d) { return d.target.x; })
-                .attr("y2", function(d) { return d.target.y; });
-        circles.attr("cx", function(d) { return d.x; })
-                .attr("cy", function(d) { return d.y; })
-        texts.attr("transform", function(d) { return "translate(" + (d.party ? d.x : d.x-d.bbox.width) + "," + (d.y+(d.bbox.height/4)) + ")"; });
-        textBGs.attr("transform", function(d) { return "translate(" + (d.party ? d.x-5 : d.x-d.bbox.width-5) + "," + (d.y-(d.bbox.height*.5)-5) + ")"; });
-    }); // End tick func
-}
 
+                    //create a multi node filter
+                    let predicateFactory = Filter.multiNodeFilterFactory(names, Filter.type.COMMITTEE);
 
-const MODULE_NAME = 'app';
+                    //add the filter to our list of filters, initially in additive mode
+                    $scope.filters.unshift({
+                        name: d.name+"'s SuperPACs",
+                        type: Filter.type.COMMITTEE,
+                        predicate: predicateFactory(true),
+                        predicateFactory,
+                        additive: true
+                    });
 
-angular.module(MODULE_NAME, [])
-  .directive('app', app)
-  .controller('AppCtrl', /*@ngInject*/ ($http) => {
-      $http.get('/api/donationsDemo').then((response) => {
-          drawGraph(response.data);
+                    //refresh our graph
+                    $scope.refreshGraph();
+                }}
+              ];
+          } else if(d.id.startsWith("c_")) {//menu for committees
+              $scope.ctxMenu.items = [
+                {name: "Add Politicians Donated To", action: () => {
+                    //a menu item that adds all the representatives that superpac donated to
+                    let names = [];
+                    let id = d.id.substring(2);
+                    //loop over all the donations getting matches
+                    Object.keys($scope.data.donations || {}).forEach((key) => {
+                        if($scope.data.donations[key].source == id) {
+                            names.push($scope.data.representatives[$scope.data.donations[key].destination].name);
+                        }
+                    });
+
+                    //create a multi node filter
+                    let predicateFactory = Filter.multiNodeFilterFactory(names, Filter.type.REPRESENTATIVE);
+
+                    //add the filter to our list of filters, initially in additive mode
+                    $scope.filters.unshift({
+                        name: d.name+"'s Recipents",
+                        type: Filter.type.REPRESENTATIVE,
+                        predicate: predicateFactory(true),
+                        predicateFactory,
+                        additive: true
+                    });
+
+                    //refresh our graph
+                    $scope.refreshGraph();
+                }}
+              ];
+          }
+
+          //show the menu
+          $scope.ctxMenu.show = true;
+          $scope.$apply();
+      });
+
+      //gets rid of our context menu when the user clicks elsewhere or presses escape
+      let hideCtxMenu = (e) => {
+          if($scope.ctxMenu.show) {
+              if(e && e.target && (e.target.id == "ctxMenu" || $(e.target).parents("#ctxMenu").length)) {
+                  return;
+              }
+              $scope.ctxMenu.show = false;
+              $scope.$apply();
+          }
+      };
+      $(document).mousedown(hideCtxMenu);
+      $(window).blur(hideCtxMenu);
+      $(document).keyup((e) => {
+          if (e.keyCode == 27) { // escape key maps to keycode `27`
+              hideCtxMenu();
+          }
+      });
+
+      //this function gets called whenever someone types in the search box, with their query so far
+      $scope.searchQuery = (query) => {
+          //make a call to our api with the query
+          return $http
+            .get('/api/search', {params: { query: query }})
+            .then(function(response) {
+                // Map the server's response to a format we can use.
+                let data = [];
+
+                //add matching special filters we have client size
+                for(const f of Filter.general.filter((f) => {return f.name.toLowerCase().indexOf(query.toLowerCase()) != -1})) {
+                    data.push({name: f.name, type: Filter.type.GENERAL, predicateFactory: f.predicateFactory});
+                }
+
+                //add matching representatives as filters
+                for(const rep of response.data['representatives']) {
+                    data.push({name: rep.name, type: Filter.type.REPRESENTATIVE});
+                }
+
+                //add matching committees as filters
+                for(const committee of response.data['committees']) {
+                    data.push({name: committee.name, type: Filter.type.COMMITTEE});
+                }
+
+                //todo add bills
+
+                return data;
+          });
+      };
+
+      //this gets called whenever the user selects a filter with the search box
+      $scope.$watch('searchItem', () => {
+          //make sure its a valid object
+          if($scope.searchItem instanceof Object) {
+              //get the item and its respective filter factory
+              let item = $scope.searchItem;
+              let predicateFactory = item.type == Filter.type.GENERAL ?
+                          item.predicateFactory : Filter.nodeFilterFactory(item);
+
+              //add the filter to our list of filters, initially in additive mode
+              $scope.filters.unshift({
+                  name: item.name,
+                  type: item.type,
+                  predicate: predicateFactory(true),
+                  predicateFactory,
+                  additive: true
+              });
+
+              //clear the user's selected item
+              $scope.searchItem = null;
+              $scope.searchText = "";
+
+              //refresh our graph
+              $scope.refreshGraph();
+          }
+      });
+
+      //removes the given filter from the filter list and refreshes the graph
+      $scope.removeFilter = (filter) => {
+          $scope.filters.splice($scope.filters.indexOf(filter), 1);
+          $scope.refreshGraph();
+      };
+
+      //flips the given filter's additive mode and refreshes the graph
+      $scope.flipFilter = (filter) => {
+          filter.additive = !filter.additive;
+          filter.predicate = filter.predicateFactory(filter.additive);
+          $scope.refreshGraph();
+      };
+
+      //refreshes the graph
+      $scope.refreshGraph = () => {
+          let filteredData = Filter.filter($scope.filters, $scope.data);
+          $scope.graph.draw(filteredData);
+      };
+
+      //get our entire donation dataset from the server
+      $http.get('/api/donations').then((response) => {
+          $scope.data = response.data;
+          $scope.refreshGraph();
       });
   });
 
