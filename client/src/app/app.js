@@ -1,6 +1,7 @@
 import angular from 'angular';
 import ngMaterial from 'angular-material';
 import ngSortable from 'angular-legacy-sortablejs-maintained';
+import cgBusy from '@cgross/angular-busy';
 import $ from 'jquery';
 
 import Graph from './utils/graph';
@@ -8,6 +9,7 @@ import Filter from './utils/filter';
 
 import 'font-awesome/css/font-awesome.css';
 import 'angular-material/angular-material.css';
+import '@cgross/angular-busy/dist/angular-busy.css';
 import '../style/app.css';
 
 let app = () => {
@@ -19,7 +21,7 @@ let app = () => {
 };
 
 const MODULE_NAME = 'app';
-angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable'])
+angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
   .directive('app', app)
   .controller('AppCtrl', /*@ngInject*/ ($scope, $http) => {
       //init some inital data
@@ -203,7 +205,7 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable'])
       };
 
       //get our entire donation dataset from the server
-      $http.get('/api/donations').then((response) => {
+      $scope.donationPromise = $http.get('/api/donations').then((response) => {
           $scope.data = response.data;
           $scope.refreshGraph();
       });

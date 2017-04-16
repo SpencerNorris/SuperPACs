@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/Foxandxss/angular-webpack-workflow",
   "dependencies": {
+    "@cgross/angular-busy": "^4.1.4",
     "angular": "1.5.x",
     "angular-animate": "1.5.x",
     "angular-aria": "1.5.x",
