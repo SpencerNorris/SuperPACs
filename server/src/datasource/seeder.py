@@ -103,8 +103,13 @@ class UploaderSeeder(AbstractSeeder):
             congress_dict["state"] = congressman['state']
             congress_dict["party"] = congressman['party']
             congress_dict["chamber"] = "H"
+            
+            ##Simple try catch block to avoid duplicate congressman problems
+            try:
+                Representative.objects.create(**congress_dict)
+            except django.db.utils.IntegrityError:
+                pass
 
-            Representative.objects.create(**congress_dict)
 
         for senator in congress_list["senate"]['results'][0]['members']:
             senator_dict = {}#personal details
@@ -116,14 +121,25 @@ class UploaderSeeder(AbstractSeeder):
             senator_dict["party"] = senator['party']
             senator_dict["chamber"] = "S"
 
-            Representative.objects.create(**senator_dict)
+            ##Simple try catch block to avoid duplicate senator problems
+            try:
+                Representative.objects.create(**congress_dict)
+            except django.db.utils.IntegrityError:
+                pass
+
 
     def uploadSuperPACs(self,superpac_list):
         for superpac in superpac_list:
             superpac_dict = {}
             superpac_dict["name"]=superpac["name"]
             superpac_dict["fecid"]=superpac["committee_id"]
-            SuperPAC.objects.create(**superpac_dict)
+
+            ##Simple try catch block to avoid duplicate superpac problems
+            try:
+                SuperPAC.objects.create(**superpac_dict)
+            except django.db.utils.IntegrityError:
+                pass
+
 
     def uploadDonations(self,donation_list):
         for donation in donation_list:
@@ -137,7 +153,12 @@ class UploaderSeeder(AbstractSeeder):
             donation_dict["amount"] = donation["amount"]
             donation_dict["uid"] = donation["unique_id"]
             donation_dict["support"] = donation["support_or_oppose"]
-            Donation.objects.create(**donation_dict)
+
+            ##Simple try catch block to avoid duplicate donation problems
+            try:
+                Donation.objects.create(**donation_dict)
+            except django.db.utils.IntegrityError:
+                pass
 
 class APISeeder(UploaderSeeder):
     def __init__(self):
