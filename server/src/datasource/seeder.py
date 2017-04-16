@@ -50,8 +50,10 @@ def uploadRepresentatives():
         senator_dict["state"] = senator['state']
         senator_dict["party"] = senator['party']
         senator_dict["chamber"] = "S"
-
-        Representative.objects.create(**senator_dict)
+        try:
+            Representative.objects.create(**senator_dict)
+        except django.db.utils.IntegrityError:
+            pass
 
     return True
 
@@ -61,10 +63,17 @@ def uploadSuperPACs():
 
     #print(superpacs_list[0])
     for superpac in superpacs_list:
+        #print("Upload: ",superpac["committee_id"])
         superpac_dict = {}
         superpac_dict["name"]=superpac["name"]
         superpac_dict["fecid"]=superpac["committee_id"]
-        SuperPAC.objects.create(**superpac_dict)
+        ##Sometimes the API returns duplicate data, this is a try catch block to avoid it.
+        try:
+            SuperPAC.objects.create(**superpac_dict)
+        except django.db.utils.IntegrityError:
+            print("Upload: ",superpac["committee_id"])
+            pass
+
 
 def uploadDonations():
     donation_list = donations()
@@ -80,8 +89,13 @@ def uploadDonations():
         donation_dict["amount"] = donation["amount"]
         donation_dict["uid"] = donation["unique_id"]
         donation_dict["support"] = donation["support_or_oppose"]
-        Donation.objects.create(**donation_dict)
-        #print("get donation")
+
+        ##Sometimes the API returns duplicate data, this is a try catch block to avoid it.
+        try:
+            Donation.objects.create(**donation_dict)
+        except django.db.utils.IntegrityError:
+            pass
+
 
 def uploadToDatabase():
 
