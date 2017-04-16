@@ -38,8 +38,11 @@ def uploadRepresentatives():
         congress_dict["state"] = congressman['state']
         congress_dict["party"] = congressman['party']
         congress_dict["chamber"] = "H"
-
-        Representative.objects.create(**congress_dict)
+        ##Try catch block to make sure no duplicate politicians enter the database orm
+        try:
+            Representative.objects.create(**congress_dict)
+        except django.db.utils.IntegrityError:
+            pass
 
     for senator in senators_list['results'][0]['members']:
         senator_dict = {}#personal details
@@ -51,24 +54,31 @@ def uploadRepresentatives():
         senator_dict["party"] = senator['party']
         senator_dict["chamber"] = "S"
 
-        Representative.objects.create(**senator_dict)
+        ##Try catch block to make sure no duplicate politicians enter the database orm
+        try:
+            Representative.objects.create(**senator_dict)
+        except django.db.utils.IntegrityError:
+            pass
 
     return True
 
 def uploadSuperPACs():
     fec_obj = FECAPI(FEC_APIKEY)
     superpacs_list = fec_obj.get_committees()
-
-    #print(superpacs_list[0])
     for superpac in superpacs_list:
         superpac_dict = {}
         superpac_dict["name"]=superpac["name"]
         superpac_dict["fecid"]=superpac["committee_id"]
-        SuperPAC.objects.create(**superpac_dict)
+        
+        ##Sometimes the API returns duplicate data, this is a try catch block to avoid it.
+        try:
+            SuperPAC.objects.create(**superpac_dict)
+        except django.db.utils.IntegrityError:
+            pass
+
 
 def uploadDonations():
     donation_list = donations()
-    print(donation_list[0])
     for donation in donation_list:
         donation_dict = {}
 
@@ -80,8 +90,13 @@ def uploadDonations():
         donation_dict["amount"] = donation["amount"]
         donation_dict["uid"] = donation["unique_id"]
         donation_dict["support"] = donation["support_or_oppose"]
-        Donation.objects.create(**donation_dict)
-        #print("get donation")
+
+        ##Sometimes the API returns duplicate data, this is a try catch block to avoid it.
+        try:
+            Donation.objects.create(**donation_dict)
+        except django.db.utils.IntegrityError:
+            pass
+
 
 def uploadToDatabase():
 
