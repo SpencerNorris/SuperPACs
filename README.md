@@ -39,7 +39,7 @@ You will also need to set the following environment variables
 * Enter the project directory
 * Run `docker-compose build`
 
-> Note, on Windows, if you are using Git it may replace line endings with Windows style line endings which will mess up Docker's run. Running `git config --global core.autocrl input` before you clone will solve this problem.
+> Note, on Windows, if you are using Git it may replace line endings with Windows style line endings which will mess up Docker's run. Running `git config --global core.autocrlf input` before you clone will solve this problem.
 
 Docker Compose will now automatically build all the Docker containers, you may need to run as root for the build to work properly.
 

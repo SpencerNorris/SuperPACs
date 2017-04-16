@@ -1,6 +1,7 @@
 import angular from 'angular';
 import ngMaterial from 'angular-material';
 import ngSortable from 'angular-legacy-sortablejs-maintained';
+import $ from 'jquery';
 
 import Graph from './utils/graph';
 import Filter from './utils/filter';
@@ -25,6 +26,7 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable'])
       $scope.filters = [];
       $scope.searchItem = null;
       $scope.data = {};
+      $scope.ctxMenu = {top: 0, left: 0, show: false, items: []};
       //configuration for the sortable filter list
       $scope.sortableConf = {
           animation: 150,
@@ -35,7 +37,94 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable'])
           }
       };
       //setup the graph
-      $scope.graph = new Graph("#graph");
+      $scope.graph = new Graph("#graph", (d, e) => {
+          //context menu handler, this function shows our context menu for nodes
+          //set menu position
+          $scope.ctxMenu.top = e.clientY;
+          $scope.ctxMenu.left = e.clientX;
+
+          if(d.id.startsWith("r_")) { //menu for representatives
+              $scope.ctxMenu.items = [
+                {name: "Add Donating SuperPACs", action: () => {
+                    //a menu item that adds all the superpacs that donated to this representative
+                    let names = [];
+                    let id = d.id.substring(2);
+                    //loop over all the donations getting matches
+                    Object.keys($scope.data.donations || {}).forEach((key) => {
+                        if($scope.data.donations[key].destination == id) {
+                            names.push($scope.data.committees[$scope.data.donations[key].source].name);
+                        }
+                    });
+
+                    //create a multi node filter
+                    let predicateFactory = Filter.multiNodeFilterFactory(names, Filter.type.COMMITTEE);
+
+                    //add the filter to our list of filters, initially in additive mode
+                    $scope.filters.unshift({
+                        name: d.name+"'s SuperPACs",
+                        type: Filter.type.COMMITTEE,
+                        predicate: predicateFactory(true),
+                        predicateFactory,
+                        additive: true
+                    });
+
+                    //refresh our graph
+                    $scope.refreshGraph();
+                }}
+              ];
+          } else if(d.id.startsWith("c_")) {//menu for committees
+              $scope.ctxMenu.items = [
+                {name: "Add Politicians Donated To", action: () => {
+                    //a menu item that adds all the representatives that superpac donated to
+                    let names = [];
+                    let id = d.id.substring(2);
+                    //loop over all the donations getting matches
+                    Object.keys($scope.data.donations || {}).forEach((key) => {
+                        if($scope.data.donations[key].source == id) {
+                            names.push($scope.data.representatives[$scope.data.donations[key].destination].name);
+                        }
+                    });
+
+                    //create a multi node filter
+                    let predicateFactory = Filter.multiNodeFilterFactory(names, Filter.type.REPRESENTATIVE);
+
+                    //add the filter to our list of filters, initially in additive mode
+                    $scope.filters.unshift({
+                        name: d.name+"'s Recipents",
+                        type: Filter.type.REPRESENTATIVE,
+                        predicate: predicateFactory(true),
+                        predicateFactory,
+                        additive: true
+                    });
+
+                    //refresh our graph
+                    $scope.refreshGraph();
+                }}
+              ];
+          }
+
+          //show the menu
+          $scope.ctxMenu.show = true;
+          $scope.$apply();
+      });
+
+      //gets rid of our context menu when the user clicks elsewhere or presses escape
+      let hideCtxMenu = (e) => {
+          if($scope.ctxMenu.show) {
+              if(e && e.target && (e.target.id == "ctxMenu" || $(e.target).parents("#ctxMenu").length)) {
+                  return;
+              }
+              $scope.ctxMenu.show = false;
+              $scope.$apply();
+          }
+      };
+      $(document).mousedown(hideCtxMenu);
+      $(window).blur(hideCtxMenu);
+      $(document).keyup((e) => {
+          if (e.keyCode == 27) { // escape key maps to keycode `27`
+              hideCtxMenu();
+          }
+      });
 
       //this function gets called whenever someone types in the search box, with their query so far
       $scope.searchQuery = (query) => {
