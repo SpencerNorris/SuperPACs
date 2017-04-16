@@ -1,12 +1,12 @@
 import django
 from django.core.exceptions import MultipleObjectsReturned
 from django.test import TestCase
+
 import os
 srcpath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 os.sys.path.append("/code/src/datasource")
-print(os.sys.path)
 from seeder import *
 from api.models import *
 
@@ -19,6 +19,7 @@ from api.views import *
 ##This testing class would test that all the data
 ## that is coming from the API's directly would get saved to pickles when required.
 ##and that the data for those pickles matches the same API data after it gets saved.
+
 
 #What about API to pickle? or is that way too deep.
 class CacheToORMTest(TestCase):

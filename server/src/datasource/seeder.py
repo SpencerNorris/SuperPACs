@@ -3,6 +3,7 @@ import MySQLdb
 import django
 from api.models import *
 from django.core.exceptions import MultipleObjectsReturned
+from django.db import transaction
 from time import sleep
 os.sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -105,11 +106,12 @@ class UploaderSeeder(AbstractSeeder):
             congress_dict["chamber"] = "H"
 
             ##Simple try catch block to avoid duplicate congressman problems
-            try:
-                Representative.objects.create(**congress_dict)
-            except django.db.utils.IntegrityError:
-                pass
-
+            with transaction.atomic():
+                ##Django 1.5/1.6 transaction bug requires above check
+                try:
+                    Representative.objects.create(**congress_dict)
+                except django.db.utils.IntegrityError:
+                    pass
 
         for senator in congress_list["senate"]['results'][0]['members']:
             senator_dict = {}#personal details
@@ -122,10 +124,12 @@ class UploaderSeeder(AbstractSeeder):
             senator_dict["chamber"] = "S"
 
             ##Simple try catch block to avoid duplicate senator problems
-            try:
-                Representative.objects.create(**congress_dict)
-            except django.db.utils.IntegrityError:
-                pass
+            with transaction.atomic():
+                ##Django 1.5/1.6 transaction bug requires above check
+                try:
+                    Representative.objects.create(**senator_dict)
+                except django.db.utils.IntegrityError:
+                    pass
 
 
     def uploadSuperPACs(self,superpac_list):
@@ -135,13 +139,16 @@ class UploaderSeeder(AbstractSeeder):
             superpac_dict["fecid"]=superpac["committee_id"]
 
             ##Simple try catch block to avoid duplicate superpac problems
-            try:
-                SuperPAC.objects.create(**superpac_dict)
-            except django.db.utils.IntegrityError:
-                pass
+            with transaction.atomic():
+                ##Django 1.5/1.6 transaction bug requires above check
+                try:
+                    SuperPAC.objects.create(**superpac_dict)
+                except django.db.utils.IntegrityError:
+                    pass
 
 
     def uploadDonations(self,donation_list):
+        print("database congress size:",len(Representative.objects.all()))
         for donation in donation_list:
             donation_dict = {}
 
@@ -155,10 +162,12 @@ class UploaderSeeder(AbstractSeeder):
             donation_dict["support"] = donation["support_or_oppose"]
 
             ##Simple try catch block to avoid duplicate donation problems
-            try:
-                Donation.objects.create(**donation_dict)
-            except django.db.utils.IntegrityError:
-                pass
+            with transaction.atomic():
+                ##Django 1.5/1.6 transaction bug requires above check
+                try:
+                    Donation.objects.create(**donation_dict)
+                except django.db.utils.IntegrityError:
+                    pass
 
 class APISeeder(UploaderSeeder):
     def __init__(self):
@@ -342,7 +351,7 @@ def uploadToDatabase():
 
 
     seeder = PickleSeeder()
-    print("Using API seeder to get data.1")
+    print("Using Pickle seeder to get data.")
     seeder.seedAll(reset=False)
 
 
