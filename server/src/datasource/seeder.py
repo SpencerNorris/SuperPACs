@@ -41,7 +41,7 @@ class AbstractSeeder:
         ##Find out way to pass in the testing or production database to seed.
         ##Unfortunately, it is currently based on the environment where this seeder object is called.
 
-    ##Should I add a place here to delete parts of the database?
+    ##TODO: Should I add a place here to delete parts of the database?
 
     ##function skeletons.
     '''
@@ -103,7 +103,7 @@ class UploaderSeeder(AbstractSeeder):
             congress_dict["state"] = congressman['state']
             congress_dict["party"] = congressman['party']
             congress_dict["chamber"] = "H"
-            
+
             ##Simple try catch block to avoid duplicate congressman problems
             try:
                 Representative.objects.create(**congress_dict)
