@@ -70,5 +70,4 @@ class FECAPI(RESTDatasource):
         for page in range(2, pages+1):
             params['page'] = str(page)
             results += super().request(requeststr, params, headers)["results"]
-        print("getallpages:",results)
         return results
