@@ -38,9 +38,11 @@ def uploadRepresentatives():
         congress_dict["state"] = congressman['state']
         congress_dict["party"] = congressman['party']
         congress_dict["chamber"] = "H"
-
-        Representative.objects.create(**congress_dict)
-
+        try:
+            Representative.objects.create(**congress_dict)
+        except django.db.utils.IntegrityError:
+            pass
+            
     for senator in senators_list['results'][0]['members']:
         senator_dict = {}#personal details
         senator_dict["propublicaid"] = senator['id']
