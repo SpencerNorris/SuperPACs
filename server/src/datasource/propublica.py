@@ -24,34 +24,6 @@ class CampaignFinanceAPI(RESTDatasource):
         self.keyname = 'X-API-Key'
 
 
-    def find_comittees(self, query=None, cycle='2016'):
-        """
-        Method for searching for committees using a query string
-        :param query: The search query for the api call, note that "*" does not act as a wildcard
-        :param cycle: The cycle to get info for, default is most recent (2016)
-        :return: The response of the search for committees api call as json
-        """
-        rheaders = {self.keyname: self.apikey}
-        rparams = {'query': query}
-        requeststr = str(self.uri) + str(cycle) + "/committees/search"
-        return super().request(requeststr, params, headers)
-
-
-    def get_commitee(self, fecid=None, cycle='2016'):
-        """
-        Method for searching for a specific committee by fec-id
-        :param fecid: The committee's fec-id
-        :param cycle: The cycle to get info for, default is most recent (2016)
-        :return: The result of the api call as json
-        """
-        if fecid is None:
-            raise URIParameterException('FEC ID required but not given')
-        params = {}
-        headers = {self.keyname: self.apikey}
-        requeststr = str(self.uri) + str(cycle) + "/committees/" + str(fecid) + ".json"
-        return super().request(requeststr, params, headers)
-
-
     def get_indep_expends(self, fecid=None, cycle='2016'):
         """
         Gets the independant expenditures for a specific committee for a specific cycle
