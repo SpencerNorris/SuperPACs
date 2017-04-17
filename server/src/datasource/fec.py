@@ -22,7 +22,7 @@ class FECAPI(RESTDatasource):
         self.uri = "https://api.open.fec.gov/v1/"
 
 
-    def get_committees(self):
+    def get_superpacs(self):
         """
         Function to get all SuperPACs from the FEC
         :return: The api response containing all SuperPACs as JSON data

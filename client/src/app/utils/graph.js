@@ -45,10 +45,10 @@ class Graph {
         let links = [];
 
         //add our nodes
-        //add the committee nodes
+        //add the superpac nodes
         let init_y = 0;
-        Object.keys(data.committees || {}).forEach((key) => {
-            nodes.push({id:"c_"+data.committees[key].id, name: data.committees[key].name, x: 300, fx: 300, y: init_y+=60});
+        Object.keys(data.superpacs || {}).forEach((key) => {
+            nodes.push({id:"c_"+data.superpacs[key].id, name: data.superpacs[key].name, x: 300, fx: 300, y: init_y+=60});
         });
 
         //add the representative nodes
@@ -64,9 +64,9 @@ class Graph {
         });
 
         //add our links
-        //add the donation links between committees and representatives
+        //add the donation links between superpacs and representatives
         Object.keys(data.donations || {}).forEach((key) => {
-            if(data.donations[key].source in data.committees && data.donations[key].destination in data.representatives){
+            if(data.donations[key].source in data.superpacs && data.donations[key].destination in data.representatives){
                 links.push({source:"c_"+data.donations[key].source, target: "r_"+data.donations[key].destination,thickness:data.donations[key].amount,support:data.donations[key].support});
             }
         });

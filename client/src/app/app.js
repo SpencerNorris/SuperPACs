@@ -54,17 +54,17 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
                     //loop over all the donations getting matches
                     Object.keys($scope.data.donations || {}).forEach((key) => {
                         if($scope.data.donations[key].destination == id) {
-                            names.push($scope.data.committees[$scope.data.donations[key].source].name);
+                            names.push($scope.data.superpacs[$scope.data.donations[key].source].name);
                         }
                     });
 
                     //create a multi node filter
-                    let predicateFactory = Filter.multiNodeFilterFactory(names, Filter.type.COMMITTEE);
+                    let predicateFactory = Filter.multiNodeFilterFactory(names, Filter.type.SUPERPAC);
 
                     //add the filter to our list of filters, initially in additive mode
                     $scope.filters.unshift({
                         name: d.name+"'s SuperPACs",
-                        type: Filter.type.COMMITTEE,
+                        type: Filter.type.SUPERPAC,
                         predicate: predicateFactory(true),
                         predicateFactory,
                         additive: true
@@ -74,7 +74,7 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
                     $scope.refreshGraph();
                 }}
               ];
-          } else if(d.id.startsWith("c_")) {//menu for committees
+          } else if(d.id.startsWith("c_")) {//menu for superpacs
               $scope.ctxMenu.items = [
                 {name: "Add Politicians Donated To", action: () => {
                     //a menu item that adds all the representatives that superpac donated to
@@ -147,9 +147,9 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
                     data.push({name: rep.name, type: Filter.type.REPRESENTATIVE});
                 }
 
-                //add matching committees as filters
-                for(const committee of response.data['committees']) {
-                    data.push({name: committee.name, type: Filter.type.COMMITTEE});
+                //add matching superpacs as filters
+                for(const superpac of response.data['superpacs']) {
+                    data.push({name: superpac.name, type: Filter.type.SUPERPAC});
                 }
 
                 //todo add bills

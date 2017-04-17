@@ -187,7 +187,7 @@ class APISeeder(UploaderSeeder):
     @staticmethod
     def getSuperPACs():
         fec_obj = FECAPI(FEC_APIKEY)
-        superpacs_list = fec_obj.get_committees()
+        superpacs_list = fec_obj.get_superpacs()
         return superpacs_list
 
     @staticmethod

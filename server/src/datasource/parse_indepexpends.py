@@ -17,7 +17,7 @@ ProPublica_APIKEY = os.getenv('PP_API_KEY', '')
 def donations_helper():
     print("donations_helper")
     FecApiObj = FECAPI(FEC_APIKEY)
-    committees = FecApiObj.get_committees()
+    superpacs = FecApiObj.get_superpacs()
     PPCampFinObj = CampaignFinanceAPI(ProPublica_APIKEY)
     PPCongressApi = CongressAPI(ProPublica_APIKEY)
     legislator_index = dict()
@@ -32,15 +32,15 @@ def donations_helper():
     print("starting to iterate through superpacs")
     donations = []
     count = 0
-    for committee in committees:
-        if(2016 in committee['cycles']):
+    for superpac in superpacs:
+        if(2016 in superpac['cycles']):
             try:
-                indepExpend = PPCampFinObj.get_indep_expends(str(committee['committee_id']))
+                indepExpend = PPCampFinObj.get_indep_expends(str(superpac['committee_id']))
 
                 for expend in indepExpend["results"]:
                     try:
                         #expend fo a particular expenditure
-                        expend['committee_id'] = str(committee['committee_id'])
+                        expend['committee_id'] = str(superpac['committee_id'])
                         expend['propublica_candidate_id'] = str(legislator_index[expend['candidate_name']]['id'])
                         donations.append(expend)
                     except KeyError:

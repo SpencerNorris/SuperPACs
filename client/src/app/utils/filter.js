@@ -7,7 +7,7 @@ const actions = Object.freeze({ADD: "1", DELETE: "2", PASS: "3"});
 //an enum defining what type of object is getting filtered
 const type = Object.freeze({GENERAL: "General",
                     REPRESENTATIVE: "Representative",
-                    COMMITTEE: "Committee"});
+                    SUPERPAC: "SuperPAC"});
 
 /**
  * Filters the properties of the object based on the predicate function
@@ -64,7 +64,7 @@ function filter(filters, data) {
 
     //return the filtered data, donations are ignored because the graph
     //only chooses the needed ones
-    return {committees: filterObject(data.committees, predicate(type.COMMITTEE)),
+    return {superpacs: filterObject(data.superpacs, predicate(type.SUPERPAC)),
         donations: data.donations,
         representatives: filterObject(data.representatives, predicate(type.REPRESENTATIVE))};
 }
