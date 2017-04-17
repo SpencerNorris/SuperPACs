@@ -50,6 +50,17 @@ Docker Compose will now start the Docker containers and the website should be ru
 
 > Note, if you are running mysql locally you may need to stop it before deploying Docker
 
+## Seeding Instructions
+The database needs to be seeded with data before it can provide the website with results. Use the following command to seed the database.
+* `docker exec superpacs_web_1 /bin/bash -c 'cd /code/src/datasource/ && python seeder.py'`
+
+This command may take a while but it should seed all the data needed into the database.
+If the command does not work do the following.
+* Run `docker ps`
+* Find the container with the image `superpacs_web` and copy its container id
+  * If you cannot find the container, this project's docker container is likely not running.
+* Run the command above, except replace `superpacs_web_1` with the container id
+
 # Development Instructions
 
 ## Backend Development
