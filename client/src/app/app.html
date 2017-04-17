@@ -1,6 +1,15 @@
 
 <main cg-busy="{promise:donationPromise, message:'Loading Data...', delay: 500}">
-    <div id="sidebar">
+    <button class="sidebar-vis" ng-show="sidebarHidden" ng-click="sidebarHidden=false"
+            title="Show Side Bar">
+      <i class="fa fa-angle-right" aria-hidden="true"></i>
+    </button>
+
+    <div id="sidebar" ng-hide="sidebarHidden">
+        <button class="sidebar-vis" ng-hide="sidebarHidden" ng-click="sidebarHidden=true"
+                title="Hide Side Bar">
+            <i class="fa fa-angle-left" aria-hidden="true"></i>
+        </button>
         <div class="form-group">
             <md-autocomplete
                     md-selected-item="searchItem"
