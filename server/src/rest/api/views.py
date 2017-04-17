@@ -7,6 +7,10 @@ from django.db.models.functions import Concat
 
 from api.models import Representative,SuperPAC,Donation
 
+import re
+import requests
+import json
+
 def index(request):
     '''
     basic view that returns on basic http://localhost:8000/api/ call.
@@ -68,6 +72,28 @@ def donationsDemo(request):
 
 def search(request):
     query = request.GET["query"]
+
+    ## match the query against a zipcode regex, go a zipcode search if it matches
+    if re.match("^\d{5}$", query):
+        ## here we call an external api to search for the reps via zipcode
+
+        ## create the request parameters
+        params = {"zip": query};
+        headers = [];
+        ## call the api
+        r = requests.get("https://congress.api.sunlightfoundation.com/legislators/locate", params=params, headers=headers)
+        results = json.loads(r.text)
+
+        ## loop through the results
+        reps = []
+        for rep in results["results"]:
+            ## try finding the rep in our database
+            reps += (Representative.objects.all()
+                .annotate(name=Concat('first_name', Value(" "), 'last_name'))
+                .filter(name=rep["first_name"]+" "+rep["last_name"])
+                .values("id", "name", "party"))
+        ## return the found reps
+        return JsonResponse({"representatives": reps, "committees": []})
 
     data = {}
 
