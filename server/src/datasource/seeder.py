@@ -4,7 +4,6 @@ import django
 from api.models import *
 from django.core.exceptions import MultipleObjectsReturned
 from django.db import transaction
-from time import sleep
 os.sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 srcpath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -239,7 +238,7 @@ class PickleSeeder(UploaderSeeder):
         return representatives_list
 
     def getRepresentatives(self):
-        #Check for time-sensitive reasons to not use cache? Or perhaps use a subclass..
+        #TODO:Check for time-sensitive reasons to replace cache? Or perhaps use a subclass..
         try:
             try:
                 ##pull data from the pickle.

@@ -64,8 +64,3 @@ def donations(filename='donationdata.pickle'):
             pickle.dump(donations, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
         return donations
-
-
-if __name__ == "__main__":
-    ##replace with something else.
-    donations('donationdata.pickle')
