@@ -32,11 +32,7 @@ class URIParameterException(Exception):
         return repr(self.value)
 
 
-class Datasource:
-    pass
-
-
-class RESTDatasource(Datasource):
+class RESTDatasource:
     def __init__(self, apikey=None):
 
         #Throw API key errors
