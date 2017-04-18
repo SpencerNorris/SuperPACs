@@ -1,7 +1,7 @@
 import os
 import MySQLdb
 import django
-from api.models import *
+
 from django.core.exceptions import MultipleObjectsReturned
 from django.db import transaction
 os.sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -32,8 +32,6 @@ FEC_APIKEY = os.getenv('FEC_API_KEY', '')
 class AbstractSeeder:
 
     def __init__(self):
-        ##Django environment
-        os.environ['DJANGO_SETTINGS_MODULE'] = 'rest.settings'
         ##api keys
         self.ProPublica_APIKEY = ""
         self.FEC_API_KEY = ""
@@ -355,7 +353,11 @@ def uploadToDatabase():
 
 
 if __name__ == "__main__":
+    ##Django environment
+    os.environ['DJANGO_SETTINGS_MODULE'] = 'rest.settings'
     django.setup()
     from api.models import *
     print("starting main function:")
     uploadToDatabase()
+else:
+    from api.models import *
