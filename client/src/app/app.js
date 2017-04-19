@@ -29,6 +29,7 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
       $scope.searchItem = null;
       $scope.data = {};
       $scope.ctxMenu = {top: 0, left: 0, show: false, items: []};
+      $scope.sidebarHidden = false;
       //configuration for the sortable filter list
       $scope.sortableConf = {
           animation: 150,
@@ -185,6 +186,12 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
           }
       });
 
+      //this gets triggered whenever the sidebar gets hidden, it causes the graph to resize
+      $scope.$watch('sidebarHidden', () => {
+          setTimeout(() => {
+              $scope.graph.resize();
+          }, 10);
+      });
       //removes the given filter from the filter list and refreshes the graph
       $scope.removeFilter = (filter) => {
           $scope.filters.splice($scope.filters.indexOf(filter), 1);

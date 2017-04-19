@@ -9,19 +9,13 @@ class Graph {
         this.svg = d3.select(element).append("svg");
         this.svg.attr("width", this.width).attr("height", this.height).style("background-color", "white");
         this.nodeMenu = nodeMenu;
+        this.parentElement = element;
         //add an empty arbitrary element, we'll add our graph to this later
         this.vis = this.svg.append("g");
 
         //automatically resize the svg when the window's size changes
-        let resizeSVG = (() => {
-            let rect = d3.select(element).node().getBoundingClientRect();
-            this.width = rect.width;
-            this.height = rect.height;
-
-            this.svg.attr("width", this.width).attr("height", this.height);
-        }).bind(this);
-        window.onresize = resizeSVG;
-        setTimeout(resizeSVG, 100);
+        window.onresize = this.resize.bind(this);
+        setTimeout(this.resize.bind(this), 100);
 
         //set up zooming and panning functionality for the visualization
         this.zoom = d3.zoom()
@@ -184,6 +178,17 @@ class Graph {
 
         //perform the zooming and panning
         this.svg.transition().duration(750).call(this.zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
+    }
+
+    /**
+     * Resizes the graph to fit the parent element
+     */
+    resize() {
+        let rect = d3.select(this.parentElement).node().getBoundingClientRect();
+        this.width = rect.width;
+        this.height = rect.height;
+
+        this.svg.attr("width", this.width).attr("height", this.height);
     }
 }
 
