@@ -6,7 +6,6 @@ import $ from 'jquery';
 
 import Graph from './utils/graph';
 import Filter from './utils/filter';
-import Legend from './utils/legend';
 
 import 'font-awesome/css/font-awesome.css';
 import 'angular-material/angular-material.css';

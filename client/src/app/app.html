@@ -59,7 +59,7 @@
     <button ng-click="legendHidden = false;" ng-show="legendHidden" title="Show Legend" style="position:absolute;height:30px;bottom:0px;right:0px;">
       <i class="fa fa-chevron-up" aria-hidden="true"></i>
     </button>
-    <div class="legend" ng-hide="legendHidden" style="background:#1976D2;height:200px;width:240px;position:absolute;right:5%;bottom:5%;">
+    <div class="legend" ng-hide="legendHidden" style="background:#1976D2;height:170px;width:240px;position:absolute;right:5%;bottom:5%;">
       <button ng-click="legendHidden = true;" style="position:absolute;right:0%;">
         <i class="fa fa-times" aria-hidden="true"></i>
       </button>
@@ -68,39 +68,58 @@
         <span>Legend</span>
       </div>
 
-      <ul style="list-style:none;padding:10px;margin-top:0px;">
-
+      <ul style="">
         <li style="">
-          <svg height=25 width=25 style="">
-            <circle cx="15" cy="15" r="5" stroke="black" stroke-width="2" fill="red" />
-          </svg>
-          <span style="">Republican Legislator</span>
+          <div class = "icon">
+            <svg width="14" height="14">
+              <circle cx="7" cy="7" r="5" stroke="black" stroke-width="2" fill="red" />
+            </svg>
+          </div>
+          <div class = "name">
+            <span style="">Republican Legislator</span>
+          </div>
         </li>
         <li style="">
-          <svg height=25 width=25 style="">
-            <circle cx="15" cy="15" r="5" stroke="black" stroke-width="2" fill="blue" />
-          </svg>
-          <span style="">Democratic Legislator</span>
+          <div class = "icon">
+            <svg height=14 width=14 style="">
+              <circle cx="7" cy="7" r="5" stroke="black" stroke-width="2" fill="blue" />
+            </svg>
+          </div>
+          <div class = "name">
+            <span style="">Democratic Legislator</span>
+          </div>
         </li>
         <li style="">
-          <svg height=25 width=25 style="">
-            <circle cx="15" cy="15" r="5" stroke="black" stroke-width="2" fill="rgb(188, 170, 164)" />
-          </svg>
-          <span style="">Independent Legislator</span>
+          <div class = "icon">
+            <svg height=14 width=14>
+              <circle cx="7" cy="7" r="5" stroke="black" stroke-width="2" fill="rgb(188, 170, 164)" />
+            </svg>
+          </div>
+          <div class = "name">
+            <span style="">Independent Legislator</span>
+          </div>
         </li>
         <li style="">
-          <svg height=25 width=25 style="">
-            <line x1="2.0" y1="20" x2="18.0" y2="20" style="stroke:black;stroke-width:10" />
-            <line x1="4" y1="20" x2="16" y2="20" style="stroke:green;stroke-width:5" />
-          </svg>
-          <span style="">Positive Donation</span>
+          <div class = "icon">
+            <svg height=14 width=14 style="">
+              <line x1="0" y1="7" x2="14" y2="7" style="stroke:black;stroke-width:10" />
+              <line x1="1" y1="7" x2="13" y2="7" style="stroke:green;stroke-width:5" />
+            </svg>
+          </div>
+          <div class = "name">
+            <span style="">Positive Donation</span>
+          </div>
         </li>
         <li style="">
-          <svg height=25 width=25 style="">
-            <line x1="2.0" y1="20" x2="18.0" y2="20" style="stroke:black;stroke-width:10" />
-            <line x1="4" y1="20" x2="16" y2="20" style="stroke:purple;stroke-width:5" />
-          </svg>
-          <span style="">Negative Donation</span>
+          <div class = "icon">
+            <svg height=14 width=14 style="">
+              <line x1="0" y1="7" x2="14" y2="7" style="stroke:black;stroke-width:10" />
+              <line x1="1" y1="7" x2="13" y2="7" style="stroke:purple;stroke-width:5" />
+            </svg>
+          </div>
+          <div class = "name">
+            <span style="">Negative Donation</span>
+          </div>
         </li>
       </ul>
     </div>
