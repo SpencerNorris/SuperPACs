@@ -199,7 +199,7 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
       };
     
       $scope.clearAll = () => {
-        filters = [];
+        $scope.filters = [];
         $scope.refreshGraph();
       };
 
