@@ -6,6 +6,7 @@ import $ from 'jquery';
 
 import Graph from './utils/graph';
 import Filter from './utils/filter';
+import Legend from './utils/legend';
 
 import 'font-awesome/css/font-awesome.css';
 import 'angular-material/angular-material.css';
@@ -30,6 +31,8 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
       $scope.data = {};
       $scope.ctxMenu = {top: 0, left: 0, show: false, items: []};
       $scope.sidebarHidden = false;
+      $scope.legendHidden = false;//Legend setup
+
       //configuration for the sortable filter list
       $scope.sortableConf = {
           animation: 150,

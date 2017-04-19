@@ -7,7 +7,12 @@ class Graph {
         this.width = 1200;
         this.height = 900;
         this.svg = d3.select(element).append("svg");
+
         this.svg.attr("width", this.width).attr("height", this.height).style("background-color", "white");
+
+
+
+
         this.nodeMenu = nodeMenu;
         this.parentElement = element;
         //add an empty arbitrary element, we'll add our graph to this later
@@ -25,6 +30,8 @@ class Graph {
             });
 
         this.svg.call(this.zoom).call(this.zoom.transform, d3.zoomIdentity.translate(0, this.height * .3));
+
+
     }
 
     /**
