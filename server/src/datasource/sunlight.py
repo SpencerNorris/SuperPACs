@@ -1,3 +1,5 @@
+from datasource import RESTDatasource
+
 class SunlightAPI(RESTDatasource):
 	def __init__(self):
 		apikey = '' #Sunlight doesn't require one!
@@ -29,7 +31,7 @@ class SunlightAPI(RESTDatasource):
 		return super().request(endpoint, params, {})
 
 
-	def bills(self, bill_id, congress=115):
+	def bills(self, bill_id):
 		'''
 		The main endpoint of Sunlight for retrieving data about legislation.
 		Various parameters can be passed to retrieve bills according to certain criteria.
@@ -44,7 +46,6 @@ class SunlightAPI(RESTDatasource):
 		'''
 		params = {}
 		params['bill_id'] = bill_id
-		params['congress'] = congress
 		endpoint = 'https://congress.api.sunlightfoundation.com/bills'
 		return super().request(endpoint, params, {})
 
