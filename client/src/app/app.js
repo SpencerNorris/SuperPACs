@@ -197,6 +197,13 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
           $scope.filters.splice($scope.filters.indexOf(filter), 1);
           $scope.refreshGraph();
       };
+    
+      $scope.clearAll = () => {
+        for(i = $scope.filters.length; i > 0; i--){
+          $scope.filters.splice(i-1, 1);
+          $scope.refreshGraph();
+        }
+      }
 
       //flips the given filter's additive mode and refreshes the graph
       $scope.flipFilter = (filter) => {
