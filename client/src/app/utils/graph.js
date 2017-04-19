@@ -1,8 +1,11 @@
 
 import d3 from './d3-modules';
+import Hover from './hover';
 
 class Graph {
     constructor(element, nodeMenu) {
+
+
         //add our svg to the given element and set it up
         this.width = 1200;
         this.height = 900;
@@ -25,6 +28,8 @@ class Graph {
             });
 
         this.svg.call(this.zoom).call(this.zoom.transform, d3.zoomIdentity.translate(0, this.height * .3));
+        this.hover = new Hover();
+
     }
 
     /**
@@ -48,7 +53,7 @@ class Graph {
         //add the representative nodes
         init_y = 0;
         Object.keys(data.representatives || {}).forEach((key) => {
-            nodes.push({id:"r_"+data.representatives[key].id, name: data.representatives[key].name,party:data.representatives[key].party, x:600, fx: 600, y: init_y+=60});
+            nodes.push({id:"r_"+data.representatives[key].id, name: data.representatives[key].name,party:data.representatives[key].party, x:600, fx: 600, y: init_y+=60,state:data.representatives[key].state,district:data.representatives[key].district});
         });
 
         //add the bill nodes
@@ -118,7 +123,9 @@ class Graph {
                                 return d.color = "#BCAAA4"; //brown
                             }
                         })
-                        .on('contextmenu', contextMenu);
+                        .on('contextmenu', contextMenu)
+                        .on("mouseover", this.hover.handleMouseOverRepresentative)
+                        .on("mouseout", this.hover.handleMouseOutRepresentative);
         //Draw text for all the nodes
         let texts = this.vis.selectAll("text")
                         .data(nodes)

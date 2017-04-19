@@ -6,6 +6,7 @@ import $ from 'jquery';
 
 import Graph from './utils/graph';
 import Filter from './utils/filter';
+import Hover from './utils/hover';
 
 import 'font-awesome/css/font-awesome.css';
 import 'angular-material/angular-material.css';
@@ -39,6 +40,7 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
               $scope.refreshGraph();
           }
       };
+
       //setup the graph
       $scope.graph = new Graph("#graph", (d, e) => {
           //context menu handler, this function shows our context menu for nodes
@@ -216,6 +218,17 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
           $scope.data = response.data;
           $scope.refreshGraph();
       });
+
+      //Hovering functionality.
+
+      
+      //Hovering over a superpac node.
+
+      //Hovering over a representative node.
+
+
+      //Hovering over a donation edge.
+
   });
 
 export default MODULE_NAME;

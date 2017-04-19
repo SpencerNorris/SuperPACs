@@ -32,7 +32,7 @@ def donations(request):
     data["representatives"] = {d["id"]: d for d in
         Representative.objects.all()
             .annotate(name=Concat('first_name', Value(" "), 'last_name'))
-            .values("id", "name", "party")}
+            .values("id", "name", "party","state","district")}
 
     data["committees"] = {d["id"]: d for d in
         SuperPAC.objects.all().values("id", "name")}
