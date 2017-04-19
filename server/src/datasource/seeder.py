@@ -349,7 +349,7 @@ def uploadToDatabase():
 
     seeder = PickleSeeder()
     print("Using Pickle seeder to get data.")
-    seeder.seedAll(reset=False)
+    seeder.seedAll(reset=False)#True means ignore pickle, False means use pickle.
 
 
 if __name__ == "__main__":
