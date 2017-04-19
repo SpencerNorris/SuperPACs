@@ -97,3 +97,21 @@ class CongressAPI(RESTDatasource):
         rheaders = {self.keyname: self.apikey}
         rparams = {}
         return super().request(requeststr, rparams, rheaders)
+
+
+    def get_vote(self, congress, chamber, session, roll_call_number):
+        """
+        Method for retreiving the breakdown of a specific roll call vote for a piece of legislation.
+        :param roll_call_number: the unique identifier for the vote of interest. This is called 'roll_id' by Sunlight.
+        :param congress: the numeric identifier for which Congress to retrieve from. The current Congress is '115'.
+        :param session: the session of the particular Congress. Pass 1 for the odd-numbered year (e.g. 2013) or 2 for even (2014).
+                        This can be determined by the date passed back by Sunlight under 'acted_at'.
+        :param chamber: the chamber of Congress the vote is from, either 'house' or 'senate'. This is under the 'chamber' field in Sunlight.
+        """
+        #All parameters are required!
+        if congress is None or chamber is None or session is None or roll_call_number is None:
+            raise URIParameterException('MemberId parameter required but not provided') 
+        requeststr = str(self.uri) + str(congress) + '/' + chamber + '/sessions/' + str(session) + '/votes/' + str(roll_call_number) + '.json' 
+        rheaders = {self.keyname: self.apikey}
+        rparams = {}
+        return super().request(requeststr, rparams, rheaders)
