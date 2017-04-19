@@ -42,9 +42,6 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
       //setup the graph
       $scope.graph = new Graph("#graph", (d, e) => {
           //context menu handler, this function shows our context menu for nodes
-          //set menu position
-          $scope.ctxMenu.top = e.clientY;
-          $scope.ctxMenu.left = e.clientX;
 
           if(d.id.startsWith("r_")) { //menu for representatives
               $scope.ctxMenu.items = [
@@ -108,6 +105,15 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
 
           //show the menu
           $scope.ctxMenu.show = true;
+          $scope.$apply();
+
+          //set menu position
+          $scope.ctxMenu.top = e.clientY;
+          $scope.ctxMenu.left = e.clientX;
+          console.log($(window).height(), $(window).width());
+          console.log($("#ctxMenu").outerHeight(), $("#ctxMenu").outerWidth());
+          console.log(e.clientY, e.clientX);
+
           $scope.$apply();
       });
 
