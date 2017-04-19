@@ -1,6 +1,48 @@
 
-<main>
+<main cg-busy="{promise:donationPromise, message:'Loading Data...', delay: 500}">
+    <div id="sidebar">
+        <div class="form-group">
+            <md-autocomplete
+                    md-selected-item="searchItem"
+                    md-search-text="searchText"
+                    md-items="item in searchQuery(searchText)"
+                    md-item-text="item.name"
+                    md-min-length="3"
+                    md-dropdown-items="100"
+                    placeholder="Search">
+                <md-item-template>
+                    <span>{{item.name}}</span><br>
+                    <span class="autocompleteSubtext">{{item.type}}</span>
+                </md-item-template>
+                <md-not-found>
+                    No matches found.
+                </md-not-found>
+            </md-autocomplete>
+        </div>
+        <hr>
+
+        <h2>Active Filters</h2>
+        <span class="muted" ng-hide="filters.length">No filters</span>
+        <ul ng-sortable="sortableConf " class="filters">
+            <li ng-repeat="filter in filters" ng-attr-title="{{filter.name}}" class="filter">
+                <a href="" class="flip plus" ng-show="filter.additive" ng-click="flipFilter(filter)" title="Negate this filter">
+                    <i class="fa fa-plus"></i>
+                </a>
+                <a href="" class="flip minus" ng-hide="filter.additive" ng-click="flipFilter(filter)" title="Negate this filter">
+                    <i class="fa fa-minus"></i>
+                </a>
+                <span class="name">{{filter.name}}</span>
+                <a href="" class="delete" ng-click="removeFilter(filter)"><i class="fa fa-trash"></i></a>
+            </li>
+        </ul>
+    </div>
+
     <div id="graph"></div>
+
+    <div class="overlay" ng-show="ctxMenu.show"></div>
+    <div id="ctxMenu" ng-style="{left:ctxMenu.left+'px', top:ctxMenu.top+'px'}" ng-show="ctxMenu.show" oncontextmenu="return false;">
+        <button ng-repeat="item in ctxMenu.items" class="md-button" ng-click="item.action(); ctxMenu.show = false;">
+            {{item.name}}
+        </button>
+    </div>
 </main>
-<footer>
-</footer>

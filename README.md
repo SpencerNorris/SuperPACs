@@ -39,6 +39,8 @@ You will also need to set the following environment variables
 * Enter the project directory
 * Run `docker-compose build`
 
+> Note, on Windows, if you are using Git it may replace line endings with Windows style line endings which will mess up Docker's run. Running `git config --global core.autocrlf input` before you clone will solve this problem.
+
 Docker Compose will now automatically build all the Docker containers, you may need to run as root for the build to work properly.
 
 ## Deployment Instructions
@@ -47,6 +49,17 @@ Docker Compose will now automatically build all the Docker containers, you may n
 Docker Compose will now start the Docker containers and the website should be running on localhost. You may need to run as root, if you do remember to have the environment variables in the root environment. Note that on Windows, the website may instead be running on virtualbox, but you can still access the site through Kinematic which is available as part of the Docker Toolbox download.
 
 > Note, if you are running mysql locally you may need to stop it before deploying Docker
+
+## Seeding Instructions
+The database needs to be seeded with data before it can provide the website with results. Use the following command to seed the database.
+* `docker exec superpacs_web_1 /bin/bash -c 'cd /code/src/datasource/ && python seeder.py'`
+
+This command may take a while but it should seed all the data needed into the database.
+If the command does not work do the following.
+* Run `docker ps`
+* Find the container with the image `superpacs_web` and copy its container id
+  * If you cannot find the container, this project's docker container is likely not running.
+* Run the command above, except replace `superpacs_web_1` with the container id
 
 # Development Instructions
 

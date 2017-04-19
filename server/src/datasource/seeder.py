@@ -1,9 +1,9 @@
 import os
 import MySQLdb
 import django
-from api.models import *
+
 from django.core.exceptions import MultipleObjectsReturned
-from time import sleep
+from django.db import transaction
 os.sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 srcpath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -32,8 +32,6 @@ FEC_APIKEY = os.getenv('FEC_API_KEY', '')
 class AbstractSeeder:
 
     def __init__(self):
-        ##Django environment
-        os.environ['DJANGO_SETTINGS_MODULE'] = 'rest.settings'
         ##api keys
         self.ProPublica_APIKEY = ""
         self.FEC_API_KEY = ""
@@ -41,7 +39,7 @@ class AbstractSeeder:
         ##Find out way to pass in the testing or production database to seed.
         ##Unfortunately, it is currently based on the environment where this seeder object is called.
 
-    ##Should I add a place here to delete parts of the database?
+    ##TODO: Should I add a place here to delete parts of the database?
 
     ##function skeletons.
     '''
@@ -104,7 +102,13 @@ class UploaderSeeder(AbstractSeeder):
             congress_dict["party"] = congressman['party']
             congress_dict["chamber"] = "H"
 
-            Representative.objects.create(**congress_dict)
+            ##Simple try catch block to avoid duplicate congressman problems
+            with transaction.atomic():
+                ##Django 1.5/1.6 transaction bug requires above check
+                try:
+                    Representative.objects.create(**congress_dict)
+                except django.db.utils.IntegrityError:
+                    pass
 
         for senator in congress_list["senate"]['results'][0]['members']:
             senator_dict = {}#personal details
@@ -116,16 +120,32 @@ class UploaderSeeder(AbstractSeeder):
             senator_dict["party"] = senator['party']
             senator_dict["chamber"] = "S"
 
-            Representative.objects.create(**senator_dict)
+            ##Simple try catch block to avoid duplicate senator problems
+            with transaction.atomic():
+                ##Django 1.5/1.6 transaction bug requires above check
+                try:
+                    Representative.objects.create(**senator_dict)
+                except django.db.utils.IntegrityError:
+                    pass
+
 
     def uploadSuperPACs(self,superpac_list):
         for superpac in superpac_list:
             superpac_dict = {}
             superpac_dict["name"]=superpac["name"]
             superpac_dict["fecid"]=superpac["committee_id"]
-            SuperPAC.objects.create(**superpac_dict)
+
+            ##Simple try catch block to avoid duplicate superpac problems
+            with transaction.atomic():
+                ##Django 1.5/1.6 transaction bug requires above check
+                try:
+                    SuperPAC.objects.create(**superpac_dict)
+                except django.db.utils.IntegrityError:
+                    pass
+
 
     def uploadDonations(self,donation_list):
+        print("database congress size:",len(Representative.objects.all()))
         for donation in donation_list:
             donation_dict = {}
 
@@ -137,7 +157,14 @@ class UploaderSeeder(AbstractSeeder):
             donation_dict["amount"] = donation["amount"]
             donation_dict["uid"] = donation["unique_id"]
             donation_dict["support"] = donation["support_or_oppose"]
-            Donation.objects.create(**donation_dict)
+
+            ##Simple try catch block to avoid duplicate donation problems
+            with transaction.atomic():
+                ##Django 1.5/1.6 transaction bug requires above check
+                try:
+                    Donation.objects.create(**donation_dict)
+                except django.db.utils.IntegrityError:
+                    pass
 
 class APISeeder(UploaderSeeder):
     def __init__(self):
@@ -209,7 +236,7 @@ class PickleSeeder(UploaderSeeder):
         return representatives_list
 
     def getRepresentatives(self):
-        #Check for time-sensitive reasons to not use cache? Or perhaps use a subclass..
+        #TODO:Check for time-sensitive reasons to replace cache? Or perhaps use a subclass..
         try:
             try:
                 ##pull data from the pickle.
@@ -321,12 +348,16 @@ def uploadToDatabase():
 
 
     seeder = PickleSeeder()
-    print("Using API seeder to get data.1")
+    print("Using Pickle seeder to get data.")
     seeder.seedAll(reset=False)
 
 
 if __name__ == "__main__":
+    ##Django environment
+    os.environ['DJANGO_SETTINGS_MODULE'] = 'rest.settings'
     django.setup()
     from api.models import *
     print("starting main function:")
     uploadToDatabase()
+else:
+    from api.models import *

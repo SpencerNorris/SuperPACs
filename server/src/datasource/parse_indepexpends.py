@@ -31,15 +31,12 @@ def donations_helper():
         legislator_index[name] = legislator
     print("starting to iterate through superpacs")
     donations = []
-    #print("committees number:",len(committees))
     count = 0
     for committee in committees:
         if(2016 in committee['cycles']):
             try:
                 indepExpend = PPCampFinObj.get_indep_expends(str(committee['committee_id']))
 
-                #print("superpac n"+str(count))
-                
                 for expend in indepExpend["results"]:
                     try:
                         #expend fo a particular expenditure
@@ -58,7 +55,6 @@ def donations(filename='donationdata.pickle'):
         print("donation data pickled already. Grabbing data from donationdata.picke")
         with open(filename, 'rb') as handle:
             donations = pickle.load(handle)
-        #print("donations",donations)
         return donations
     except EOFError:
         print("donation data not pickled, grabbing directly from FEC and ProPublica APIs")
@@ -68,8 +64,3 @@ def donations(filename='donationdata.pickle'):
             pickle.dump(donations, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
         return donations
-
-
-if __name__ == "__main__":
-    ##replace with something else.
-    donations('donationdata.pickle')
