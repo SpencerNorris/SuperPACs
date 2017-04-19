@@ -30,7 +30,7 @@ class SunlightAPI(RESTDatasource):
 		endpoint = 'https://congress.api.sunlightfoundation.com/bills/search'
 		return super().request(endpoint, params, headers)
 
-	def bills(self, **params, fields=None):
+	def bills(self, **params):
 	'''
 	The main endpoint of Sunlight for retrieving data about legislation.
 	Various parameters can be passed to retrieve bills according to certain criteria.
