@@ -1,5 +1,5 @@
 
-<main cg-busy="{promise:donationPromise, message:'Loading Data...', delay: 500}">
+<main cg-busy="{promise:longPromise, message:'Loading Data...', delay: 500}">
     <button class="sidebar-vis" ng-show="sidebarHidden" ng-click="sidebarHidden=false"
             title="Show Side Bar">
       <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -20,8 +20,8 @@
                     md-dropdown-items="100"
                     placeholder="Search">
                 <md-item-template>
-                    <span>{{item.name}}</span><br>
-                    <span class="autocompleteSubtext">{{item.type}}</span>
+                    <span ng-attr-title="{{item.title}}">{{item.short_title ? item.short_title : item.name}}</span><br>
+                    <span class="autocompleteSubtext">{{item.type}} {{item.bill ? item.bill.bill_id : ""}}</span>
                 </md-item-template>
                 <md-not-found>
                     No matches found.

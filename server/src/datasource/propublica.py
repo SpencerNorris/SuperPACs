@@ -110,8 +110,8 @@ class CongressAPI(RESTDatasource):
         """
         #All parameters are required!
         if congress is None or chamber is None or session is None or roll_call_number is None:
-            raise URIParameterException('MemberId parameter required but not provided') 
-        requeststr = str(self.uri) + str(congress) + '/' + chamber + '/sessions/' + str(session) + '/votes/' + str(roll_call_number) + '.json' 
+            raise URIParameterException('MemberId parameter required but not provided')
+        requeststr = str(self.uri) + str(congress) + '/' + str(chamber) + '/sessions/' + str(session) + '/votes/' + str(roll_call_number) + '.json' 
         rheaders = {self.keyname: self.apikey}
         rparams = {}
         return super().request(requeststr, rparams, rheaders)
