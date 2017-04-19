@@ -10,9 +10,6 @@ class Graph {
 
         this.svg.attr("width", this.width).attr("height", this.height).style("background-color", "white");
 
-
-
-
         this.nodeMenu = nodeMenu;
         this.parentElement = element;
         //add an empty arbitrary element, we'll add our graph to this later
