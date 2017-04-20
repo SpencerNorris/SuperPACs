@@ -154,3 +154,20 @@ footer {
 .filter .minus:hover {
     color: lightgreen;
 }
+
+div.legend ul li div.icon {
+  position:absolute;
+  left:20px;
+}
+
+div.legend ul li div.name {
+  margin-left: 20px;
+}
+
+div.legend ul li {
+  padding-bottom:5px;
+}
+
+div.legend ul {
+  list-style:none;padding:10px;margin-top:0px;
+}

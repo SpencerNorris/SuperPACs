@@ -1,5 +1,5 @@
 
-<main cg-busy="{promise:donationPromise, message:'Loading Data...', delay: 500}">
+<main cg-busy="{promise:longPromise, message:'Loading Data...', delay: 500}">
     <button class="sidebar-vis" ng-show="sidebarHidden" ng-click="sidebarHidden=false"
             title="Show Side Bar">
       <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -20,8 +20,8 @@
                     md-dropdown-items="100"
                     placeholder="Search">
                 <md-item-template>
-                    <span>{{item.name}}</span><br>
-                    <span class="autocompleteSubtext">{{item.type}}</span>
+                    <span ng-attr-title="{{item.title}}">{{item.short_title ? item.short_title : item.name}}</span><br>
+                    <span class="autocompleteSubtext">{{item.type}} {{item.bill ? item.bill.bill_id : ""}}</span>
                 </md-item-template>
                 <md-not-found>
                     No matches found.
@@ -32,6 +32,7 @@
 
         <h2>Active Filters</h2>
         <span class="muted" ng-hide="filters.length">No filters</span>
+        <span class="muted" ng-show="filters.length"><a href="" class="delete" ng-click="clearAll()">Clear All</a></span>
         <ul ng-sortable="sortableConf " class="filters">
             <li ng-repeat="filter in filters" ng-attr-title="{{filter.name}}" class="filter">
                 <a href="" class="flip plus" ng-show="filter.additive" ng-click="flipFilter(filter)" title="Negate this filter">
@@ -53,5 +54,74 @@
         <button ng-repeat="item in ctxMenu.items" class="md-button" ng-click="item.action(); ctxMenu.show = false;">
             {{item.name}}
         </button>
+    </div>
+
+    <!--TODO: Add all of this css inline to the app.css -->
+    <button ng-click="legendHidden = false;" ng-show="legendHidden" title="Show Legend" style="position:absolute;height:30px;bottom:0px;right:0px;">
+      <i class="fa fa-chevron-up" aria-hidden="true"></i>
+    </button>
+    <div class="legend" ng-hide="legendHidden" style="background:#1976D2;height:170px;width:270px;position:absolute;right:5%;bottom:5%;">
+      <button ng-click="legendHidden = true;" style="position:absolute;right:0%;">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </button>
+
+      <div style="padding:5px">
+        <span>Legend</span>
+      </div>
+
+      <ul style="">
+        <li style="">
+          <div class = "icon">
+            <svg width="14" height="14">
+              <circle cx="7" cy="7" r="5" stroke="black" stroke-width="2" fill="red" />
+            </svg>
+          </div>
+          <div class = "name">
+            <span style="">Republican Legislator</span>
+          </div>
+        </li>
+        <li style="">
+          <div class = "icon">
+            <svg height=14 width=14 style="">
+              <circle cx="7" cy="7" r="5" stroke="black" stroke-width="2" fill="blue" />
+            </svg>
+          </div>
+          <div class = "name">
+            <span style="">Democratic Legislator</span>
+          </div>
+        </li>
+        <li style="">
+          <div class = "icon">
+            <svg height=14 width=14>
+              <circle cx="7" cy="7" r="5" stroke="black" stroke-width="2" fill="rgb(188, 170, 164)" />
+            </svg>
+          </div>
+          <div class = "name">
+            <span style="">Independent Legislator</span>
+          </div>
+        </li>
+        <li style="">
+          <div class = "icon">
+            <svg height=14 width=14 style="">
+              <line x1="0" y1="7" x2="14" y2="7" style="stroke:black;stroke-width:10" />
+              <line x1="1" y1="7" x2="13" y2="7" style="stroke:green;stroke-width:5" />
+            </svg>
+          </div>
+          <div class = "name">
+            <span style="">Positive Donation/Voted Yes</span>
+          </div>
+        </li>
+        <li style="">
+          <div class = "icon">
+            <svg height=14 width=14 style="">
+              <line x1="0" y1="7" x2="14" y2="7" style="stroke:black;stroke-width:10" />
+              <line x1="1" y1="7" x2="13" y2="7" style="stroke:purple;stroke-width:5" />
+            </svg>
+          </div>
+          <div class = "name">
+            <span style="">Negative Donation/Voted No</span>
+          </div>
+        </li>
+      </ul>
     </div>
 </main>

@@ -5,7 +5,8 @@ This client uses the base code structure provided by https://github.com/preboot/
 We use the webpack v2 build system to compile our frontend assets into a bundle which we then serve through our static assets server (Nginx).
 
 # Development Instructions
-Use the following instructions to develop code for client side use
+Use the following instructions to develop code for client side use.
+Please note, these commands are meant to be run along side the docker containers, not within them.
 
 ## Dependencies
 What you'll need the begin development:
@@ -24,11 +25,11 @@ This will install all the dependencies needed.
 The webpack dev server is now serving content at `http://localhost:8080`.
 
 The webpack dev server proxies requests that are sent to `api/`.
-To set the server that it points to set the environment variable `API_SERVER`, the default value used is `http://localhost:8000`.
+To set the server that it points to set the environment variable `API_SERVER` before running the above command, the default value used is `http://localhost:8000`.
 We recommend running the Docker container for this, with the `API_SERVER` enviroment variable pointing to the Django server in Docker.
 
 
-This is the point at which you can begin developing. 
+This is the point at which you can begin developing.
 Any changed made will update in real time and automatically refresh the browser window.
 
 ## Testing

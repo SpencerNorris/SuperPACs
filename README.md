@@ -61,6 +61,13 @@ If the command does not work do the following.
   * If you cannot find the container, this project's docker container is likely not running.
 * Run the command above, except replace `superpacs_web_1` with the container id
 
+## Shutting down Instructions
+To shut down the server use the following command.
+* `docker-compose down`
+
+If you also want to delete the data in the database use the following command instead.
+* `docker-compose down -v`
+
 # Development Instructions
 
 ## Backend Development
