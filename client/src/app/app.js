@@ -147,15 +147,18 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
 
                 //add matching representatives as filters
                 for(const rep of response.data['representatives']) {
-                    data.push({name: rep.name, type: Filter.type.REPRESENTATIVE});
+                    data.push({name: rep.name, title: rep.name, type: Filter.type.REPRESENTATIVE});
                 }
 
                 //add matching committees as filters
                 for(const committee of response.data['committees']) {
-                    data.push({name: committee.name, type: Filter.type.COMMITTEE});
+                    data.push({name: committee.name, title: committee.name, type: Filter.type.COMMITTEE});
                 }
 
-                //todo add bills
+                //add matching bills as filters
+                for(const bill of response.data['bills'] || []) {
+                    data.push({short_title: bill.short_title || bill.official_title, name: bill.official_title, bill, title: bill.bill_id+": "+bill.official_title, type: Filter.type.BILL});
+                }
 
                 return data;
           });
@@ -165,26 +168,23 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
       $scope.$watch('searchItem', () => {
           //make sure its a valid object
           if($scope.searchItem instanceof Object) {
-              //get the item and its respective filter factory
               let item = $scope.searchItem;
-              let predicateFactory = item.type == Filter.type.GENERAL ?
-                          item.predicateFactory : Filter.nodeFilterFactory(item);
-
-              //add the filter to our list of filters, initially in additive mode
-              $scope.filters.unshift({
-                  name: item.name,
-                  type: item.type,
-                  predicate: predicateFactory(true),
-                  predicateFactory,
-                  additive: true
-              });
-
               //clear the user's selected item
               $scope.searchItem = null;
               $scope.searchText = "";
 
-              //refresh our graph
-              $scope.refreshGraph();
+              if(item.type == Filter.type.BILL && !(item.bill.bill_id in $scope.data)) {
+                $scope.longPromise = $http
+                  .get('/api/votes', {params: { bill_id: item.bill.bill_id }})
+                  .then(function(response) {
+                      item.bill.name = item.bill.official_title;
+                      $scope.data.bills[item.bill.bill_id] = item.bill;
+                      $scope.data.votes = $scope.data.votes.concat(response.data.votes);
+                      $scope.addFilter(item);
+                  });
+              } else {
+                  $scope.addFilter(item);
+              }
           }
       });
 
@@ -194,10 +194,32 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
               $scope.graph.resize();
           }, 10);
       });
+      //adds the given item as a filter
+      $scope.addFilter = (item) => {
+          let predicateFactory = item.type == Filter.type.GENERAL ?
+                      item.predicateFactory : Filter.nodeFilterFactory(item);
+
+          //add the filter to our list of filters, initially in additive mode
+          $scope.filters.unshift({
+              name: item.name,
+              type: item.type,
+              predicate: predicateFactory(true),
+              predicateFactory,
+              additive: true
+          });
+
+          //refresh our graph
+          $scope.refreshGraph();
+      };
       //removes the given filter from the filter list and refreshes the graph
       $scope.removeFilter = (filter) => {
           $scope.filters.splice($scope.filters.indexOf(filter), 1);
           $scope.refreshGraph();
+      };
+    
+      $scope.clearAll = () => {
+        $scope.filters = [];
+        $scope.refreshGraph();
       };
 
       //flips the given filter's additive mode and refreshes the graph
@@ -214,8 +236,10 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
       };
 
       //get our entire donation dataset from the server
-      $scope.donationPromise = $http.get('/api/donations').then((response) => {
+      $scope.longPromise = $http.get('/api/donations').then((response) => {
           $scope.data = response.data;
+          $scope.data.bills = {};
+          $scope.data.votes = [];
           $scope.refreshGraph();
       });
 

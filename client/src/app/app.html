@@ -1,5 +1,5 @@
 
-<main cg-busy="{promise:donationPromise, message:'Loading Data...', delay: 500}">
+<main cg-busy="{promise:longPromise, message:'Loading Data...', delay: 500}">
     <button class="sidebar-vis" ng-show="sidebarHidden" ng-click="sidebarHidden=false"
             title="Show Side Bar">
       <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -20,8 +20,8 @@
                     md-dropdown-items="100"
                     placeholder="Search">
                 <md-item-template>
-                    <span>{{item.name}}</span><br>
-                    <span class="autocompleteSubtext">{{item.type}}</span>
+                    <span ng-attr-title="{{item.title}}">{{item.short_title ? item.short_title : item.name}}</span><br>
+                    <span class="autocompleteSubtext">{{item.type}} {{item.bill ? item.bill.bill_id : ""}}</span>
                 </md-item-template>
                 <md-not-found>
                     No matches found.
@@ -32,6 +32,7 @@
 
         <h2>Active Filters</h2>
         <span class="muted" ng-hide="filters.length">No filters</span>
+        <span class="muted" ng-show="filters.length"><a href="" class="delete" ng-click="clearAll()">Clear All</a></span>
         <ul ng-sortable="sortableConf " class="filters">
             <li ng-repeat="filter in filters" ng-attr-title="{{filter.name}}" class="filter">
                 <a href="" class="flip plus" ng-show="filter.additive" ng-click="flipFilter(filter)" title="Negate this filter">

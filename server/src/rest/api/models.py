@@ -64,40 +64,6 @@ class SuperPAC(models.Model):
     def __json__(self):
         return {"id":self.id,"name":self.name}
 
-
-class Bill(models.Model):
-    '''
-    Bill class which represents Bill. It is either passed or not passed.
-    '''
-    name = models.CharField(max_length = 140)
-
-
-    sitelink = models.CharField(max_length = 500,default="")
-    hr = models.IntegerField()
-    ##more details about the bill? Sponsors? co-sponsors?
-
-    ##PROPUBLICA api id.
-    propublicaid = models.CharField(max_length = 9,default = None)
-
-    ##FEC api id
-    fecid = models.CharField(max_length = 9,default = None)
-
-    def __str__(self):
-        return self.name
-
-
-class Vote(models.Model):
-    '''
-    Vote class which represents a Representative voting on a Bill.
-    '''
-    representative = models.ForeignKey(Representative, on_delete=models.CASCADE)
-    bill = models.ForeignKey(Bill, on_delete=models.CASCADE)
-    decision = models.IntegerField()
-
-    def __str__(self):
-        return self.representative.__str__()+","+self.bill.__str__()+","+self.decision
-
-
 class Donation(models.Model):
     '''
     Donation class that acts as a donation edge from SuperPACs to Representatives.

@@ -1,24 +1,24 @@
 <!doctype html>
 <html ng-app="app" lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>SuperPAC.biz - Follow the Money</title>
-	<link rel="icon" type="image/x-icon" href="/img/favicon.ico">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>SuperPAC.biz - Follow the Money</title>
+    <link rel="icon" type="image/x-icon" href="/img/newfavicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
-	<link href="css/landing-page.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="css/landing-page.css" rel="stylesheet">
 
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-	<script src="https://code.jquery.com/jquery-3.1.1.js"
-	  integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
-	  crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.js"
+      integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
+      crossorigin="anonymous"></script>
 
 
-	<base href="/">
+    <base href="/">
 </head>
 <body>
 
@@ -40,6 +40,9 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li>
                         <a href="#about">About</a>
+                    </li>
+                    <li>
+                        <a href="#tutorial">Tutorial</a>
                     </li>
                     <li>
                         <a href="#code">Source Code</a>
@@ -65,9 +68,9 @@
                         <ul class="list-inline">
                             <li>
                                 <a href="/app/" class="btn btn-default btn-lg">
-									<i class="fa fa-chevron-circle-right fa-fw"></i>
-									<span class="network-name">Enter App</span>
-								</a>
+                                    <i class="fa fa-chevron-circle-right fa-fw"></i>
+                                    <span class="network-name">Enter App</span>
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -82,7 +85,7 @@
 
     <!-- Page Content -->
 
-	<a  name="about"></a>
+    <a  name="about"></a>
     <div class="content-section-a">
 
         <div class="container">
@@ -92,14 +95,13 @@
                     <div class="clearfix"></div>
                     <h2 class="section-heading">About this Project</h2>
                     <p class="lead">
-					<br>
-					Users can search for a SuperPAC, visualizations will focus on how that SuperPACs contributions to congressmen affect legislation.
-					</p>
+                    <br>
+                    Users can search for a particular SuperPAC. Our app will display visualizations that focus on how that SuperPAC's contributions to congresspeople affect legislation. 
+                    </p>
                 </div>
                 <div class="col-lg-5 col-lg-offset-2 col-sm-6">
-                    <img class="img-responsive" src="img/ipad.png" alt="">
-					<br><br>
-					<div style="text-align:center; font-style: italic; font-size: 30px; font-weight: 200;">The focus of this website is to create visualizations of how SuperPAC contributions to members of congress affect their voting on different pieces of legislation.</div>
+                    <br><br>
+                    <div style="text-align:center; font-style: italic; font-size: 30px; font-weight: 200;">The focus of this website is to create visualizations of how SuperPAC contributions to members of Congress affect their votes on different pieces of legislation.</div>
                 </div>
             </div>
 
@@ -118,9 +120,8 @@
                     <hr class="section-heading-spacer">
                     <div class="clearfix"></div>
                     <p class="lead">
-					Users can also search for a particular representative, the visuals will focus on what SuperPACs are contributing and how that is reflected in the representative’s voting on legislation.
-					As the goal of the site is to inform, other relevant information, such as more information about a particular SuperPAC or politician, will be either given directly, or linked to, whenever possible.
-					</p>
+                    Users can also search for a particular representative or a particular bill. The visuals will focus on which SuperPACs are contributing to the representative and how the representative.
+                    </p>
                 </div>
                 <div class="col-lg-5 col-sm-pull-6  col-sm-6">
                     <img class="img-responsive" src="img/graph.png" alt="">
@@ -133,7 +134,105 @@
     </div>
     <!-- /.content-section-b -->
 
-	<a  name="code"></a>
+    <div class="content-section-a">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5 col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <p class="lead">
+                    <br>
+                    Users can also search for a particular bill. The visualization will show who voted aye or nay on the bill, and show the donors behind those votes. 
+                    </p>
+                </div>
+                <div class="col-lg-5 col-lg-offset-2 col-sm-6">
+                    <br><br>
+                    <div style="text-align:center; font-style: italic; font-size: 30px; font-weight: 200;">Our datasources are <a href="https://www.propublica.org/">ProPublica</a>, <a href="http://www.fec.gov/pindex.shtml">the FEC</a>, and <a href="https://www.congress.gov/">Congress.gov</a>.</div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+
+    <a  name="tutorial"></a>
+    <div class="content-section-b">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5 col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">Tutorial</h2>
+                    <h4 class="section-heading">Understanding the Visualization</h4>
+                    <p class="lead">
+                    <br>
+                    The visualization we use is called <a href="http://www.juiceanalytics.com/writing/writing/parallel-coordinates"> parallel coordinates</a>. There are many nodes, organized into columns. The nodes in the first column represent SuperPACs; in the second column, they represent legislators; in the third, they represent bills. A line from a SuperPAC to a legislator indicates spending (the thicker the line, the more money was spent). A green line means the SuperPAC spent money supporting the politician, and a purple line means it spent money opposing them. A line from a legislator to a bill represents a vote; green means aye, purple means nay.
+                    </p>
+                </div>
+                <div class="col-lg-5 col-lg-offset-2 col-sm-6">
+                    <img class="img-responsive" src="img/sample-visualization-2.png" alt="">
+                    <br><br>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+
+    <div class="content-section-a">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h4 class="section-heading">Using Filters</h4>
+                    <p class="lead">
+                    To add a node to the current visualization, type the name of a SuperPAC or legislator into the search bar and click on their name in the dropdown menu that appears. You can also type in a ZIP code to add the representatives for that area, or add all members of a political party at once by typing the name of that party. To exclude a node from the current visualization, find the filter corresponding to it in the sidebar (you may need to add this filter first!) and click the <b>+</b> on the left side, changing it to a <b>-</b>. To clear a filter you've previously made, click the trash can icon on the right side of the filter.
+                    </p>
+                </div>
+                <div class="col-lg-5 col-sm-pull-6  col-sm-6">
+                    <img class="img-responsive" src="img/sample-filter-2.png" alt="">
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-b -->
+    <div class="content-section-b">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-5 col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h4 class="section-heading">Bills</h4>
+                    <p class="lead">
+                    Bill filters are similar, but searching is slightly more complicated. For a House bill, type the official name of the bill into the search bar: "H.R.[bill number]". For a Senate bill, type "S.[bill number]". If the bill has a public name ("Affordable Care Act", for example), that will also work. 
+                    </p>
+                </div>
+                <div class="col-lg-5 col-lg-offset-2  col-sm-6">
+                    <img class="img-responsive" src="img/sample-bill-filter.png" alt="">
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-c -->
+
+    <a  name="code"></a>
     <div class="banner">
 
         <div class="container">
@@ -146,9 +245,9 @@
                     <ul class="list-inline banner-social-buttons">
                         <li>
                             <a href="https://github.com/SpencerNorris/SuperPACs" class="btn btn-default btn-lg">
-								<i class="fa fa-github fa-fw"></i>
-								<span class="network-name">Github</span>
-							</a>
+                                <i class="fa fa-github fa-fw"></i>
+                                <span class="network-name">Github</span>
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -175,6 +274,10 @@
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
+                            <a href="#tutorial">Tutorial</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
                             <a href="#code">Source Code</a>
                         </li>
                     </ul>
@@ -182,12 +285,6 @@
             </div>
         </div>
     </footer>
-
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
 
 </body>
 </html>
