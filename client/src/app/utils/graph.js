@@ -41,7 +41,9 @@ class Graph {
         let nodes = [];
         let links = [];
 
-        //add our nodes
+        //Most nodes follow (id,type,arg1,arg2....) pattern
+        //Most edges follow (id,sourceid,targetid,type,arg1,arg2) pattern
+
         //add the committee nodes
         let init_y = 0;
         Object.keys(data.committees || {}).forEach((key) => {
@@ -64,14 +66,15 @@ class Graph {
         //add the donation links between committees and representatives
         Object.keys(data.donations || {}).forEach((key) => {
             if(data.donations[key].source in data.committees && data.donations[key].destination in data.representatives){
-                links.push({id:"d_"+data.donations[key].source+"d"+data.donations[key].destination,type:"donation",source:"c_"+data.donations[key].source, target: "r_"+data.donations[key].destination,thickness:data.donations[key].amount, status:data.donations[key].support == "S" ? 1 : 2});
+                links.push({id:"d_"+data.donations[key].source+"d"+data.donations[key].destination,source:"c_"+data.donations[key].source, target: "r_"+data.donations[key].destination,type:"donation",thickness:data.donations[key].amount, status:data.donations[key].support == "S" ? 1 : 2});
+                //TODO: refactor the id system for the links node. This ghetto id is mainly a hack for now to enable edge hovering.
             }
         });
 
         //add the vote links between representatives and bills
         Object.keys(data.votes || {}).forEach((key) => {
             if(data.votes[key].source in data.representatives && data.votes[key].destination in data.bills){
-                links.push({type:"vote",source:"r_"+data.votes[key].source, target: "b_"+data.votes[key].destination, status:data.votes[key].position == "Yes" ? 1 : data.votes[key].position == "No" ? 2 : 3});
+                links.push({source:"r_"+data.votes[key].source, target: "b_"+data.votes[key].destination,type:"vote", status:data.votes[key].position == "Yes" ? 1 : data.votes[key].position == "No" ? 2 : 3});
             }
         });
 

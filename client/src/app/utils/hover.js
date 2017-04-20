@@ -60,7 +60,6 @@ class Hover {
     handleMouseOutEdge(d,i){
         if(d.type == "donation"){
           let edgeid = String(d.source.id)+"d"+String(d.target.id);
-          
           d3.selectAll("text > textPath#"+edgeid).remove();
         }
     }
