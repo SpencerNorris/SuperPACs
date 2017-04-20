@@ -43,16 +43,18 @@ class Hover {
   handleMouseOverEdge(d,i){
     if(d.type == "donation"){
       //Thickness is amount....
+
       var svg = d3.select("g");
       let thickness = d.thickness;
       let id = d.id;
-
+      console.log(d.source);
       svg.append("text")
+      .attr("id",()=>{return String(d.source.id)+"d"+String(d.target.id);})
       .append("textPath")
-      .attr("id",()=>{return id;})
-       .attr("xlink:href", "#"+d.id) //place the ID of the path here
+      .attr("id",()=>{return String(d.source.id)+"d"+String(d.target.id);})
+       .attr("xlink:href", "#"+String(d.source.id)+"d"+String(d.target.id)) //place the ID of the path here
        .style("text-anchor","right")
-       .attr("startOffset", "50%")
+       .attr("startOffset", "35%")
        .text(()=>{return "$"+String(thickness);});//
     }
 
@@ -61,7 +63,9 @@ class Hover {
   //hides the dollar amount donated from the superpac to the representative on the edge.
   handleMouseOutEdge(d,i){
     if(d.type == "donation"){
-      d3.selectAll("text > textPath#"+d.id).remove();
+      let edgeid = String(d.source.id)+"d"+String(d.target.id);
+      console.log(d3.selectAll("text > textPath#"+edgeid));
+      d3.selectAll("text > textPath#"+edgeid).remove();
     }
   }
 }

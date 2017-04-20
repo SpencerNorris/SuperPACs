@@ -15,7 +15,7 @@ class Graph {
         this.vis = this.svg.append("g"); //add an empty arbitrary element, we'll add our graph to this later
 
         this.svg.attr("width", this.width).attr("height", this.height).style("background-color", "white");
-        
+
         //automatically resize the svg when the window's size changes
         window.onresize = this.resize.bind(this);
         setTimeout(this.resize.bind(this), 100);
@@ -66,8 +66,8 @@ class Graph {
         //add the donation links between committees and representatives
         Object.keys(data.donations || {}).forEach((key) => {
             if(data.donations[key].source in data.committees && data.donations[key].destination in data.representatives){
-
-                links.push({id:"d_"+data.donations[key].id,type:"donation",source:"c_"+data.donations[key].source, target: "r_"+data.donations[key].destination,thickness:data.donations[key].amount, status:data.donations[key].support == "S" ? 1 : 2});
+                console.log(data.donations[key].source);
+                links.push({id:"d_"+data.donations[key].source+"d"+data.donations[key].destination,type:"donation",source:"c_"+data.donations[key].source, target: "r_"+data.donations[key].destination,thickness:data.donations[key].amount, status:data.donations[key].support == "S" ? 1 : 2});
             }
         });
 
@@ -105,7 +105,7 @@ class Graph {
                         .data(links)
                         .enter()
                         .append("path")//So that I could have text on the path.
-                        .attr("id",(d)=>{return d.id;})
+                        .attr("id",(d)=>{return String(d.source.id)+"d"+String(d.target.id);})
                         .style("stroke-width", (d) => { return thicknessScale(d.thickness); })
                         .style("stroke", (d) => {
                             if(d.status == 1) {
