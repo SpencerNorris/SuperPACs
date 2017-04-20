@@ -9,11 +9,17 @@ class Hover {
     //If statement for checking the status of a node.
     //is it a superpac or a representative.
     if(d.type == "representative"){
-      d3.select(this.parentNode).selectAll("g > text#"+d.id)
-        .html(()=>{return d.name+" ("+d.party+") from "+d.state+"'s district "+d.district;});
+      if(d.district == ""){
+        d3.select(this.parentNode).selectAll("g > text#"+d.id)
+          .html(()=>{return d.name+" ("+d.party+") senator from "+d.state;});
+      }else{
+        d3.select(this.parentNode).selectAll("g > text#"+d.id)
+          .html(()=>{return d.name+" ("+d.party+") congressman from "+d.state+"'s district "+d.district;});
+      }
+
 
       d3.select(this.parentNode).selectAll("g > rect#"+d.id)
-        .attr("width",180);
+        .attr("width",250);
         //TODO:Could use a bounding box, but I don't know how to do it.
         //TODO:Make this less coupled with the json data. Essentially remove need for if statements
     }

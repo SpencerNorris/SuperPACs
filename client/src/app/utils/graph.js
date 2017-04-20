@@ -115,8 +115,8 @@ class Graph {
                         })
                         .attr("d", (d)=>{return "M "+d.source.x+","+d.source.y+" L "+d.target.x+","+d.target.y})
                         .attr("marker-end", "url(#end)")
-                        .on("mouseover", this.hover.handleMouseOverDonation)
-                        .on("mouseout", this.hover.handleMouseOutDonation);
+                        .on("mouseover", this.hover.handleMouseOverEdge)
+                        .on("mouseout", this.hover.handleMouseOutEdge);
         //Draw the nodes themselves
         let circles = this.vis.selectAll("circle")
                         .data(nodes)
@@ -135,8 +135,8 @@ class Graph {
                             }
                         })
                         .on('contextmenu', contextMenu)
-                        .on("mouseover", this.hover.handleMouseOverRepresentative)
-                        .on("mouseout", this.hover.handleMouseOutRepresentative);
+                        .on("mouseover", this.hover.handleMouseOverNode)
+                        .on("mouseout", this.hover.handleMouseOutNode);
         //Draw text for all the nodes
         let texts = this.vis.selectAll("text")
                         .data(nodes)
