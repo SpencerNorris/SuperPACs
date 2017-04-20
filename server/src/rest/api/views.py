@@ -10,6 +10,14 @@ from api.models import Representative,SuperPAC,Donation
 import re
 import requests
 import json
+import os
+
+srcpath = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+os.sys.path.append(srcpath)
+from datasource.sunlight import SunlightAPI
+from datasource.propublica import CongressAPI
+
+ProPublica_APIKEY = os.getenv('PP_API_KEY', '')
 
 def index(request):
     '''
@@ -71,18 +79,15 @@ def donationsDemo(request):
     return JsonResponse(data)
 
 def search(request):
+    '''
+    Searches through all available sources to match the user's query
+    '''
     query = request.GET["query"]
 
     ## match the query against a zipcode regex, go a zipcode search if it matches
     if re.match("^\d{5}$", query):
         ## here we call an external api to search for the reps via zipcode
-
-        ## create the request parameters
-        params = {"zip": query};
-        headers = [];
-        ## call the api
-        r = requests.get("https://congress.api.sunlightfoundation.com/legislators/locate", params=params, headers=headers)
-        results = json.loads(r.text)
+        results = SunlightAPI().rep_by_zip(query)
 
         ## loop through the results
         reps = []
@@ -104,5 +109,35 @@ def search(request):
 
     data["committees"] = list(SuperPAC.objects.filter(name__icontains=query)
         .values("id", "name"))
+
+    if "." in query or len(query) > 5:
+        results = SunlightAPI().search(query)
+        data["bills"] = results["results"]
+
+    return JsonResponse(data)
+
+def votes(request):
+    '''
+    Returns votes for the given bill
+    '''
+    bill_id = request.GET["bill_id"]
+
+    #get latest roll call vote from sunlight
+    results = SunlightAPI().votes(bill_id)
+    print(results)
+    if len(results["results"]) == 0:
+        return JsonResponse({"votes": []})
+
+    last_vote = results["results"][0]
+
+    #get individual votes for the roll call vote
+    results = CongressAPI(ProPublica_APIKEY).get_vote(last_vote["congress"], last_vote["chamber"], 2-last_vote["year"]%2, last_vote["number"])
+
+    data = {"votes": []}
+
+    for vote in results["results"]["votes"]["vote"]["positions"]:
+        rep = Representative.objects.filter(propublicaid=vote["member_id"]).first()
+        if rep is not None:
+            data["votes"].append({"source": rep.id, "destination": bill_id, "position": vote["vote_position"]})
 
     return JsonResponse(data)

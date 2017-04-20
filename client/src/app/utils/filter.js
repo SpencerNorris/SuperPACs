@@ -7,7 +7,8 @@ const actions = Object.freeze({ADD: "1", DELETE: "2", PASS: "3"});
 //an enum defining what type of object is getting filtered
 const type = Object.freeze({GENERAL: "General",
                     REPRESENTATIVE: "Representative",
-                    COMMITTEE: "Committee"});
+                    COMMITTEE: "Committee",
+                    BILL: "Bill"});
 
 /**
  * Filters the properties of the object based on the predicate function
@@ -66,7 +67,9 @@ function filter(filters, data) {
     //only chooses the needed ones
     return {committees: filterObject(data.committees, predicate(type.COMMITTEE)),
         donations: data.donations,
-        representatives: filterObject(data.representatives, predicate(type.REPRESENTATIVE))};
+        representatives: filterObject(data.representatives, predicate(type.REPRESENTATIVE)),
+        votes: data.votes,
+        bills: filterObject(data.bills, predicate(type.BILL))};
 }
 
 //some general filters
