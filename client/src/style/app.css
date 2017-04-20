@@ -156,15 +156,19 @@ footer {
 }
 
 
-div.tooltip {
-    position: absolute;
-    text-align: center;
-    width: 60px;
-    height: 28px;
-    padding: 2px;
-    font: 12px sans-serif;
-    background: lightsteelblue;
-    border: 0px;
-    border-radius: 8px;
-    pointer-events: none;
+div.legend ul li div.icon {
+  position:absolute;
+  left:20px;
+}
+
+div.legend ul li div.name {
+  margin-left: 20px;
+}
+
+div.legend ul li {
+  padding-bottom:5px;
+}
+
+div.legend ul {
+  list-style:none;padding:10px;margin-top:0px;
 }

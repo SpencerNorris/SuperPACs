@@ -55,4 +55,73 @@
             {{item.name}}
         </button>
     </div>
+
+    <!--TODO: Add all of this css inline to the app.css -->
+    <button ng-click="legendHidden = false;" ng-show="legendHidden" title="Show Legend" style="position:absolute;height:30px;bottom:0px;right:0px;">
+      <i class="fa fa-chevron-up" aria-hidden="true"></i>
+    </button>
+    <div class="legend" ng-hide="legendHidden" style="background:#1976D2;height:170px;width:270px;position:absolute;right:5%;bottom:5%;">
+      <button ng-click="legendHidden = true;" style="position:absolute;right:0%;">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </button>
+
+      <div style="padding:5px">
+        <span>Legend</span>
+      </div>
+
+      <ul style="">
+        <li style="">
+          <div class = "icon">
+            <svg width="14" height="14">
+              <circle cx="7" cy="7" r="5" stroke="black" stroke-width="2" fill="red" />
+            </svg>
+          </div>
+          <div class = "name">
+            <span style="">Republican Legislator</span>
+          </div>
+        </li>
+        <li style="">
+          <div class = "icon">
+            <svg height=14 width=14 style="">
+              <circle cx="7" cy="7" r="5" stroke="black" stroke-width="2" fill="blue" />
+            </svg>
+          </div>
+          <div class = "name">
+            <span style="">Democratic Legislator</span>
+          </div>
+        </li>
+        <li style="">
+          <div class = "icon">
+            <svg height=14 width=14>
+              <circle cx="7" cy="7" r="5" stroke="black" stroke-width="2" fill="rgb(188, 170, 164)" />
+            </svg>
+          </div>
+          <div class = "name">
+            <span style="">Independent Legislator</span>
+          </div>
+        </li>
+        <li style="">
+          <div class = "icon">
+            <svg height=14 width=14 style="">
+              <line x1="0" y1="7" x2="14" y2="7" style="stroke:black;stroke-width:10" />
+              <line x1="1" y1="7" x2="13" y2="7" style="stroke:green;stroke-width:5" />
+            </svg>
+          </div>
+          <div class = "name">
+            <span style="">Positive Donation/Voted Yes</span>
+          </div>
+        </li>
+        <li style="">
+          <div class = "icon">
+            <svg height=14 width=14 style="">
+              <line x1="0" y1="7" x2="14" y2="7" style="stroke:black;stroke-width:10" />
+              <line x1="1" y1="7" x2="13" y2="7" style="stroke:purple;stroke-width:5" />
+            </svg>
+          </div>
+          <div class = "name">
+            <span style="">Negative Donation/Voted No</span>
+          </div>
+        </li>
+      </ul>
+    </div>
 </main>
