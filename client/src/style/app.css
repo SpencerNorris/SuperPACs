@@ -154,3 +154,7 @@ footer {
 .filter .minus:hover {
     color: lightgreen;
 }
+
+span.muted a{
+    margin-top:30px;
+}

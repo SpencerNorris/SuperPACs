@@ -32,7 +32,7 @@
 
         <h2>Active Filters</h2>
         <span class="muted" ng-hide="filters.length">No filters</span>
-        <span class="muted" ng-show="filters.length"><a href="" class="delete" ng-click="clearAll()">Clear All</a></span>
+
         <ul ng-sortable="sortableConf " class="filters">
             <li ng-repeat="filter in filters" ng-attr-title="{{filter.name}}" class="filter">
                 <a href="" class="flip plus" ng-show="filter.additive" ng-click="flipFilter(filter)" title="Negate this filter">
@@ -45,6 +45,9 @@
                 <a href="" class="delete" ng-click="removeFilter(filter)"><i class="fa fa-trash"></i></a>
             </li>
         </ul>
+        <div style="margin-top:20px">
+          <span class="muted" ng-show="filters.length"><a href="" class="deleteall" ng-click="clearAll()"><i class="fa fa-trash" style="color:red;float"></i></a></span>
+        </div>
     </div>
 
     <div id="graph"></div>
