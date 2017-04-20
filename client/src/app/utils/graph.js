@@ -4,8 +4,6 @@ import Hover from './hover';
 
 class Graph {
     constructor(element, nodeMenu) {
-
-
         //add our svg to the given element and set it up
         this.width = 1200;
         this.height = 900;
@@ -47,13 +45,13 @@ class Graph {
         //add the committee nodes
         let init_y = 0;
         Object.keys(data.committees || {}).forEach((key) => {
-            nodes.push({id:"c_"+data.committees[key].id, name: data.committees[key].name,type:"superpac", x: 300, fx: 300, y: init_y+=60});
+            nodes.push({id:"c_"+data.committees[key].id, name: data.committees[key].name, type:"superpac", x: 300, fx: 300, y: init_y+=60});
         });
 
         //add the representative nodes
         init_y = 0;
         Object.keys(data.representatives || {}).forEach((key) => {
-            nodes.push({id:"r_"+data.representatives[key].id, type:"representative",name: data.representatives[key].name,party:data.representatives[key].party, x:600, fx: 600, y: init_y+=60,state:data.representatives[key].state,district:data.representatives[key].district});
+            nodes.push({id:"r_"+data.representatives[key].id, name: data.representatives[key].name, type:"representative", party:data.representatives[key].party, x:600, fx: 600, y: init_y+=60, state:data.representatives[key].state, district:data.representatives[key].district});
         });
 
         //add the bill nodes
@@ -66,14 +64,12 @@ class Graph {
         //add the donation links between committees and representatives
         Object.keys(data.donations || {}).forEach((key) => {
             if(data.donations[key].source in data.committees && data.donations[key].destination in data.representatives){
-                console.log(data.donations[key].source);
                 links.push({id:"d_"+data.donations[key].source+"d"+data.donations[key].destination,type:"donation",source:"c_"+data.donations[key].source, target: "r_"+data.donations[key].destination,thickness:data.donations[key].amount, status:data.donations[key].support == "S" ? 1 : 2});
             }
         });
 
         //add the vote links between representatives and bills
         Object.keys(data.votes || {}).forEach((key) => {
-
             if(data.votes[key].source in data.representatives && data.votes[key].destination in data.bills){
                 links.push({type:"vote",source:"r_"+data.votes[key].source, target: "b_"+data.votes[key].destination, status:data.votes[key].position == "Yes" ? 1 : data.votes[key].position == "No" ? 2 : 3});
             }
@@ -89,8 +85,6 @@ class Graph {
             this.nodeMenu(d, event);
         };
 
-
-
         //Create a force directed graph and define forces in it
         //Our graph is essentially a physics simulation between nodes and edges
         let force = d3.forceSimulation(nodes)
@@ -100,7 +94,6 @@ class Graph {
                         .force("center", d3.forceCenter())
                         .force('Y', d3.forceY().y(0).strength(.001));
         //Draw the edges between the nodes
-
         let edges = this.vis.selectAll("line")
                         .data(links)
                         .enter()

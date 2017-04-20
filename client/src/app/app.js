@@ -218,7 +218,7 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
           $scope.filters.splice($scope.filters.indexOf(filter), 1);
           $scope.refreshGraph();
       };
-    
+
       $scope.clearAll = () => {
         $scope.filters = [];
         $scope.refreshGraph();
@@ -244,17 +244,6 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
           $scope.data.votes = [];
           $scope.refreshGraph();
       });
-
-      //Hovering functionality.
-
-      
-      //Hovering over a superpac node.
-
-      //Hovering over a representative node.
-
-
-      //Hovering over a donation edge.
-
   });
 
 export default MODULE_NAME;
