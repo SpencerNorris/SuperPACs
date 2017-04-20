@@ -39,7 +39,7 @@ def donations(request):
 
     data["donations"] = list(Donation.objects.all()
         .annotate(source=F("superpac_id"), destination=F("representative_id"))
-        .values("source", "destination", "support")
+        .values("id","source", "destination", "support")
         .annotate(amount=Sum("amount")))
 
     return JsonResponse(data)

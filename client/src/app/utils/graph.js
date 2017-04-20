@@ -10,6 +10,9 @@ class Graph {
         this.width = 1200;
         this.height = 900;
         this.svg = d3.select(element).append("svg");
+
+
+        //This is what i need to do...
         this.svg.attr("width", this.width).attr("height", this.height).style("background-color", "white");
         this.nodeMenu = nodeMenu;
         this.parentElement = element;
@@ -47,32 +50,32 @@ class Graph {
         //add the committee nodes
         let init_y = 0;
         Object.keys(data.committees || {}).forEach((key) => {
-            nodes.push({id:"c_"+data.committees[key].id, name: data.committees[key].name, x: 300, fx: 300, y: init_y+=60});
+            nodes.push({id:"c_"+data.committees[key].id, name: data.committees[key].name,type:"superpac", x: 300, fx: 300, y: init_y+=60});
         });
 
         //add the representative nodes
         init_y = 0;
         Object.keys(data.representatives || {}).forEach((key) => {
-            nodes.push({id:"r_"+data.representatives[key].id, name: data.representatives[key].name,party:data.representatives[key].party, x:600, fx: 600, y: init_y+=60,state:data.representatives[key].state,district:data.representatives[key].district});
+            nodes.push({id:"r_"+data.representatives[key].id, type:"representative",name: data.representatives[key].name,party:data.representatives[key].party, x:600, fx: 600, y: init_y+=60,state:data.representatives[key].state,district:data.representatives[key].district});
         });
 
         //add the bill nodes
         init_y = 0;
         Object.keys(data.bills || {}).forEach((key) => {
-            nodes.push({id:"b_"+data.bills[key].id, name: data.bills[key].name, x: 900, fx: 900, y: init_y+=60});
+            nodes.push({id:"b_"+data.bills[key].id, type:"bill",name: data.bills[key].name, x: 900, fx: 900, y: init_y+=60});
         });
 
         //add our links
         //add the donation links between committees and representatives
         Object.keys(data.donations || {}).forEach((key) => {
             if(data.donations[key].source in data.committees && data.donations[key].destination in data.representatives){
-                links.push({source:"c_"+data.donations[key].source, target: "r_"+data.donations[key].destination,thickness:data.donations[key].amount,support:data.donations[key].support});
+                links.push({id:"d_"+data.donations[key].id,type:"donation",source:"c_"+data.donations[key].source, target: "r_"+data.donations[key].destination,thickness:data.donations[key].amount,support:data.donations[key].support});
             }
         });
 
         //add the vote links between representatives and bills
         Object.keys(data.votes || {}).forEach((key) => {
-            links.push({source:"r_"+data.votes[key].source, target: "b_"+data.votes[key].destination});
+            links.push({type:"vote",source:"r_"+data.votes[key].source, target: "b_"+data.votes[key].destination});
         });
 
         //a scaling function that limits how think or thin edges can be in our graph
@@ -85,6 +88,8 @@ class Graph {
             this.nodeMenu(d, event);
         };
 
+
+
         //Create a force directed graph and define forces in it
         //Our graph is essentially a physics simulation between nodes and edges
         let force = d3.forceSimulation(nodes)
@@ -94,10 +99,12 @@ class Graph {
                         .force("center", d3.forceCenter())
                         .force('Y', d3.forceY().y(0).strength(.001));
         //Draw the edges between the nodes
+
         let edges = this.vis.selectAll("line")
                         .data(links)
                         .enter()
-                        .append("line")
+                        .append("path")//So that I could have text on the path.
+                        .attr("id",(d)=>{return d.id;})
                         .style("stroke-width", (d) => { return thicknessScale(d.thickness); })
                         .style("stroke", (d) => {
                             if(d.support == "S"){
@@ -106,7 +113,10 @@ class Graph {
                                 return "Purple";
                             }
                         })
-                        .attr("marker-end", "url(#end)");
+                        .attr("d", (d)=>{return "M "+d.source.x+","+d.source.y+" L "+d.target.x+","+d.target.y})
+                        .attr("marker-end", "url(#end)")
+                        .on("mouseover", this.hover.handleMouseOverDonation)
+                        .on("mouseout", this.hover.handleMouseOutDonation);
         //Draw the nodes themselves
         let circles = this.vis.selectAll("circle")
                         .data(nodes)
@@ -132,7 +142,7 @@ class Graph {
                         .data(nodes)
                         .enter()
                         .append("text")
-                        .attr("id",(d)=> {return d.id;})
+                        .attr("id",(d) => {return d.id;})
                         .attr("fill", "black")
                         .attr("font-family", "sans-serif")
                         .attr("font-size", "10px")
@@ -155,7 +165,8 @@ class Graph {
             edges.attr("x1", (d) => { return d.source.x; })
                     .attr("y1", (d) => { return d.source.y; })
                     .attr("x2", (d) => { return d.target.x; })
-                    .attr("y2", (d) => { return d.target.y; });
+                    .attr("y2", (d) => { return d.target.y; })
+                    .attr("d", (d) => {return "M "+d.source.x+" "+d.source.y+" L "+d.target.x+" "+d.target.y;});
             circles.attr("cx", (d) => { return d.x; })
                     .attr("cy", (d) => { return d.y; })
             texts.attr("transform", (d) => { return "translate(" + (d.party ? d.x : d.x-d.bbox.width) + "," + (d.y+(d.bbox.height/4)) + ")"; });
