@@ -113,6 +113,7 @@ class Graph {
                         .enter()
                         .append("circle")
                         .attr("r", 20)
+                        .attr("id",(d) => {return d.id;})
                         .style("stroke", "black")
                         .style("fill", (d) => {
                             if(d.party == "R"){
@@ -131,6 +132,7 @@ class Graph {
                         .data(nodes)
                         .enter()
                         .append("text")
+                        .attr("id",(d)=> {return d.id;})
                         .attr("fill", "black")
                         .attr("font-family", "sans-serif")
                         .attr("font-size", "10px")
@@ -142,6 +144,7 @@ class Graph {
                         .data(nodes)
                         .enter()
                         .insert("rect", "text")
+                        .attr("id",(d) => {return d.id;})
                         .attr("fill", (d) => {return d.color;})
                         .attr("width", (d) => {return d.bbox.width+10})
                         .attr("height", (d) => {return d.bbox.height+10})
