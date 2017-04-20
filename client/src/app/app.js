@@ -47,6 +47,7 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
           //set menu position
           $scope.ctxMenu.top = e.clientY;
           $scope.ctxMenu.left = e.clientX;
+          $scope.ctxMenu.items = [];
 
           if(d.id.startsWith("r_")) { //menu for representatives
               $scope.ctxMenu.items = [
@@ -108,8 +109,10 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
               ];
           }
 
-          //show the menu
-          $scope.ctxMenu.show = true;
+          //show the menu if there are items
+          if($scope.ctxMenu.items.length > 0) {
+              $scope.ctxMenu.show = true;
+          }
           $scope.$apply();
       });
 
@@ -216,7 +219,7 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
           $scope.filters.splice($scope.filters.indexOf(filter), 1);
           $scope.refreshGraph();
       };
-    
+
       $scope.clearAll = () => {
         $scope.filters = [];
         $scope.refreshGraph();
