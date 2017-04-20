@@ -29,7 +29,7 @@ To set the server that it points to set the environment variable `API_SERVER` be
 We recommend running the Docker container for this, with the `API_SERVER` enviroment variable pointing to the Django server in Docker.
 
 
-This is the point at which you can begin developing. 
+This is the point at which you can begin developing.
 Any changed made will update in real time and automatically refresh the browser window.
 
 ## Testing

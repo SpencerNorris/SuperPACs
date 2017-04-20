@@ -30,6 +30,8 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
       $scope.data = {};
       $scope.ctxMenu = {top: 0, left: 0, show: false, items: []};
       $scope.sidebarHidden = false;
+      $scope.legendHidden = false;//Legend setup
+
       //configuration for the sortable filter list
       $scope.sortableConf = {
           animation: 150,
