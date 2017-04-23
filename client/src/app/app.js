@@ -23,7 +23,7 @@ let app = () => {
 const MODULE_NAME = 'app';
 angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
   .directive('app', app)
-  .controller('AppCtrl', /*@ngInject*/ ($scope, $http) => {
+  .controller('AppCtrl', /*@ngInject*/ ($scope, $http, $mdToast) => {
       //init some inital data
       $scope.filters = [];
       $scope.searchItem = null;
@@ -61,6 +61,14 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
                         }
                     });
 
+                    //if no names were found, don't add a filter
+                    if(names.length == 0) {
+                        $mdToast.show($mdToast.simple()
+                          .textContent('No SuperPACs were found, no filter was added.')
+                          .position('top right'));
+                        return;
+                    }
+
                     //create a multi node filter
                     let predicateFactory = Filter.multiNodeFilterFactory(names, Filter.type.COMMITTEE);
 
@@ -89,6 +97,14 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
                             names.push($scope.data.representatives[$scope.data.donations[key].destination].name);
                         }
                     });
+
+                    //if no names were found, don't add a filter
+                    if(names.length == 0) {
+                      $mdToast.show($mdToast.simple()
+                        .textContent('No Representatives were found, no filter was added.')
+                        .position('top right'));
+                      return;
+                    }
 
                     //create a multi node filter
                     let predicateFactory = Filter.multiNodeFilterFactory(names, Filter.type.REPRESENTATIVE);
@@ -216,7 +232,7 @@ angular.module(MODULE_NAME, [ngMaterial, 'ng-sortable', cgBusy])
           $scope.filters.splice($scope.filters.indexOf(filter), 1);
           $scope.refreshGraph();
       };
-    
+
       $scope.clearAll = () => {
         $scope.filters = [];
         $scope.refreshGraph();
