@@ -1,5 +1,6 @@
 
 import d3 from './d3-modules';
+import Hover from './hover';
 
 class Graph {
     constructor(element, nodeMenu) {
@@ -12,7 +13,7 @@ class Graph {
         this.vis = this.svg.append("g"); //add an empty arbitrary element, we'll add our graph to this later
 
         this.svg.attr("width", this.width).attr("height", this.height).style("background-color", "white");
-        
+
         //automatically resize the svg when the window's size changes
         window.onresize = this.resize.bind(this);
         setTimeout(this.resize.bind(this), 100);
@@ -25,6 +26,8 @@ class Graph {
             });
 
         this.svg.call(this.zoom).call(this.zoom.transform, d3.zoomIdentity.translate(0, this.height * .3));
+        this.hover = new Hover();
+
     }
 
     /**
@@ -38,17 +41,19 @@ class Graph {
         let nodes = [];
         let links = [];
 
-        //add our nodes
+        //Most nodes follow (id,type,arg1,arg2....) pattern
+        //Most edges follow (id,sourceid,targetid,type,arg1,arg2) pattern
+
         //add the committee nodes
         let init_y = 0;
         Object.keys(data.committees || {}).forEach((key) => {
-            nodes.push({id:"c_"+data.committees[key].id, name: data.committees[key].name, x: 300, fx: 300, y: init_y+=60});
+            nodes.push({id:"c_"+data.committees[key].id, name: data.committees[key].name, type:"superpac", x: 300, fx: 300, y: init_y+=60});
         });
 
         //add the representative nodes
         init_y = 0;
         Object.keys(data.representatives || {}).forEach((key) => {
-            nodes.push({id:"r_"+data.representatives[key].id, name: data.representatives[key].name,party:data.representatives[key].party, x:600, fx: 600, y: init_y+=60});
+            nodes.push({id:"r_"+data.representatives[key].id, name: data.representatives[key].name, type:"representative", party:data.representatives[key].party, x:600, fx: 600, y: init_y+=60, state:data.representatives[key].state, district:data.representatives[key].district});
         });
 
         //add the bill nodes
@@ -61,14 +66,15 @@ class Graph {
         //add the donation links between committees and representatives
         Object.keys(data.donations || {}).forEach((key) => {
             if(data.donations[key].source in data.committees && data.donations[key].destination in data.representatives){
-                links.push({source:"c_"+data.donations[key].source, target: "r_"+data.donations[key].destination,thickness:data.donations[key].amount, status:data.donations[key].support == "S" ? 1 : 2});
+                links.push({id:"d_"+data.donations[key].source+"d"+data.donations[key].destination,source:"c_"+data.donations[key].source, target: "r_"+data.donations[key].destination,type:"donation",thickness:data.donations[key].amount, status:data.donations[key].support == "S" ? 1 : 2});
+                //TODO: refactor the id system for the links node. This ghetto id is mainly a hack for now to enable edge hovering.
             }
         });
 
         //add the vote links between representatives and bills
         Object.keys(data.votes || {}).forEach((key) => {
             if(data.votes[key].source in data.representatives && data.votes[key].destination in data.bills){
-                links.push({source:"r_"+data.votes[key].source, target: "b_"+data.votes[key].destination, status:data.votes[key].position == "Yes" ? 1 : data.votes[key].position == "No" ? 2 : 3});
+                links.push({source:"r_"+data.votes[key].source, target: "b_"+data.votes[key].destination,type:"vote", status:data.votes[key].position == "Yes" ? 1 : data.votes[key].position == "No" ? 2 : 3});
             }
         });
 
@@ -94,7 +100,8 @@ class Graph {
         let edges = this.vis.selectAll("line")
                         .data(links)
                         .enter()
-                        .append("line")
+                        .append("path")//So that I could have text on the path.
+                        .attr("id",(d)=>{return String(d.source.id)+"d"+String(d.target.id);})
                         .style("stroke-width", (d) => { return thicknessScale(d.thickness); })
                         .style("stroke", (d) => {
                             if(d.status == 1) {
@@ -104,13 +111,17 @@ class Graph {
                             }
                             return "White";
                         })
-                        .attr("marker-end", "url(#end)");
+                        .attr("d", (d)=>{return "M "+d.source.x+","+d.source.y+" L "+d.target.x+","+d.target.y})
+                        .attr("marker-end", "url(#end)")
+                        .on("mouseover", this.hover.handleMouseOverEdge)
+                        .on("mouseout", this.hover.handleMouseOutEdge);
         //Draw the nodes themselves
         let circles = this.vis.selectAll("circle")
                         .data(nodes)
                         .enter()
                         .append("circle")
                         .attr("r", 20)
+                        .attr("id",(d) => {return d.id;})
                         .style("stroke", "black")
                         .style("fill", (d) => {
                             if(d.party == "R"){
@@ -121,12 +132,15 @@ class Graph {
                                 return d.color = "#BCAAA4"; //brown
                             }
                         })
-                        .on('contextmenu', contextMenu);
+                        .on('contextmenu', contextMenu)
+                        .on("mouseover", this.hover.handleMouseOverNode)
+                        .on("mouseout", this.hover.handleMouseOutNode);
         //Draw text for all the nodes
         let texts = this.vis.selectAll("text")
                         .data(nodes)
                         .enter()
                         .append("text")
+                        .attr("id",(d) => {return d.id;})
                         .attr("fill", "black")
                         .attr("font-family", "sans-serif")
                         .attr("font-size", "10px")
@@ -138,6 +152,7 @@ class Graph {
                         .data(nodes)
                         .enter()
                         .insert("rect", "text")
+                        .attr("id",(d) => {return d.id;})
                         .attr("fill", (d) => {return d.color;})
                         .attr("width", (d) => {return d.bbox.width+10})
                         .attr("height", (d) => {return d.bbox.height+10})
@@ -148,7 +163,8 @@ class Graph {
             edges.attr("x1", (d) => { return d.source.x; })
                     .attr("y1", (d) => { return d.source.y; })
                     .attr("x2", (d) => { return d.target.x; })
-                    .attr("y2", (d) => { return d.target.y; });
+                    .attr("y2", (d) => { return d.target.y; })
+                    .attr("d", (d) => {return "M "+d.source.x+" "+d.source.y+" L "+d.target.x+" "+d.target.y;});
             circles.attr("cx", (d) => { return d.x; })
                     .attr("cy", (d) => { return d.y; })
             texts.attr("transform", (d) => { return "translate(" + (d.party || d.bill ? d.x : d.x-d.bbox.width) + "," + (d.y+(d.bbox.height/4)) + ")"; });
